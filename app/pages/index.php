@@ -1,6 +1,7 @@
 <?php
 namespace Web\Pages;
 use \Model\User;
+use \Model\Workout;
 
 class Index extends \PageBuilder {
 	protected function init() {
@@ -9,7 +10,8 @@ class Index extends \PageBuilder {
 
 	protected function content() {
 		if ($this->account->isLoggedIn()) {
-			$this->response->addTemplate("newsfeed/index.php", []);
+			$workouts = Workout::getNewsfeedList($this->database);
+			$this->response->addTemplate("newsfeed/index.php", ["workouts" => $workouts]);
 		} else {
 			$this->response->addTemplate("static/index.php", []);
 		}

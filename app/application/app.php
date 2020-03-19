@@ -16,8 +16,9 @@ class PageBuilder extends \WebBuilder {
 
 	public function login($login, $password) {
 		$user = \Model\User::login($this->database, $login, $password);
-		if (!$user)
+		if (!$user) {
 			return false;
+		}
 		
 		$this->account->loginUser($user);
 		return true;

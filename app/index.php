@@ -9,6 +9,7 @@ $router->route('', 'index.php');
 $router->route('login\/?', 'login.php');
 $router->route('register\/?', 'register.php');
 $router->route('workout\/add\/?', 'workouts/add.php');
+$router->route('workout\/\d+\/?', 'workouts/view.php');
 /*
 $router->route('category(?:\/([^\/]+)\/?|\/?)', 'category.php');
 $router->route('order(?:\/([^\/]*)\/?|\/?)', 'order.php');

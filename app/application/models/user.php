@@ -2,9 +2,9 @@
 namespace Model;
 class User extends \DBModel {
 	protected static $table_name = "users";
-	protected static $primary_key = "id";
+	protected static $primary_key = "user_id";
 
-	public $id;
+	public $user_id;
 	public $login;
 	public $password;
 	public $name;
@@ -18,7 +18,7 @@ class User extends \DBModel {
 	public static function login($db, $login, $password) {
 		$user = static::getSingleItem($db, ["login" => $login]);
 
-		if (!$user->id)
+		if (!$user->user_id)
 			return false;
 
 		if (password_verify($password, $user->password))

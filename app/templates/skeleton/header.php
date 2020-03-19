@@ -12,6 +12,7 @@
 	</head>
 	<body>
 		<div id="header">
+			<a href="{{PATH_PREFIX}}/">Strona główna</a><br>
 			<?php if ($account->isLoggedIn()): ?>
 				Cześć, {{$account->name}}!<br>
 				<?php $this->nest("forms/logout.php", []); ?>

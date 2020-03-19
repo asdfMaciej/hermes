@@ -2,7 +2,7 @@
 namespace Model;
 class UserSession extends \SessionModel {
 	protected $fields = [
-		"id" => 0,
+		"user_id" => 0,
 		"login" => "",
 		"password" => "",
 		"name" => "",
@@ -10,7 +10,7 @@ class UserSession extends \SessionModel {
 	];
 
 	public function isLoggedIn() {
-		return $this->id != 0 && $this->login;
+		return $this->user_id != 0 && $this->login;
 	}
 
 	public function loginUser($user_model) {

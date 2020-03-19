@@ -3,3 +3,39 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+body {
+	display: flex;
+	flex-direction: column;
+	font-family: sans-serif;
+	max-width: 1200px;
+	margin: auto;
+}
+#content {
+	flex: 1 1;
+	padding: 8px;
+}
+#header {
+	background: aquamarine;
+	padding: 8px;
+}
+#footer {
+	background: #333333;
+	color: white;
+	padding: 8px;
+}
+.newsfeed {
+	display: flex;
+	flex-direction: column;
+}
+.feed-workout {
+	margin: 8px 0;
+	padding: 8px;
+	background: lightcyan;	
+}
+.feed-workout__date {
+	font-size: 0.8rem;
+	margin-bottom: 4px;
+}
+.feed-workout__title {
+	font-weight: bold;
+}

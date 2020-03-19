@@ -2,7 +2,7 @@
 namespace Web\Pages;
 use \Model\User;
 
-class Login extends \PageBuilder {
+class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->setTitle("Index");
 		$this->addActions([
@@ -33,5 +33,5 @@ class Login extends \PageBuilder {
 	}
 }
 
-new Login();
+new Page();
 ?>
