@@ -1,5 +1,5 @@
 <?php
-class Model {
+class Model implements ArrayAccess {
 	protected static $aliases = [];
 	protected $computed = [];
 
@@ -26,6 +26,26 @@ class Model {
 		}
 		$this->{$key} = $value;
 		return;
+	}
+
+	/*
+	 * ArrayAccess implementation (offset methods): 
+	 * Enables accessing the model as an Array: 
+	*/
+	public function offsetSet($offset, $value) {
+		$this->{$offset} = $value;
+	}
+
+	public function offsetExists($offset) {
+		return !is_null($this->{$offset}); 
+	}
+
+	public function offsetUnset($offset) {
+		$this->{$offset} = null;
+	}
+
+	public function offsetGet($offset) {
+		return $this->{$offset};
 	}
 
 	public function init() {} // virtual
@@ -121,6 +141,7 @@ class QueryBuilder {
 
 	private $statement;
 	private $database;
+	private $debug = false;
 
 	public function __construct() {}
 	public function select($fields) {
@@ -204,6 +225,11 @@ class QueryBuilder {
 		return $this->statement->fetch(PDO::FETCH_ASSOC);
 	}
 
+	public function debug() {
+		$this->debug = true;
+		return $this;
+	}
+
 	public function getQuery() {
 		$q = "SELECT $this->fields\n";
 		$q .= "FROM $this->table\n";
@@ -212,6 +238,9 @@ class QueryBuilder {
 		$q .= "$joins\n";
 		$q .= "$this->where\n";
 		$q .= "$this->order";
+
+		if ($this->debug and DEBUG)
+			echo "<div><h2>Query:</h2><pre>".$q."</pre></div>";
 
 		return $q;
 	}

@@ -67,7 +67,7 @@ class Template implements TemplateInterface {
 		}
 		$content = file_get_contents($this->template_path);
 		$content = "?>" . $content;// . "<?php";
-		$content = preg_replace('~{{ *([\w\-\>\$\[\]"\']+) *}}~', '<?php echo(htmlspecialchars($1, ENT_QUOTES, "UTF-8", false)); ?>', $content);
+		$content = preg_replace('~{{ *([^{}]+) *}}~', '<?php echo(htmlspecialchars($1, ENT_QUOTES, "UTF-8", false)); ?>', $content);
 
 		extract($this->nest_extract);
 		$this->nest_extract = $data;
