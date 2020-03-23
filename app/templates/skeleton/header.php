@@ -14,7 +14,10 @@
 		<div id="header">
 			<a href="{{PATH_PREFIX}}/">Strona główna</a><br>
 			<?php if ($account->isLoggedIn()): ?>
-				Cześć, {{$account->name}}!<br>
+				Cześć,
+				<a href="{{PATH_PREFIX}}/profile/{{$account->user_id}}">
+					{{$account->name}}!
+				</a><br>
 				<?php $this->nest("forms/logout.php", []); ?>
 			<?php else: ?>
 				<a href="{{PATH_PREFIX}}/login">Zaloguj się</a>

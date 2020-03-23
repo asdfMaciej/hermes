@@ -14,7 +14,7 @@ class Workout extends \DBModel {
 
 	public static function getNewsfeedList($database) {
 		$rows = static::select("w.workout_id, w.name, w.date, 
-				user.name as user_name, gym.name as gym_name")
+				user.name as user_name, gym.gym_id, gym.name as gym_name, user.user_id")
 				->from(static::class, "w")
 				->innerJoin(User::class, "user", "user.user_id = w.user_id")
 				->innerJoin(Gym::class, "gym", "gym.gym_id = w.gym_id")

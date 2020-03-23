@@ -11,7 +11,9 @@
 </div>
 <div class="workout-gym">
 	<div class="workout-gym__name">
-		{{$gym["name"]}}
+		<a href="{{PATH_PREFIX}}/gym/{{$gym['gym_id']}}">
+			{{$gym["name"]}}
+		</a>
 	</div>
 	<div class="workout-gym__map">
 		Lokalizacja siłowni: {{$gym["lat"] . ", " . $gym["long"]}}
@@ -28,19 +30,19 @@
 					{{$exercise["exercise_type"]}}
 				</span>
 				<?php if ($exercise["show_duration"]): ?>
-					<div class="exercises-list__duration">
+					<span class="exercises-list__duration">
 						{{$exercise["duration"]}} sekund
-					</div>
+					</span>
 				<?php endif ?>
 				<?php if ($exercise["show_reps"]): ?>
-					<div class="exercises-list__reps">
+					<span class="exercises-list__reps">
 						{{$exercise["reps"]}} powtórzeń
-					</div>
+					</span>
 				<?php endif ?>
 				<?php if ($exercise["show_weight"]): ?>
-					<div class="exercises-list__weight">
+					<span class="exercises-list__weight">
 						{{$exercise["weight"]}} kg
-					</div>
+					</span>
 				<?php endif ?>
 			</div>
 		<?php endforeach ?>

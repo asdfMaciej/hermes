@@ -4,7 +4,7 @@ use \Model\User;
 use \Model\Workout;
 use \Model\Exercise;
 
-class AddWorkout extends \PageBuilder {
+class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->setTitle("Index");
 		$this->addActions([
@@ -21,7 +21,7 @@ class AddWorkout extends \PageBuilder {
 
 		$workout = new Workout();
 		$workout->gym_id = $_POST["gym_id"] ?? "";
-		$workout->user_id = $this->account->id;
+		$workout->user_id = $this->account->user_id;
 		$workout->name = $_POST["name"] ?? "";
 		$workout->date = date("Y-m-d h:i:s", time());
 		$success = $workout->save($this->database);
@@ -43,5 +43,5 @@ class AddWorkout extends \PageBuilder {
 	}
 }
 
-new Login();
+new Page();
 ?>
