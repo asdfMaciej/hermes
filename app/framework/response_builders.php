@@ -152,8 +152,8 @@ class WebBuilder {
 }
 
 class PageMetadata {
-	private $stylesheet_prefix = PATH_PREFIX . "/style/";
-	private $script_prefix = PATH_PREFIX . "/javascript/";
+	private $stylesheet_prefix = PATH_PREFIX . "/static/css/";
+	private $script_prefix = PATH_PREFIX . "/static/js/";
 
 	protected $title = "";
 	protected $stylesheets = [];
