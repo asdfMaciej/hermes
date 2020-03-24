@@ -145,7 +145,7 @@ class WebBuilder {
 	protected function redirect($path=null) {
 		if (is_null($path))
 			throw new Exception("Unspecified path for a redirect.");
-		var_dump('Location: '.PATH_PREFIX."/".$path);
+
 		header('Location: '.PATH_PREFIX."/".$path);
 		exit();
 	}

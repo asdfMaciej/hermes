@@ -31,10 +31,42 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.profile-details__avatar img {
+	width: 150px;
+	position: absolute;
+	left: 50%;
+	margin-left: -75px;
+	top: 50%;
+	margin-top: -75px;
+}
+
+.profile-details__avatar {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	position: relative;
+}
+
+.feed-workout__avatar {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	position: relative;
+}
+.feed-workout__avatar img {
+	width: 150px;
+	position: absolute;
+	left: 50%;
+	margin-left: -75px;
+	top: 50%;
+	margin-top: -75px;
+}
 .feed-workout {
 	margin: 8px 0;
 	padding: 8px;
 	background: lightcyan;	
+	display: flex;
 }
 .feed-workout__date {
 	font-size: 0.8rem;
