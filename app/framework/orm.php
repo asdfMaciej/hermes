@@ -318,7 +318,7 @@ class DBModel extends Model {
 			echo "</pre><br><pre>";
 			echo $query;
 			echo "</pre><br><pre>";
-			echo print_r($parameters);
+			print_r($parameters);
 			echo "</pre></div>";
 		}
 		

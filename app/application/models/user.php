@@ -9,6 +9,7 @@ class User extends \DBModel {
 	public $password;
 	public $name;
 	public $register_date;
+	public $avatar;
 
 	public function register($db) {
 		$this->password = password_hash($this->password, PASSWORD_DEFAULT);

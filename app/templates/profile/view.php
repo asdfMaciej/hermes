@@ -1,4 +1,4 @@
-Profil:
+<h2>Profil:</h2>
 <div class="profile-details">
 	<div class="profile-details__name">
 		{{$user["login"]}}
@@ -13,3 +13,10 @@ Profil:
 		<img src="{{PATH_PREFIX}}/{{$user['avatar']}}">
 	</div>
 </div>
+
+<h3>Zmień avatar:</h3>
+<form enctype="multipart/form-data" action="<?php echo PATH_PREFIX; ?>/upload/avatar" method="POST">
+	<input type="hidden" name="action" value="upload">
+	<input type="file" name="image">
+	<input type="submit">
+</form>
