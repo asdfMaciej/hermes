@@ -18,7 +18,8 @@ class Page extends \PageBuilder {
 			return $this->response->addTemplate("codes/404.php");
 
 		$this->response->addTemplate("profile/view.php", [
-			"user" => $user
+			"user" => $user,
+			"account" => $this->account
 		]);
 	}
 }

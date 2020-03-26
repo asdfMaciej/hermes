@@ -2,7 +2,7 @@
 namespace Web\Pages;
 use \Model\User;
 use \Model\Workout;
-use \Model\Exercise;
+use \Model\Photo;
 use \Model\Gym;
 
 class Page extends \PageBuilder {
@@ -18,8 +18,10 @@ class Page extends \PageBuilder {
 		if (!$gym)
 			return $this->response->addTemplate("codes/404.php");
 
+		$album = Photo::getForAlbumId($this->database, $gym["album_id"]);
 		$this->response->addTemplate("gym/view.php", [
-			"gym" => $gym
+			"gym" => $gym,
+			"album" => $album
 		]);
 	}
 }
