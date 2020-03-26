@@ -1,27 +1,27 @@
 <html>
 	<head>
-		<title>{{$title}}</title>
+		<title>``$title``</title>
 		<meta charset="UTF-8"/>
 		<?php foreach ($stylesheets as $style): ?>
-		<link rel="stylesheet" type="text/css" href="{{$style}}">
+		<link rel="stylesheet" type="text/css" href="``$style``">
 		<?php endforeach ?>
 
 		<?php foreach ($scripts as $script): ?>
-			<script src="{{$script}}"></script>
+			<script src="``$script``"></script>
 		<?php endforeach ?>
 	</head>
 	<body>
 		<div id="header">
-			<a href="{{PATH_PREFIX}}/">Strona główna</a><br>
+			<a href="``PATH_PREFIX``/">Strona główna</a><br>
 			<?php if ($account->isLoggedIn()): ?>
 				Cześć,
-				<a href="{{PATH_PREFIX}}/profile/{{$account->user_id}}">
-					{{$account->name}}!
+				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
+					``$account->name``!
 				</a><br>
 				<?php $this->nest("forms/logout.php", []); ?>
 			<?php else: ?>
-				<a href="{{PATH_PREFIX}}/login">Zaloguj się</a>
-				<a href="{{PATH_PREFIX}}/register">Rejestracja</a>
+				<a href="``PATH_PREFIX``/login">Zaloguj się</a>
+				<a href="``PATH_PREFIX``/register">Rejestracja</a>
 			<?php endif ?>
 		</div>
 

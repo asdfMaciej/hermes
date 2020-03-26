@@ -1,4 +1,4 @@
-<form action="{{PATH_PREFIX}}/workout/add" method="post">
+<form action="``PATH_PREFIX``/workout/add" method="post">
 	<input type="hidden" name="action" value="add">
 	<input type="text" name="name" placeholder="Nazwa"><br>
 	<input type="number" name="reps" placeholder="Ilość powtórzeń"><br>

@@ -172,14 +172,14 @@ class PageMetadata {
 		return $name;
 	}
 
-	public function addStylesheet($name) {
-		$path = $this->stylesheet_prefix;
+	public function addStylesheet($name, $add_prefix=True) {
+		$path = $add_prefix ? $this->stylesheet_prefix : "";
 		$name = $path . $this->addPostfix($name, ".css");
 		$this->stylesheets[] = $name;
 	}
 
-	public function addScript($name) {
-		$path = $this->script_prefix;
+	public function addScript($name, $add_prefix=True) {
+		$path = $add_prefix ? $this->script_prefix : "";
 		$name = $path . $this->addPostfix($name, ".js");
 		$this->scripts[] = $name;
 	}

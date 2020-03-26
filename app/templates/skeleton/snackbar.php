@@ -13,6 +13,6 @@
 		$font = "#FFFFFF";
 	}
 ?>
-<div id="header_message" style="background-color: <?=$color?>; color: <?=$font?>">
-	<?=$message?>
+<div id="header_message" style="background-color: ``$color``; color: ``$font``">
+	``$message``
 </div>

@@ -11,7 +11,14 @@ class PageBuilder extends \WebBuilder {
 	public function __construct() {
 		parent::__construct();
 		$this->account = new \Model\UserSession();
+		if (DEBUG) {
+			$this->metadata->addScript("vue.js");
+		} else {
+			$this->metadata->addScript("https://vuejs.org/js/vue.min.js", false);
+		}
+		
 		$this->metadata->addStylesheet("style.css");
+		
 	}
 
 	public function login($login, $password) {
