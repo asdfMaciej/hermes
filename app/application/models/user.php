@@ -29,9 +29,12 @@ class User extends \DBModel {
 	}
 
 	public static function getProfileById($database, $id) {
-		$row = static::select("u.user_id, u.login, u.name, u.register_date, u.avatar")
-				->from(static::class, "u")
-				->where("u.user_id = :id")
+		$row = static::select([
+					static::class => [
+						"user_id", "login", "name", "register_date", "avatar"]
+				])
+				->from(static::class)
+				->where("User.user_id = :id")
 				->setParameter(":id", $id)
 				->execute($database)
 				->getRow();

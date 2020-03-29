@@ -134,6 +134,8 @@ class SessionModel extends Model {
 class QueryBuilder {
 	private $fields = "";
 	private $table = "";
+	private $where_model = null;
+	private $where_alias = null;
 	private $where = "";
 	private $order = "";
 	private $parameters = [];
@@ -146,16 +148,41 @@ class QueryBuilder {
 	public function __construct() {}
 	public function select($fields) {
 		if (!is_array($fields)) {
-			$fields = [$fields];
+			$this->fields = $fields;
+			return $this;
 		}
 
-		$this->fields = implode(", ", $fields);
+		$this->fields = [];
+
+		foreach ($fields as $key => $value) {
+			// if key is numeric, then it's generic
+			if (is_numeric($key)) {
+				$this->fields[] = $value;
+				continue;
+			}
+
+			$table = $key::getClassName();
+	
+			if (is_array($value)) {
+				foreach ($value as $column) {
+					$this->fields[] = $table.".".$column;
+				}
+				continue;
+			}
+
+			$this->fields[] = $table.".*";
+		}
+
+		$this->fields = implode(", ", $this->fields);
 		return $this;
 	}
 
-	public function from($model, $alias="") {
+	public function from($model) {
 		$table_name = $this->getModelTable($model);
+		$alias = $model::getClassName();
 		$this->table = "`$table_name` AS $alias";
+		$this->where_model = $model;
+		$this->where_alias = $alias;
 		return $this;
 	}
 
@@ -199,14 +226,14 @@ class QueryBuilder {
 		return $this;
 	}
 
-	public function leftJoin($model, $alias, $on) {
-		return $this->join("left", $model, $alias, $on);
+	public function leftJoin($model, $on, $model_b=null) {
+		return $this->join("LEFT", $model, $on, $model_b);
 	}
-	public function rightJoin($model, $alias, $on) {
-		return $this->join("right", $model, $alias, $on);
+	public function rightJoin($model, $on, $model_b=null) {
+		return $this->join("RIGHT", $model, $on, $model_b);
 	}
-	public function innerJoin($model, $alias, $on) {
-		return $this->join("inner", $model, $alias, $on);
+	public function innerJoin($model, $on, $model_b=null) {
+		return $this->join("INNER", $model, $on, $model_b);
 	}
 
 	public function execute($database) {
@@ -245,9 +272,17 @@ class QueryBuilder {
 		return $q;
 	}
 
-	private function join($method, $model, $alias, $on) {
+	private function join($method, $model, $on, $model_b=null) {
+		if (is_null($model_b)) {
+			$alias_b = $this->where_alias;
+		} else {
+			$alias_b = $model_b::getClassName();
+		}
+
+		$alias = $model::getClassName();
+		$on_query = $alias_b.".".$on." = ".$alias.".".$on;
 		$table_name = $this->getModelTable($model);
-		$query = "$method JOIN $table_name AS $alias\nON $on";
+		$query = "$method JOIN $table_name AS $alias\nON $on_query";
 		$this->joins[] = $query;
 		return $this;
 	}
@@ -374,14 +409,14 @@ class DBModel extends Model {
 	}
 
 	private static function getItemsQuery($match) {
-		$table_alias = "t";
+		$table_alias = static::getClassName();
 
 		$q = static::whereQuery($table_alias, $match);
 		$where_query = $q["query"];
 		$where_params = $q["parameters"];
 
 		$row = static::select("$table_alias.*")
-					->from(static::class, $table_alias)
+					->from(static::class)
 					->where($where_query)
 					->setParameters($where_params);
 		return $row;
@@ -411,7 +446,7 @@ class DBModel extends Model {
 	}
 
 	public static function getClassName() {
-		return static::class;
+		return basename(str_replace('\\', '/', static::class)); // removes namespace
 	}
 
 	public static function getPrimaryKey() {
