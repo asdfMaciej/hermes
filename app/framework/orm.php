@@ -134,7 +134,6 @@ class SessionModel extends Model {
 class QueryBuilder {
 	private $fields = "";
 	private $table = "";
-	private $where_model = null;
 	private $where_alias = null;
 	private $where = "";
 	private $order = "";
@@ -142,7 +141,6 @@ class QueryBuilder {
 	private $joins = [];
 
 	private $statement;
-	private $database;
 	private $debug = false;
 
 	public function __construct() {}
@@ -155,14 +153,16 @@ class QueryBuilder {
 		$this->fields = [];
 
 		foreach ($fields as $key => $value) {
-			// if key is numeric, then it's generic
+			// if key is numeric, then we just assume it's list of Alias.columns
 			if (is_numeric($key)) {
 				$this->fields[] = $value;
 				continue;
 			}
 
+			// otherwise, we assume the key is a model name
 			$table = $key::getClassName();
-	
+			
+			// the columns dont need to have aliases
 			if (is_array($value)) {
 				foreach ($value as $column) {
 					$this->fields[] = $table.".".$column;
@@ -170,18 +170,22 @@ class QueryBuilder {
 				continue;
 			}
 
-			$this->fields[] = $table.".*";
+			// catchall: model name with a single field
+			$this->fields[] = $table.".".$value;
 		}
 
+		// join all fields 
 		$this->fields = implode(", ", $this->fields);
 		return $this;
 	}
 
 	public function from($model) {
-		$table_name = $this->getModelTable($model);
+		$model_table = $model::getTableName();
 		$alias = $model::getClassName();
-		$this->table = "`$table_name` AS $alias";
-		$this->where_model = $model;
+		// FROM query
+		$this->table = "`$model_table` AS $alias";
+
+		// we need to store the alias for joining tables
 		$this->where_alias = $alias;
 		return $this;
 	}
@@ -237,9 +241,7 @@ class QueryBuilder {
 	}
 
 	public function execute($database) {
-		$this->database = $database;
-		$query = $this->getQuery();
-		$this->statement = $database->prepare($query);
+		$this->statement = $database->prepare($this->getQuery());
 		$this->statement->execute($this->parameters);
 		return $this;
 	}
@@ -273,22 +275,26 @@ class QueryBuilder {
 	}
 
 	private function join($method, $model, $on, $model_b=null) {
-		if (is_null($model_b)) {
-			$alias_b = $this->where_alias;
-		} else {
-			$alias_b = $model_b::getClassName();
-		}
-
+		// get class name for the specified model 
 		$alias = $model::getClassName();
+
+		// If model B isn't specified, use one from the where query
+		if (is_null($model_b))
+			$alias_b = $this->where_alias;
+		else
+			$alias_b = $model_b::getClassName();
+		
+		// use the same key for both tables
 		$on_query = $alias_b.".".$on." = ".$alias.".".$on;
-		$table_name = $this->getModelTable($model);
+
+		$table_name = $model::getTableName();
 		$query = "$method JOIN $table_name AS $alias\nON $on_query";
+		
+		// in case of multiple joins we use an array
 		$this->joins[] = $query;
 		return $this;
 	}
-	private function getModelTable($model) {
-		return $model::getTableName();
-	}
+
 }
 
 class DBModel extends Model {
