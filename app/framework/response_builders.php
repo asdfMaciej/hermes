@@ -1,16 +1,9 @@
 <?php
 class JSONBuilder {
-	private $response = [
-		"data" => [], 
-		"status" => [
-			"code" => 200, 
-			"message" => ""
-		]
-	];
-	private $error_msg = "";
 	private $response_code = 200;
-	
 
+	public function __construct() {}
+	
 	public function r_ok() {$this->response_code = 200;}
 	public function r_created() {$this->response_code = 201;}
 	public function r_bad_request() {$this->response_code = 400;}
@@ -18,33 +11,25 @@ class JSONBuilder {
 	public function r_forbidden() {$this->response_code = 403;}
 	public function r_not_found() {$this->response_code = 404;}
 
-	public function setError($error) {
-		$this->error_msg = $error;
-		$this->response["status"]["message"] = $this->error_msg;
-	}
-
-	public function generateAndSet($code, $message, $data=[]) {
-		$this->error_msg = $message;
+	public function generateAndSet($data=[], $code=200) {
 		$this->response_code = $code;
 		return $this->generate($data);
 	}
 
 	public function generate($data=[]) {
-		$this->response["status"]["message"] = $this->error_msg;
-		$this->response["status"]["code"] = $this->response_code;
-		$this->response["data"] = $data;
+		if (DEBUG) {
+			// Let's make it debug only for now
+			header("Access-Control-Allow-Origin: *");
+		}
 
-		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json");
 		http_response_code($this->response_code);
-
-		return $this->json($this->response);
+		return $this->json($data);
 	}
 
 	protected function json($str) {
 		return json_encode($str, JSON_UNESCAPED_SLASHES);
 	}
-	
 }
 
 class WebBuilder {

@@ -1,14 +1,21 @@
 <html>
-	<head>
-		<title>``$title``</title>
-		<meta charset="UTF-8"/>
+	<head>	
+		<meta charset="UTF-8">
+		<link rel="apple-touch-icon" sizes="180x180" href="``PATH_PREFIX``/static/favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="``PATH_PREFIX``/static/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="``PATH_PREFIX``/static/favicon/favicon-16x16.png">
+		<link rel="manifest" href="``PATH_PREFIX``/static/favicon/site.webmanifest">
 		<?php foreach ($stylesheets as $style): ?>
 		<link rel="stylesheet" type="text/css" href="``$style``">
 		<?php endforeach ?>
+			
+		<script>var PATH_PREFIX = "``PATH_PREFIX``";</script>
 
 		<?php foreach ($scripts as $script): ?>
 			<script src="``$script``"></script>
 		<?php endforeach ?>
+		<title>``$title`` - Hermes</title>
+
 	</head>
 	<body>
 		<div id="header">

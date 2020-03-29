@@ -13,8 +13,10 @@ class PageBuilder extends \WebBuilder {
 		$this->account = new \Model\UserSession();
 		if (DEBUG) {
 			$this->metadata->addScript("vue.js");
+			$this->metadata->addScript("axios.min.js");
 		} else {
 			$this->metadata->addScript("https://vuejs.org/js/vue.min.js", false);
+			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
 		}
 		
 		$this->metadata->addStylesheet("style.css");
@@ -50,6 +52,21 @@ class PageBuilder extends \WebBuilder {
 			"message" => $message,
 			"code" => $code,
 		]);
+	}
+}
+
+class APIBuilder extends \JSONBuilder {
+	protected $account;
+
+	public function __construct() {
+		parent::__construct();
+		$this->account = new \Model\UserSession();
+	}
+
+	public function run() {return "";} // virtual, to override
+
+	public function __destruct() {
+		echo $this->run();
 	}
 }
 ?>
