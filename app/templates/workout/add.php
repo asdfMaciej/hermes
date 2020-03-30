@@ -46,12 +46,43 @@ var t = new Vue({
 	},
 	methods: {
 		testApi: function() {
-			axios.get(this.getPath('workout/add/api'))
+			workout = {
+				workout: {
+					gym_id: 1,
+					user_id: 16,
+					name: "Trening dodany z frontendu!"
+				},
+
+				exercises: [
+					{
+						type_id: 1,
+						reps: 5,
+						weight: 80
+					},
+					{
+						type_id: 1,
+						reps: 5,
+						weight: 85
+					},
+					{
+						type_id: 1,
+						reps: 4,
+						weight: 100,
+						failure: 1
+					},
+					{
+						type_id: 2,
+						reps: 8,
+						weight: 12
+					}
+				]
+			}
+			axios.post(this.getPath('api/workout'), workout)
 				.then((response) => {
 					let r = new APIResponse(response);
 					r.preview();
-				});
-			console.log('hey');
+				})
+				.catch((error) => {console.log(error)});
 		},
 
 		getPath: function(method) {

@@ -1,8 +1,15 @@
 <?php
 class JSONBuilder {
 	private $response_code = 200;
+	protected $database;
+	protected $database_class;
+	protected $data;
 
-	public function __construct() {}
+	public function __construct() {
+		$this->database_class = new DBClass();
+		$this->database = $this->database_class->getConnection();
+		$this->data = new DataHandler();
+	}
 	
 	public function r_ok() {$this->response_code = 200;}
 	public function r_created() {$this->response_code = 201;}
@@ -214,7 +221,7 @@ class PageSnackbar {
 	public function getCode() { return $this->code; }
 }
 
-class DataFromArray {
+class DataFromArray implements ArrayAccess {
 	private $array;
 	public function __construct(&$array) {
 		$this->array = &$array;
@@ -227,6 +234,26 @@ class DataFromArray {
 
 	public function __set($key, $value) {
 		$this->array[$key] = $value;
+	}
+
+	/*
+	 * ArrayAccess implementation (offset methods): 
+	 * Enables accessing the model as an Array: 
+	*/
+	public function offsetSet($offset, $value) {
+		$this->$array[$offset] = $value;
+	}
+
+	public function offsetExists($offset) {
+		return isset($this->array[$offset]); 
+	}
+
+	public function offsetUnset($offset) {
+		unset($this->array[$offset]);
+	}
+
+	public function offsetGet($offset) {
+		return $this->array[$offset];
 	}
 }
 
@@ -274,6 +301,8 @@ class DataHandler {
 		$this->post = new DataFromArray($_POST);
 		$this->session = new DataFromArray($_SESSION);
 		$this->path = new DataFromPath($_SESSION);
+		$json = json_decode(file_get_contents('php://input'), true);
+		$this->json = new DataFromArray($json);
 	}
 }
 ?>
