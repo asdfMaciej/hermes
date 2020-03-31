@@ -440,11 +440,7 @@ class DBModel extends Model {
 					->execute($db)
 					->getAll();
 
-		$objects = [];
-		foreach ($rows as $row) { // faster than array_map
-			$objects[] = static::fromArray($row);
-		}
-		return $objects;
+		return $rows;
 	}
 
 	public static function getTableName() {

@@ -4,10 +4,11 @@ use \Model\Workout;
 use \Model\Exercise;
 
 class Page extends \APIBuilder {
-	public function run() {
-		$this->database->beginTransaction();
+	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
 		$exercises = $this->data->json["exercises"] ?? [];
+
+		$this->database->beginTransaction();
 		try {
 			Workout::fromArray($workout)->save($this->database);
 			$workout_id = $this->database->lastInsertId();
@@ -21,6 +22,7 @@ class Page extends \APIBuilder {
 			return $this->generateAndSet([], 400);
 		}
 		$this->database->commit();
+		
 		return $this->generateAndSet(["workout_id" => $workout_id], 201);
 	}
 }

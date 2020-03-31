@@ -63,7 +63,25 @@ class APIBuilder extends \JSONBuilder {
 		$this->account = new \Model\UserSession();
 	}
 
-	public function run() {return "";} // virtual, to override
+	public function run() {
+		$method = $_SERVER['REQUEST_METHOD'];
+		if ($method == "GET")
+			return $this->get();
+		elseif ($method == "POST")
+			return $this->post();
+		elseif ($method == "PUT")
+			return $this->put();
+		elseif ($method == "DELETE")
+			return $this->delete();
+
+		return ""; // unknown method
+	}
+
+	// virtual methods to override:
+	public function post() {return "";}
+	public function get() {return "";}
+	public function put() {return "";}
+	public function delete() {return "";}
 
 	public function __destruct() {
 		echo $this->run();

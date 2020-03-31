@@ -14,7 +14,8 @@ $router->route('gym\/\d+\/?', 'gyms/view.php');
 $router->route('profile\/\d+\/?', 'profiles/view.php');
 $router->route('upload\/avatar\/?', 'upload/avatar.php');
 
-$router->route('api\/workout\/?', 'workouts/api_add.php');
+$router->route('api\/workouts\/?', 'api/workouts.php');
+$router->route('api\/exercise_types\/?', 'api/exercise_types.php');
 /*
 $router->route('category(?:\/([^\/]+)\/?|\/?)', 'category.php');
 $router->route('order(?:\/([^\/]*)\/?|\/?)', 'order.php');

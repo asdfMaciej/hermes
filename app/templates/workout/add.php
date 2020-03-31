@@ -1,19 +1,5 @@
-<form action="``PATH_PREFIX``/workout/add" method="post">
-	<input type="hidden" name="action" value="add">
-	<input type="text" name="name" placeholder="Nazwa"><br>
-	<input type="number" name="reps" placeholder="Ilość powtórzeń"><br>
-	<input type="number" name="weight" placeholder="Waga na powtórzeniu"><br>
-	<input type="hidden" name="type_id" value="1">
-	<input type="hidden" name="gym_id" value="1">
-	<input type="hidden" name="failure" value="0">
-	<input type="submit" value="Dodaj trening">
-</form>
-
-
 <div id="app">
-	<pre>{{dataSent}}</pre>
 	<button @click="testApi">Dodaj workout</button>
-	<pre>{{response}}</pre>
 </div>
 
 <script>
@@ -38,12 +24,70 @@ class APIResponse {
 	}
 }
 
+class API {
+	getPath(method) {
+		return PATH_PREFIX + '/api/' + method;
+	}
+
+	post(path, data, onResponse) {
+		this._request(
+			axios.post(this.getPath(path), data),
+			onResponse
+		)
+	}
+
+	get(path, onResponse) {
+		this._request(
+			axios.get(this.getPath(path)),
+			onResponse
+		)
+	}
+
+	_request(request, onResponse) {
+		request.then((response) => {
+			let r = new APIResponse(response);
+			if (DEBUG)
+				r.preview();
+
+			onResponse(r, r.data);
+		})
+		.catch((error) => {
+			let r = new APIResponse(error.response);
+			if (DEBUG)
+				r.preview();
+
+			onResponse(r, r.data);
+		});
+	}
+}
+
 var t = new Vue({
 	el: "#app",
 	data: {
-		dataSent: {},
-		response: {}
+		cache: {
+			exerciseTypes: []
+		},
+		selected: {
+			exerciseType: {}
+		},
+		current: {
+			workout: {
+				workout: {},
+				exercises: []
+			}
+		},
+		exerciseTypes: [],
+		api: null
+
 	},
+
+	mounted: function() {
+		this.api = new API();
+		this.api.get('exercise_types', (response, data) => {
+			this.cache.exerciseTypes = data.exercise_types;
+		});
+	},
+
 	methods: {
 		testApi: function() {
 			workout = {
@@ -77,16 +121,28 @@ var t = new Vue({
 					}
 				]
 			}
-			axios.post(this.getPath('api/workout'), workout)
-				.then((response) => {
-					let r = new APIResponse(response);
-					r.preview();
-				})
-				.catch((error) => {console.log(error)});
+
+			this.addWorkout(workout)
 		},
 
-		getPath: function(method) {
-			return PATH_PREFIX + '/' + method;
+		addWorkout: function(workout) {
+			this.api.post('workouts', workout, (response, data) => {
+				if (response.code >= 400) {
+					this.snackbar(response.code, 'Nie udało się dodać treningu.');
+				} else {
+					this.snackbar(response.code, 'Udało się dodać trening.');
+					this.redirect('workout/'+data.workout_id);
+				}
+			});
+		},
+
+		snackbar: function(code, message) {
+			let prefix = code >= 400 ? "[!]" : "[*]";
+			console.log(prefix + ' ' + message);
+		},
+
+		redirect: function(page) {
+			window.location.href = PATH_PREFIX + '/' + page;
 		}
 	}
 });

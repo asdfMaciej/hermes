@@ -9,7 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="``$style``">
 		<?php endforeach ?>
 			
-		<script>var PATH_PREFIX = "``PATH_PREFIX``";</script>
+		<script>var PATH_PREFIX = "``PATH_PREFIX``"; <?php echo DEBUG ? "var DEBUG = true;" : "var DEBUG = false"; ?></script>
 
 		<?php foreach ($scripts as $script): ?>
 			<script src="``$script``"></script>
