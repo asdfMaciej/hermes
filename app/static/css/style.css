@@ -75,3 +75,31 @@ body {
 .feed-workout__title {
 	font-weight: bold;
 }
+.add-workout {
+	display: grid;
+	grid-template-areas: 'settings settings settings' 
+						 'list add preview'
+						 'submit submit submit';
+	min-height: 100%;
+	width: 100%;
+}
+.add-workout__list {
+	grid-area: list;
+}
+.add-workout__add {
+	grid-area: add;
+}
+.add-workout__preview {
+	grid-area: preview;
+}
+.add-workout__submit {
+	grid-area: submit;
+}
+.add-workout__settings {
+	grid-area: settings;
+	padding: 24px;
+	background: lightgreen;
+}
+.exercise-selected {
+	font-weight: bold;
+}

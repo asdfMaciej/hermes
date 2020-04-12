@@ -6,6 +6,7 @@ class Gym extends \DBModel {
 
 	public $gym_id;
 	public $album_id;
+	public $type_id;
 	public $name;
 	public $lat;
 	public $long;

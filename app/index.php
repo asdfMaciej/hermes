@@ -16,6 +16,7 @@ $router->route('upload\/avatar\/?', 'upload/avatar.php');
 
 $router->route('api\/workouts\/?', 'api/workouts.php');
 $router->route('api\/exercise_types\/?', 'api/exercise_types.php');
+$router->route('api\/gyms\/?', 'api/gyms.php');
 /*
 $router->route('category(?:\/([^\/]+)\/?|\/?)', 'category.php');
 $router->route('order(?:\/([^\/]*)\/?|\/?)', 'order.php');

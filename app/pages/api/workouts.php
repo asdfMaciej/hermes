@@ -6,8 +6,10 @@ use \Model\Exercise;
 class Page extends \APIBuilder {
 	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
-		$exercises = $this->data->json["exercises"] ?? [];
+		$workout["user_id"] = $this->account->user_id;
 
+		$exercises = $this->data->json["exercises"] ?? [];
+		
 		$this->database->beginTransaction();
 		try {
 			Workout::fromArray($workout)->save($this->database);

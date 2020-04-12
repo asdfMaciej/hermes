@@ -1,5 +1,62 @@
-<div id="app">
-	<button @click="testApi">Dodaj workout</button>
+<div id="app" class='add-workout'>
+	<div class="add-workout__settings">
+		<h1>Dodaj trening:</h1>
+		<input type="text" v-model='current.workout.workout.name' placeholder='Podaj nazwę treningu'>
+		<h3>Wybierz siłownię:</h3>
+		<div v-for="gym in cache.gyms" :class='{"exercise-selected": gym.gym_id == current.workout.workout.gym_id}'>
+			<a href='#' @click.prevent='current.workout.workout.gym_id = gym.gym_id'>
+				{{gym.name}}
+			</a>
+		</div>
+	</div>
+	<div class="add-workout__list">
+		<div v-for="exerciseType in cache.exerciseTypes" :class='{"exercise-selected": exerciseType == selected.exerciseType}'>
+			<a href='#' @click.prevent='selected.exerciseType = exerciseType'>
+				{{exerciseType.exercise_type}}
+			</a>
+		</div>
+	</div>
+
+	<div v-if='selected.exerciseType.type_id' class='add-workout__add'>
+		<h2>{{selected.exerciseType.exercise_type}}</h2>
+		<div v-if='selected.exerciseType.show_reps == 1'>
+			<span>Ilość powtórzeń:</span>
+			<input type="number" v-model="selected.exerciseType.reps">
+		</div>
+		<div v-if='selected.exerciseType.show_weight == 1'>
+			<span>Obciążenie [kg]:</span>
+			<input type="number" v-model="selected.exerciseType.weight">
+		</div>
+		<div v-if='selected.exerciseType.show_duration == 1'>
+			<span>Czas trwania [s]:</span>
+			<input type="number" v-model="selected.exerciseType.duration">
+		</div>
+		<button :disabled='!validExercise' @click="addExercise">
+			Dodaj ćwiczenie
+		</button>
+	</div>
+	
+	<div class="add-workout__preview">
+		<div v-for="exercise in current.workout.exercises" class='exercise'>
+			<h2>{{exercise.exercise_type}}</h2>
+			<div v-if='exercise.show_reps == 1'>
+				<span>Ilość powtórzeń:</span>
+				<span>{{exercise.reps}}</span>
+			</div>
+			<div v-if='exercise.show_weight == 1'>
+				<span>Obciążenie:</span>
+				<span>{{exercise.weight}} kg</span>
+			</div>
+			<div v-if='exercise.show_duration == 1'>
+				<span>Czas trwania:</span>
+				<span>{{exercise.duration}} s</span>
+			</div>
+		</div>
+	</div>
+	
+	<button :disabled='!validWorkout' @click="submit" class='add-workout__submit'>
+		Dodaj trening
+	</button>
 </div>
 
 <script>
@@ -61,24 +118,30 @@ class API {
 	}
 }
 
+function copy(o) {
+	return JSON.parse(JSON.stringify(o));
+}
+
 var t = new Vue({
 	el: "#app",
 	data: {
 		cache: {
-			exerciseTypes: []
+			exerciseTypes: [],
+			gyms: []
 		},
 		selected: {
 			exerciseType: {}
 		},
 		current: {
 			workout: {
-				workout: {},
+				workout: {
+					gym_id: null,
+					name: ""
+				},
 				exercises: []
 			}
 		},
-		exerciseTypes: [],
 		api: null
-
 	},
 
 	mounted: function() {
@@ -86,43 +149,48 @@ var t = new Vue({
 		this.api.get('exercise_types', (response, data) => {
 			this.cache.exerciseTypes = data.exercise_types;
 		});
+		this.api.get('gyms', (response, data) => {
+			this.cache.gyms = data.gyms;
+		});
+	},
+
+	computed: {
+		validExercise: function() {
+			let e = this.selected.exerciseType;
+			return this.validateExercise(e);
+		},
+
+		validWorkout: function() {
+			let w = this.current.workout;
+			if (w.workout.gym_id == null || !w.workout.name)
+				return false;
+
+			if (w.exercises.length == 0)
+				return false;
+
+			for (let e of w.exercises)
+				if (!this.validateExercise(e))
+					return false;
+
+			return true;
+		}
 	},
 
 	methods: {
-		testApi: function() {
-			workout = {
-				workout: {
-					gym_id: 1,
-					user_id: 16,
-					name: "Trening dodany z frontendu!"
-				},
+		submit: function() {
+			this.addWorkout(this.current.workout);
+		},
 
-				exercises: [
-					{
-						type_id: 1,
-						reps: 5,
-						weight: 80
-					},
-					{
-						type_id: 1,
-						reps: 5,
-						weight: 85
-					},
-					{
-						type_id: 1,
-						reps: 4,
-						weight: 100,
-						failure: 1
-					},
-					{
-						type_id: 2,
-						reps: 8,
-						weight: 12
-					}
-				]
-			}
+		addExercise: function() {
+			let exerciseType = this.selected.exerciseType;
+			if (this.isEmptyObject(exerciseType))
+				return this.snackbar(400, "Wybierz ćwiczenie!");
 
-			this.addWorkout(workout)
+			this.current.workout.exercises.push(copy(exerciseType));
+		},
+
+		isEmptyObject: function(obj) {
+			return Object.keys(obj).length === 0; 
 		},
 
 		addWorkout: function(workout) {
@@ -134,6 +202,21 @@ var t = new Vue({
 					this.redirect('workout/'+data.workout_id);
 				}
 			});
+		},
+
+		validateExercise: function(e) {
+			if (!e.type_id)
+				return false;
+
+			if ((e.show_reps == 1 && e.reps == null)
+				|| (e.show_duration == 1 && e.duration == null)
+				|| (e.show_weight == 1 && e.weight == null))
+				return false;
+
+			if (e.reps <= 0 || e.weight < 0 || e.duration <= 0)
+				return false;
+
+			return true;
 		},
 
 		snackbar: function(code, message) {
