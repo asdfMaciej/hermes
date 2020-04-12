@@ -94,11 +94,18 @@ body {
 }
 .add-workout__submit {
 	grid-area: submit;
+	display: flex;
+	flex-direction: column;
 }
 .add-workout__settings {
 	grid-area: settings;
 	padding: 24px;
 	background: lightgreen;
+}
+.add-workout__error {
+	padding: 16px;
+	background: lightcoral;
+	font-weight: bold;
 }
 .exercise-selected {
 	font-weight: bold;

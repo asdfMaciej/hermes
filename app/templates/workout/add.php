@@ -10,6 +10,7 @@
 		</div>
 	</div>
 	<div class="add-workout__list">
+		<h2>Wszystkie ćwiczenia:</h2>
 		<div v-for="exerciseType in cache.exerciseTypes" :class='{"exercise-selected": exerciseType == selected.exerciseType}'>
 			<a href='#' @click.prevent='selected.exerciseType = exerciseType'>
 				{{exerciseType.exercise_type}}
@@ -18,46 +19,52 @@
 	</div>
 
 	<div v-if='selected.exerciseType.type_id' class='add-workout__add'>
-		<h2>{{selected.exerciseType.exercise_type}}</h2>
-		<div v-if='selected.exerciseType.show_reps == 1'>
-			<span>Ilość powtórzeń:</span>
-			<input type="number" v-model="selected.exerciseType.reps">
-		</div>
-		<div v-if='selected.exerciseType.show_weight == 1'>
-			<span>Obciążenie [kg]:</span>
-			<input type="number" v-model="selected.exerciseType.weight">
-		</div>
-		<div v-if='selected.exerciseType.show_duration == 1'>
-			<span>Czas trwania [s]:</span>
-			<input type="number" v-model="selected.exerciseType.duration">
-		</div>
-		<button :disabled='!validExercise' @click="addExercise">
-			Dodaj ćwiczenie
-		</button>
+		<h2>Dodaj:</h2>
+		<exercise edit-only :value='selected.exerciseType' @input='addExercise($event)'>
+		</exercise>
 	</div>
 	
 	<div class="add-workout__preview">
-		<div v-for="exercise in current.workout.exercises" class='exercise'>
-			<h2>{{exercise.exercise_type}}</h2>
-			<div v-if='exercise.show_reps == 1'>
-				<span>Ilość powtórzeń:</span>
-				<span>{{exercise.reps}}</span>
-			</div>
-			<div v-if='exercise.show_weight == 1'>
-				<span>Obciążenie:</span>
-				<span>{{exercise.weight}} kg</span>
-			</div>
-			<div v-if='exercise.show_duration == 1'>
-				<span>Czas trwania:</span>
-				<span>{{exercise.duration}} s</span>
-			</div>
-		</div>
+		<h2>Dodane ćwiczenia:</h2>
+		<exercise v-for="(exercise, i) in current.workout.exercises" 
+			v-model='current.workout.exercises[i]'
+			@delete='current.workout.exercises.splice(i, 1)'></exercise>
 	</div>
 	
-	<button :disabled='!validWorkout' @click="submit" class='add-workout__submit'>
-		Dodaj trening
-	</button>
+	<div class="add-workout__submit">
+		<div class="add-workout__error" v-for='error in validateWorkoutErrors'>
+			{{error}}
+		</div>
+		<button :disabled='validateWorkoutErrors.length > 0' @click="submit">
+			Dodaj trening
+		</button>
+	</div>
+	
 </div>
+
+<script type="text/x-template" id="exercise-template">
+	<div class="exercise">
+		<h3>{{exercise.exercise_type}}</h3>
+		<div v-if='exercise.show_reps == 1'>
+			<span>Ilość powtórzeń:</span>
+			<input v-if='edit' type="number" v-model="exercise.reps">
+			<span v-else>{{exercise.reps}}</span>
+		</div>
+		<div v-if='exercise.show_weight == 1'>
+			<span>Obciążenie:{{edit ? ' [kg]' : ''}}</span>
+			<input v-if='edit' type="number" v-model="exercise.weight">
+			<span v-else>{{exercise.weight}} kg</span>
+		</div>
+		<div v-if='exercise.show_duration == 1'>
+			<span>Czas trwania:{{edit ? ' [s]' : ''}}</span>
+			<input v-if='edit' type="number" v-model="exercise.duration">
+			<span v-else>{{exercise.duration}} s</span>
+		</div>
+		<button @click='remove' v-if='!viewOnly && !editOnly'>Usuń</button>
+		<button @click='showEdit = true && !viewOnly' v-if='!edit'>Edytuj</button>
+		<button @click='finishEdit' v-if='edit' :disabled='!valid'>Zapisz</button>
+	</div>
+</script>
 
 <script>
 class APIResponse {
@@ -122,6 +129,67 @@ function copy(o) {
 	return JSON.parse(JSON.stringify(o));
 }
 
+Vue.component('exercise', {
+	props: {
+		value: undefined,
+		editOnly: Boolean,
+		viewOnly: Boolean
+	},
+	template: '#exercise-template',
+	data: function() {return {
+		showEdit: false
+	}},
+
+	methods: {
+		finishEdit: function() {
+			if (this.validateExercise(this.value)) {
+				this.$emit('input', this.value);
+				this.$emit('add', this.value);
+				this.showEdit = false;
+			}
+		},
+
+		validateExercise: function(e) {
+			if (!e.type_id)
+				return false;
+
+			if ((e.show_reps == 1 && (e.reps == null || e.reps === ""))
+				|| (e.show_duration == 1 && (e.duration == null || e.duration === ""))
+				|| (e.show_weight == 1 && (e.weight == null || e.weight === "")))
+				return false;
+
+			if (e.reps <= 0 || e.weight < 0 || e.duration <= 0)
+				return false;
+
+			return true;
+		},
+
+		remove: function() {
+			this.$emit('delete');
+		}
+	},
+
+	computed: {
+		exercise: function() {
+			return this.value;
+		},
+
+		valid: function() {
+			return this.validateExercise(this.value);
+		},
+
+		edit: function() {
+			if (this.editOnly)
+				return true;
+
+			if (this.viewOnly)
+				return false;
+
+			return this.showEdit;
+		}
+	}
+});
+
 var t = new Vue({
 	el: "#app",
 	data: {
@@ -155,24 +223,16 @@ var t = new Vue({
 	},
 
 	computed: {
-		validExercise: function() {
-			let e = this.selected.exerciseType;
-			return this.validateExercise(e);
-		},
-
-		validWorkout: function() {
+		validateWorkoutErrors: function() {
 			let w = this.current.workout;
+			let errors = [];
 			if (w.workout.gym_id == null || !w.workout.name)
-				return false;
+				errors.push("Nie ustawiono siłowni lub nazwy treningu!");
 
 			if (w.exercises.length == 0)
-				return false;
+				errors.push("Nie dodano żadnych ćwiczeń!");
 
-			for (let e of w.exercises)
-				if (!this.validateExercise(e))
-					return false;
-
-			return true;
+			return errors;
 		}
 	},
 
@@ -181,12 +241,9 @@ var t = new Vue({
 			this.addWorkout(this.current.workout);
 		},
 
-		addExercise: function() {
-			let exerciseType = this.selected.exerciseType;
-			if (this.isEmptyObject(exerciseType))
-				return this.snackbar(400, "Wybierz ćwiczenie!");
-
-			this.current.workout.exercises.push(copy(exerciseType));
+		addExercise: function(exercise) {
+			console.log(exercise);
+			this.current.workout.exercises.push(copy(exercise));
 		},
 
 		isEmptyObject: function(obj) {
@@ -202,21 +259,6 @@ var t = new Vue({
 					this.redirect('workout/'+data.workout_id);
 				}
 			});
-		},
-
-		validateExercise: function(e) {
-			if (!e.type_id)
-				return false;
-
-			if ((e.show_reps == 1 && e.reps == null)
-				|| (e.show_duration == 1 && e.duration == null)
-				|| (e.show_weight == 1 && e.weight == null))
-				return false;
-
-			if (e.reps <= 0 || e.weight < 0 || e.duration <= 0)
-				return false;
-
-			return true;
 		},
 
 		snackbar: function(code, message) {
