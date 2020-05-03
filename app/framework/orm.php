@@ -135,8 +135,11 @@ class QueryBuilder {
 	private $fields = "";
 	private $table = "";
 	private $where_alias = null;
+	private $sql = null;
 	private $where = "";
 	private $order = "";
+	private $group = "";
+	private $limit = "";
 	private $parameters = [];
 	private $joins = [];
 
@@ -199,6 +202,11 @@ class QueryBuilder {
 		return $this;
 	}
 
+	public function sql($sql=null) {
+		$this->sql = $sql;
+		return $this;
+	}
+
 	public function orderBy($column, $direction="asc") {
 		$directions = ["asc", "desc", "ascending", "descending", ""];
 		$valid = in_array(strtolower($direction), $directions);
@@ -209,6 +217,24 @@ class QueryBuilder {
 		$this->order = "";
 		if ($column) {
 			$this->order = "ORDER BY $column $direction";
+		}
+		return $this;
+	}
+
+	public function groupBy($condition) {
+		if ($condition) {
+			$this->group = "GROUP BY ".$condition;
+		} else {
+			$this->group = "";
+		}
+		return $this;
+	}
+
+	public function limit($n) {
+		if ($n) {
+			$this->limit = "LIMIT $n";
+		} else {
+			$this->limit = "";
 		}
 		return $this;
 	}
@@ -260,17 +286,36 @@ class QueryBuilder {
 	}
 
 	public function getQuery() {
+		if ($this->sql)
+			$q = $this->sql; 
+		else
+			$q = $this->buildQuery();
+		
+		if ($this->debug and DEBUG)
+			echo "<div><h2>Query:</h2><pre>".$q."</pre></div>";
+
+		return $q;
+	}
+
+	protected function buildQuery() {
 		$q = "SELECT $this->fields\n";
 		$q .= "FROM $this->table\n";
 
 		$joins = implode("\n", $this->joins);
-		$q .= "$joins\n";
-		$q .= "$this->where\n";
-		$q .= "$this->order";
+		$q .= "$joins";
+		
+		if ($this->where)
+			$q .= "\n$this->where";
+		
+		if ($this->group)
+			$q .= "\n$this->group";
 
-		if ($this->debug and DEBUG)
-			echo "<div><h2>Query:</h2><pre>".$q."</pre></div>";
+		if ($this->order)
+			$q .= "\n$this->order";
 
+		if ($this->limit)
+			$q .= "\n$this->limit";
+		
 		return $q;
 	}
 
@@ -369,6 +414,11 @@ class DBModel extends Model {
 	public static function select($fields) {
 		$query_builder = new QueryBuilder();
 		return $query_builder->select($fields);
+	}
+
+	public static function sql($sql) {
+		$query_builder = new QueryBuilder();
+		return $query_builder->sql($sql);
 	}
 
 	public static function fromArray($array, $prefix="") {

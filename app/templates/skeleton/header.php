@@ -18,18 +18,23 @@
 
 	</head>
 	<body>
-		<div id="header">
-			<a href="``PATH_PREFIX``/">Strona główna</a><br>
+		<div class='page-header' id="header">
+			<a href="``PATH_PREFIX``/" class='page-header__logo'>
+				<img src="``PATH_PREFIX``/static/img/logo.png">
+			</a><br>
 			<?php if ($account->isLoggedIn()): ?>
-				Cześć,
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
-					``$account->name``!
+					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>
-				<?php $this->nest("forms/logout.php", []); ?>
+
+				<form action="``PATH_PREFIX``/login" method="post">
+					<input type="hidden" name="action" value="logout">
+					<input type="submit" value="Wyloguj się">
+				</form>
 			<?php else: ?>
 				<a href="``PATH_PREFIX``/login">Zaloguj się</a>
 				<a href="``PATH_PREFIX``/register">Rejestracja</a>
 			<?php endif ?>
 		</div>
 
-		<div id="content">
+		<div class='page-content' id="content">

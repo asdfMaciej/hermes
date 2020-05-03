@@ -6,7 +6,8 @@ class UserSession extends \SessionModel {
 		"login" => "",
 		"password" => "",
 		"name" => "",
-		"register_date" => ""
+		"register_date" => "",
+		"avatar" => ""
 	];
 
 	public function isLoggedIn() {

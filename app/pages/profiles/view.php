@@ -21,6 +21,11 @@ class Page extends \PageBuilder {
 			"user" => $user,
 			"account" => $this->account
 		]);
+
+		$workouts = Workout::getNewsfeedForUser($this->database, $id);
+		$this->response->addTemplate("newsfeed/index.php", [
+			"workouts" => $workouts
+		]);
 	}
 }
 

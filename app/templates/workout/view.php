@@ -8,6 +8,9 @@
 	<div class="workout-details__username">
 		``$workout["user_name"]``
 	</div>
+	<div class="workout-details__photo">
+		<img src="``PATH_PREFIX``/``$workout['avatar']``">
+	</div>
 </div>
 <div class="workout-gym">
 	<div class="workout-gym__name">
@@ -25,26 +28,32 @@
 	</div>
 	<div class="workout-exercises__list exercises-list">
 		<?php foreach ($exercises as $exercise): ?>
-			<div class="exercises-list__item ``$exercise['failure'] ? 'failed' : ''``">
-				<span class="exercises-list__name">
+			<div class="exercises-list__item exercise ``$exercise['failure'] ? 'failed' : ''``">
+				<h3 class="exercises-list__name">
 					``$exercise["exercise_type"]``
-				</span>
+				</h3>
 				<?php if ($exercise["show_duration"]): ?>
-					<span class="exercises-list__duration">
+					<div>
 						``$exercise["duration"]`` sekund
-					</span>
+					</div>
 				<?php endif ?>
 				<?php if ($exercise["show_reps"]): ?>
-					<span class="exercises-list__reps">
+					<div>
 						``$exercise["reps"]`` powtórzeń
-					</span>
+					</div>
 				<?php endif ?>
 				<?php if ($exercise["show_weight"]): ?>
-					<span class="exercises-list__weight">
+					<div>
 						``$exercise["weight"]`` kg
-					</span>
+					</div>
 				<?php endif ?>
 			</div>
 		<?php endforeach ?>
 	</div>
 </div>
+
+<style>
+	.workout-details__photo img {
+		width: 100px;
+	}
+</style>

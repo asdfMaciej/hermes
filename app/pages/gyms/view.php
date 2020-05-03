@@ -18,10 +18,19 @@ class Page extends \PageBuilder {
 		if (!$gym)
 			return $this->response->addTemplate("codes/404.php");
 
+		$records = Gym::getExerciseRecords($this->database, $id);
+		$frequenters = Gym::getFrequenters($this->database, $id);
 		$album = Photo::getForAlbumId($this->database, $gym["album_id"]);
 		$this->response->addTemplate("gym/view.php", [
 			"gym" => $gym,
-			"album" => $album
+			"album" => $album,
+			"records" => $records,
+			"frequenters" => $frequenters
+		]);
+
+		$workouts = Workout::getNewsfeedForGym($this->database, $id);
+		$this->response->addTemplate("newsfeed/index.php", [
+			"workouts" => $workouts
 		]);
 	}
 }

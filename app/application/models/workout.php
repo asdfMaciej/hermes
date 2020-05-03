@@ -12,8 +12,8 @@ class Workout extends \DBModel {
 	public $added;
 	public $modified;
 
-	public static function getNewsfeedList($database) {
-		$rows = static::select([
+	protected static function queryNewsfeedList() {
+		$query = static::select([
 					static::class => ["workout_id", "name", "date"],
 					User::class => ["name as user_name", "user_id", "avatar"],
 					Gym::class => ["gym_id", "name as gym_name"]
@@ -21,7 +21,33 @@ class Workout extends \DBModel {
 				->from(static::class)
 				->innerJoin(User::class, "user_id")
 				->innerJoin(Gym::class, "gym_id")
-				->orderBy("Workout.workout_id", "desc")
+				->orderBy("Workout.workout_id", "desc");
+
+		return $query;
+	}
+
+	public static function getNewsfeedList($database) {
+		$rows = static::queryNewsfeedList()
+				->execute($database)
+				->getAll();
+
+		return $rows;
+	}
+
+	public static function getNewsfeedForUser($database, $user_id) {
+		$rows = static::queryNewsfeedList()
+				->where("User.user_id = :user_id")
+				->setParameter(":user_id", $user_id)
+				->execute($database)
+				->getAll();
+
+		return $rows;
+	}
+
+	public static function getNewsfeedForGym($database, $gym_id) {
+		$rows = static::queryNewsfeedList()
+				->where("Gym.gym_id = :gym_id")
+				->setParameter(":gym_id", $gym_id)
 				->execute($database)
 				->getAll();
 
@@ -52,7 +78,7 @@ class Workout extends \DBModel {
 					ExerciseType::class => "*"
 				])
 				->from(static::class)
-				->leftJoin(Exercise::class, "workout_id")
+				->innerJoin(Exercise::class, "workout_id")
 				->innerJoin(ExerciseType::class, "type_id", Exercise::class)
 				->where("Workout.workout_id = :id")
 				->setParameter(":id", $id)

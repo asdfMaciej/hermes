@@ -1,5 +1,5 @@
 		</div> <!-- content end -->
-		<div id="footer">
+		<div class='page-footer' id="footer">
 			Dokąd nocą tupta jeż?
 		</div>
 	</body>
