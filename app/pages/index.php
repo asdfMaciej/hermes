@@ -11,7 +11,13 @@ class Index extends \PageBuilder {
 	protected function content() {
 		if ($this->account->isLoggedIn()) {
 			$workouts = Workout::getNewsfeedList($this->database);
-			$this->response->addTemplate("newsfeed/index.php", ["workouts" => $workouts]);
+			$statistics = User::getStatistics($this->database, $this->account->user_id);
+
+			$this->response->addTemplate("newsfeed/index.php", [
+				"workouts" => $workouts, 
+				"account" => $this->account,
+				"statistics" => $statistics
+			]);
 		} else {
 			$this->response->addTemplate("static/index.php", []);
 		}

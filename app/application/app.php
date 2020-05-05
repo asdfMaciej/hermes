@@ -19,6 +19,7 @@ class PageBuilder extends \WebBuilder {
 			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
 		}
 		
+		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");
 		
 	}

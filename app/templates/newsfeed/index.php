@@ -1,31 +1,22 @@
-<b>Tutaj będą wstawiane treningi!</b><br>
-<a href="``PATH_PREFIX``/workout/add">Dodaj trening!</a><br>
-
-<div class="newsfeed">
-	<?php foreach ($workouts as $workout): ?>
-		<div class="feed-workout">
-			<div class="feed-workout__avatar">
-				<img src="``PATH_PREFIX``/``$workout['avatar']``">
+<div class="frontpage">
+	<div class='frontpage__statistics statistics-box'>
+		<a href="``PATH_PREFIX``/profile/``$account->user_id``" class='statistics-box__avatar'>
+			<img src="``PATH_PREFIX``/``$account->avatar``">
+				<div class="statistics-box__name">
+				``$account->name``
 			</div>
-			<div class="feed-workout__container">
-				<div class="feed-workout__author">
-					<a href="``PATH_PREFIX``/profile/``$workout['user_id']``">
-						``$workout["user_name"]``
-					</a>
-				</div>
-				<div class="feed-workout__date">
-					``$workout["date"]``
-					-
-					<a href="``PATH_PREFIX``/gym/``$workout['gym_id']``">
-						``$workout["gym_name"]``
-					</a>
-				</div>
-				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``">
-					<div class="feed-workout__title">
-						``$workout["name"]``
-					</div>
-				</a>
+		</a>
+		<div class="statistics-box__statistics">
+			<div>
+				<h4>Na siłowni byłeś:</h4>
+				``$statistics["workout_count"]`` razy
+				<h4>Ostatni trening zrobiłeś:</h4>
+				``$statistics["workout_last_date"]``
 			</div>
 		</div>
-	<?php endforeach ?>
+		<a class='statistics-box__add' href="``PATH_PREFIX``/workout/add">Dodaj trening!</a>
+	</div>
+	<div class="frontpage__newsfeed">
+		<?php $this->nest("newsfeed/newsfeed.php", ["workouts" => $workouts]); ?>
+	</div>
 </div>

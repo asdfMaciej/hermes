@@ -41,5 +41,22 @@ class User extends \DBModel {
 
 		return $row;
 	}
+
+	public static function getStatistics($database, $id) {
+		$row = static::select([
+					"User.user_id",
+					"COUNT(Workout.workout_id) as workout_count",
+					"date(MAX(Workout.date)) as workout_last_date"
+				])
+				->from(static::class)
+				->where("User.user_id = :id")
+				->leftJoin(Workout::class, "user_id")
+				->groupBy("User.user_id")
+				->setParameter(":id", $id)
+				->execute($database)
+				->getRow();
+
+		return $row;
+	}
 }
 ?>

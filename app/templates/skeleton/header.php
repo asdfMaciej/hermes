@@ -22,6 +22,8 @@
 			<a href="``PATH_PREFIX``/" class='page-header__logo'>
 				<img src="``PATH_PREFIX``/static/img/logo.png">
 			</a><br>
+			<div class='page-header__filler'></div>
+			<a class='page-header__add' href="``PATH_PREFIX``/workout/add">+</a>
 			<?php if ($account->isLoggedIn()): ?>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
