@@ -3,6 +3,8 @@ namespace Web\Pages;
 use \Model\User;
 
 class Index extends \PageBuilder {
+	protected $require_auth = false;
+
 	protected function init() {
 		$this->metadata->setTitle("Index");
 		$this->addActions([

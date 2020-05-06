@@ -23,4 +23,5 @@ foreach (glob(ROOT_PATH . "/application/models/*.php") as $model_path) {
 	out($result[1]);
 	out();
 }
+
 ?>

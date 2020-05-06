@@ -5,8 +5,10 @@ foreach (glob(__DIR__ . "/models/*.php") as $filename) {
     include_once $filename;
 }
 
+
 class PageBuilder extends \WebBuilder {
     protected $account;
+    protected $require_auth = true;
 
 	public function __construct() {
 		parent::__construct();
@@ -21,7 +23,18 @@ class PageBuilder extends \WebBuilder {
 		
 		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");
-		
+	}
+
+	public function run() {
+		if ($this->account->isLoggedIn() || !$this->require_auth) {
+			parent::run();
+		} else {
+			$this->authRedirect();
+		}	
+	}
+
+	protected function authRedirect() {
+		$this->redirect("login");
 	}
 
 	public function login($login, $password) {

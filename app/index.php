@@ -14,6 +14,7 @@ $router->route('gym\/\d+\/?', 'gyms/view.php');
 $router->route('profile\/\d+\/?', 'profiles/view.php');
 $router->route('upload\/avatar\/?', 'upload/avatar.php');
 
+$router->route('api\/login\/?', 'api/login.php');
 $router->route('api\/workouts\/?', 'api/workouts.php');
 $router->route('api\/exercise_types\/?', 'api/exercise_types.php');
 $router->route('api\/gyms\/?', 'api/gyms.php');

@@ -4,6 +4,8 @@ use \Model\User;
 use \Model\Workout;
 
 class Index extends \PageBuilder {
+	protected $require_auth = false;
+
 	protected function init() {
 		$this->metadata->setTitle("Index");
 	}
