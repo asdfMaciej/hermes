@@ -21,4 +21,12 @@
 	<input type="file" name="image">
 	<input type="submit">
 </form>
+<?php else: ?>
+
+<?php if ($user["following"]): ?>
+	Obserwujesz!<br>
+	<a href="``PATH_PREFIX``/profile/``$user['user_id']``/unfollow">Odobserwuj</a>
+<?php else: ?>
+	<a href="``PATH_PREFIX``/profile/``$user['user_id']``/follow">Zaobserwuj</a>
+<?php endif ?>
 <?php endif ?>

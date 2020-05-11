@@ -26,10 +26,35 @@ class Workout extends \DBModel {
 		return $query;
 	}
 
-	public static function getNewsfeedList($database) {
-		$rows = static::queryNewsfeedList()
-				->execute($database)
-				->getAll();
+	public static function getNewsfeedList($database, $user_id) {
+		// todo: complicated ON queries arent supported by orm
+		// todo: UNION isnt supported by orm
+		$rows = static::sql("
+		SELECT Workout.workout_id, Workout.name, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
+		FROM followers AS Follower
+		INNER JOIN `workouts` AS Workout
+		ON Workout.user_id = Follower.user_id
+		INNER JOIN users AS User
+		ON Workout.user_id = User.user_id
+		INNER JOIN gyms AS Gym
+		ON Workout.gym_id = Gym.gym_id
+		WHERE Follower.follower_id = :user_id
+
+		UNION
+
+		SELECT Workout.workout_id, Workout.name, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
+		FROM `workouts` AS Workout
+		INNER JOIN users AS User
+		ON Workout.user_id = User.user_id
+		INNER JOIN gyms AS Gym
+		ON Workout.gym_id = Gym.gym_id
+		WHERE Workout.user_id = :user_id
+
+		ORDER BY workout_id DESC
+		")
+		->setParameter(":user_id", $user_id)
+		->execute($database)
+		->getAll();
 
 		return $rows;
 	}

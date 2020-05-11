@@ -28,14 +28,17 @@ class User extends \DBModel {
 			return false;
 	}
 
-	public static function getProfileById($database, $id) {
+	public static function getProfileById($database, $id, $viewer_id) {
 		$row = static::select([
 					static::class => [
-						"user_id", "login", "name", "register_date", "avatar"]
+						"user_id", "login", "name", "register_date", "avatar"
+					],
+					"EXISTS(SELECT 0 FROM followers WHERE user_id = :id AND follower_id = :viewer_id) AS following"
 				])
 				->from(static::class)
 				->where("User.user_id = :id")
 				->setParameter(":id", $id)
+				->setParameter(":viewer_id", $viewer_id)
 				->execute($database)
 				->getRow();
 
@@ -57,6 +60,35 @@ class User extends \DBModel {
 				->getRow();
 
 		return $row;
+	}
+
+	public static function follow($database, $follower_id, $following_id) {
+		if ($follower_id == $following_id)
+			return;
+
+		static::sql("
+			INSERT INTO followers
+			(user_id, follower_id)
+			VALUES 
+			(:following_id, :follower_id)
+		")
+		->setParameter(":follower_id", $follower_id)
+		->setParameter(":following_id", $following_id)
+		->execute($database);
+	}
+
+	public static function unfollow($database, $follower_id, $following_id) {
+		if ($follower_id == $following_id)
+			return;
+
+		static::sql("
+			DELETE FROM followers
+			WHERE user_id = :following_id and follower_id = :follower_id
+		")
+		->setParameter(":follower_id", $follower_id)
+		->setParameter(":following_id", $following_id)
+		->debug()
+		->execute($database);
 	}
 }
 ?>

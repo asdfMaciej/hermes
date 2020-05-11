@@ -13,7 +13,7 @@ class Page extends \PageBuilder {
 
 	protected function content() {
 		$id = $this->data->path->profile;
-		$user = User::getProfileById($this->database, $id);
+		$user = User::getProfileById($this->database, $id, $this->account->user_id);
 		if (!$user)
 			return $this->response->addTemplate("codes/404.php");
 

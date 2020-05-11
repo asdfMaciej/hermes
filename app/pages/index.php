@@ -12,7 +12,7 @@ class Index extends \PageBuilder {
 
 	protected function content() {
 		if ($this->account->isLoggedIn()) {
-			$workouts = Workout::getNewsfeedList($this->database);
+			$workouts = Workout::getNewsfeedList($this->database, $this->account->user_id);
 			$statistics = User::getStatistics($this->database, $this->account->user_id);
 
 			$this->response->addTemplate("newsfeed/index.php", [
