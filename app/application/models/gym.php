@@ -16,7 +16,7 @@ class Gym extends \DBModel {
 		todo: subqueries arent supported in orm
 		*/
 		$rows = static::sql("
-		SELECT e.workout_id, e.type_id, e.reps, e.weight, w.date, w.gym_id, u.name, u.avatar, 
+		SELECT e.workout_id, e.type_id, e.reps, e.weight, date(w.date) as date, w.gym_id, u.name, u.avatar, 
 		et.exercise_type, et.show_duration, et.show_reps, et.show_weight
 		FROM (
 			SELECT ee.type_id, MAX(ee.weight) AS weight

@@ -11,11 +11,9 @@
 	</div>
 	<div class="add-workout__list">
 		<h2>Wszystkie ćwiczenia:</h2>
-		<div v-for="exerciseType in cache.exerciseTypes" :class='{"exercise-selected": exerciseType == selected.exerciseType}'>
-			<a href='#' @click.prevent='selected.exerciseType = exerciseType'>
-				{{exerciseType.exercise_type}}
-			</a>
-		</div>
+		<exercise-category :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories" > <!-- :class='{"exercise-selected": exerciseType == selected.exerciseType}' -->
+			
+		</exercise-category>
 	</div>
 
 	<div v-if='selected.exerciseType.type_id' class='add-workout__add'>
@@ -41,6 +39,22 @@
 	</div>
 	
 </div>
+
+<script type="text/x-template" id="exercise-category-template">
+	<div class="exercise-category"> <!-- :class='{"exercise-selected": exerciseType == selected.exerciseType}' -->
+		{{category.name}}
+
+		<div v-for='exerciseType in category.exercises'> 
+			<a href='#' @click.prevent='$root.selected.exerciseType = exerciseType' >
+				{{exerciseType.exercise_type}}
+			</a>
+		</div>
+
+		<exercise-category :category='exerciseCategory' v-for="exerciseCategory in category.categories" > 
+			
+		</exercise-category>
+	</div>
+</script>
 
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise">
@@ -129,6 +143,13 @@ function copy(o) {
 	return JSON.parse(JSON.stringify(o));
 }
 
+Vue.component('exercise-category', {
+	props: {
+		category: undefined
+	},
+	template: '#exercise-category-template'
+});
+
 Vue.component('exercise', {
 	props: {
 		value: undefined,
@@ -194,7 +215,7 @@ var t = new Vue({
 	el: "#app",
 	data: {
 		cache: {
-			exerciseTypes: [],
+			exerciseCategories: [],
 			gyms: []
 		},
 		selected: {
@@ -214,8 +235,8 @@ var t = new Vue({
 
 	mounted: function() {
 		this.api = new API();
-		this.api.get('exercise_types', (response, data) => {
-			this.cache.exerciseTypes = data.exercise_types;
+		this.api.get('exercise_categories', (response, data) => {
+			this.cache.exerciseCategories = data.exercise_categories;
 		});
 		this.api.get('gyms', (response, data) => {
 			this.cache.gyms = data.gyms;

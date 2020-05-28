@@ -36,6 +36,12 @@ small {
     font-size: .4em
 }
 
+input {
+    font-size: 0.9em;
+    padding: 4px;
+    font-family: Open Sans, Arial, sans-serif;
+}
+
 ul li img {
     height: 1em
 }

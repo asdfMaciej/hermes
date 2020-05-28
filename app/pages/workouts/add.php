@@ -13,12 +13,12 @@ class Page extends \PageBuilder {
 	}
 
 	protected function content() {
+		$exercises = \Model\ExerciseCategory::getTree($this->database);
+		var_dump(json_encode($exercises, JSON_UNESCAPED_UNICODE));
 		$this->response->addTemplate("workout/add.php", []);
 	}
 
 	protected function onAdd() {
-		// todo: MVP
-
 		$workout = new Workout();
 		$workout->gym_id = $_POST["gym_id"] ?? "";
 		$workout->user_id = $this->account->user_id;

@@ -5,6 +5,7 @@ class ExerciseType extends \DBModel {
 	protected static $primary_key = "type_id";
 
 	public $type_id;
+	public $category_id;
 	public $exercise_type;
 	public $show_duration;
 	public $show_reps;
