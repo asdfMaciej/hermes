@@ -23,19 +23,24 @@
 				<img src="``PATH_PREFIX``/static/img/logo.png">
 			</a><br>
 			<div class='page-header__filler'></div>
-			<a class='page-header__add' href="``PATH_PREFIX``/workout/add">+</a>
+			
 			<?php if ($account->isLoggedIn()): ?>
+				<a class='page-header__add' href="``PATH_PREFIX``/workout/add">+</a>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>
 
-				<form action="``PATH_PREFIX``/login" method="post">
+				<form action="``PATH_PREFIX``/" method="post">
 					<input type="hidden" name="action" value="logout">
 					<input type="submit" value="Wyloguj się">
 				</form>
 			<?php else: ?>
-				<a href="``PATH_PREFIX``/login">Zaloguj się</a>
-				<a href="``PATH_PREFIX``/register">Rejestracja</a>
+				<form action="``PATH_PREFIX``/" method="post">
+					<input type="hidden" name="action" value="login">
+					<input type="text" name="login" placeholder="Login">
+					<input type="password" name="password" placeholder="Hasło">
+					<input type="submit" value="Zaloguj się">
+				</form>
 			<?php endif ?>
 		</div>
 

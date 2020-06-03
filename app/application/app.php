@@ -34,7 +34,7 @@ class PageBuilder extends \WebBuilder {
 	}
 
 	protected function authRedirect() {
-		$this->redirect("login");
+		$this->redirect("");
 	}
 
 	public function login($login, $password) {

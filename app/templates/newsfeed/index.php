@@ -17,6 +17,10 @@
 		<a class='statistics-box__add' href="``PATH_PREFIX``/workout/add">Dodaj trening!</a>
 	</div>
 	<div class="frontpage__newsfeed">
+		<?php if (!$workouts): ?>
+			<h2>Nie ma tu jeszcze żadnych treningów.</h2>
+			<h3>Dodaj swój trening lub zaoobserwuj kogoś.</h3>
+		<?php endif ?>
 		<?php $this->nest("newsfeed/newsfeed.php", ["workouts" => $workouts]); ?>
 	</div>
 </div>

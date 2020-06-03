@@ -14,7 +14,6 @@ class Page extends \PageBuilder {
 
 	protected function content() {
 		$exercises = \Model\ExerciseCategory::getTree($this->database);
-		var_dump(json_encode($exercises, JSON_UNESCAPED_UNICODE));
 		$this->response->addTemplate("workout/add.php", []);
 	}
 

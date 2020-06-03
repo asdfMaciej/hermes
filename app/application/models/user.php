@@ -12,8 +12,12 @@ class User extends \DBModel {
 	public $avatar;
 
 	public function register($db) {
-		$this->password = password_hash($this->password, PASSWORD_DEFAULT);
-		return self::save($db);
+		try {
+			$this->password = password_hash($this->password, PASSWORD_DEFAULT);
+			return self::save($db);
+		} catch (\Exception $e) {
+			return false;
+		}
 	}
 
 	public static function login($db, $login, $password) {

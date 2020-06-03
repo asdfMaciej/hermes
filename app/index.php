@@ -7,8 +7,6 @@ $router->page404 = "404.php";
 
 // accounts
 $router->route('', 'index.php');
-$router->route('login\/?', 'login.php');
-$router->route('register\/?', 'register.php');
 
 // profile
 $router->route('profile\/\d+\/?', 'profiles/view.php');
