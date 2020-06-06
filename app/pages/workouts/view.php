@@ -4,6 +4,7 @@ use \Model\User;
 use \Model\Workout;
 use \Model\Exercise;
 use \Model\Gym;
+use \Model\Photo;
 
 class Page extends \PageBuilder {
 	protected function init() {
@@ -20,11 +21,13 @@ class Page extends \PageBuilder {
 		$exercises = Workout::getExercises($this->database, $id);
 		$gym_id = $workout["gym_id"];
 		$gym = Gym::getSingleItem($this->database, ["gym_id" => $gym_id]);
+		$gym_album = Photo::getForAlbumId($this->database, $gym["album_id"]);
 
 		$this->response->addTemplate("workout/view.php", [
 			"workout" => $workout,
 			"gym" => $gym,
-			"exercises" => $exercises
+			"exercises" => $exercises,
+			"gym_album" => $gym_album
 		]);
 	}
 }

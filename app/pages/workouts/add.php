@@ -10,6 +10,7 @@ class Page extends \PageBuilder {
 		$this->addActions([
 			"add" => "onAdd"
 		]);
+		$this->metadata->addScript("add_workout.js", true, true);
 	}
 
 	protected function content() {

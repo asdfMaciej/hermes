@@ -23,6 +23,12 @@ a:visited {
     color: #941352
 }
 
+button {
+    font-size: 0.9em;
+    padding: 4px;
+    font-family: Open Sans, Arial, sans-serif;
+}
+
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

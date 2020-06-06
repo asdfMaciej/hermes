@@ -19,7 +19,7 @@
 				</div>
 				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``">
 					<div class="feed-workout__title">
-						``$workout["name"]``
+						``$workout["title"]``
 					</div>
 				</a>
 			</div>

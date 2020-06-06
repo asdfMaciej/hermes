@@ -7,7 +7,8 @@
 	margin: auto;
 }
 .page-header {
-	background: white;
+	background: #d32f2f;
+	color: white;
 	padding: 8px;
 	box-shadow: 0px 1px 1px #00000040;
 	display: flex;
@@ -16,15 +17,15 @@
 	flex: 1 0;
 }
 .page-header__add {
-	text-decoration: none;
-	color: black;
-	font-size: 50px;
 	margin-right: 8px;
 }
 .page-header img {
 	height: 50px;
 	margin-left: 8px;
 	margin-right: 8px;
+}
+.page-header__logo img {
+	filter: brightness(0) invert(1);
 }
 .page-footer {
 	background: #333333;
@@ -105,6 +106,20 @@
 	grid-area: settings;
 	padding: 24px;
 	background: lightgreen;
+	display: flex;
+}
+.add-workout__settings-title {
+	flex: 1;
+	margin-right: 12px;
+}
+
+.add-workout__settings-gym {
+	flex: 1;
+	margin-left: 12px;
+}
+
+.add-workout__settings-title > input {
+	width: 100%;
 }
 .add-workout__error {
 	padding: 16px;
@@ -173,4 +188,61 @@
 .landing-page {
 	display: flex;
 	flex-direction: row;
+}
+.exercise-category {
+	margin-bottom: 16px;
+	padding: 8px;
+	padding-bottom: 0;
+	padding-top: 0;
+}
+.exercise-category__exercises {
+	margin-left: 24px;
+}
+.workout-details {
+	display: flex;
+	flex-direction: row;
+	grid-area: details;
+}
+.workout-details__title {
+	grid-area: title;
+}
+.workout-details__photo {
+	grid-area: photo;
+}
+.workout-details__date {
+	font-style: italic;
+}
+.workout-details__username {
+
+}
+.workout-details__row {
+	flex: 1;
+	padding-left: 8px;
+}
+.workout-details__photo img {
+	width: 100px;
+	display: block;
+	margin: auto;
+}
+.workout-gym__picture img {
+	max-width: 480px;
+	display: block;
+}
+.workout-gym__name {
+	font-size: 1.4em;
+	text-align: center;
+}
+.workout-exercises {
+	grid-area: exercises;
+}
+.workout-exercises__header {
+	margin-top: 16px;
+}
+.workout-gym {
+	grid-area: gym;
+}
+.workout {
+	display: grid;
+	grid-template-areas: "details details" "exercises gym";
+	grid-template-columns: 1fr auto;
 }

@@ -25,7 +25,7 @@
 			<div class='page-header__filler'></div>
 			
 			<?php if ($account->isLoggedIn()): ?>
-				<a class='page-header__add' href="``PATH_PREFIX``/workout/add">+</a>
+				<button class='page-header__add' onclick="document.location = '``PATH_PREFIX``/workout/add'">Dodaj trening</button>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>

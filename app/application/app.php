@@ -21,6 +21,8 @@ class PageBuilder extends \WebBuilder {
 			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
 		}
 		
+		$this->metadata->addScript("api.js");
+
 		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");
 	}
@@ -57,8 +59,8 @@ class PageBuilder extends \WebBuilder {
 		$this->response->addTemplate("skeleton/header.php", $metadata);
 	}
 
-	protected function footer() {
-		$this->response->addTemplate("skeleton/footer.php");
+	protected function footer($metadata) {
+		$this->response->addTemplate("skeleton/footer.php", $metadata);
 	}
 
 	protected function showSnackbar($message, $code) {

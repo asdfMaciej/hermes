@@ -69,7 +69,7 @@ class WebBuilder {
 
 	/* virtual methods: */
 	protected function header($metadata) {}
-	protected function footer() {}
+	protected function footer($metadata) {}
 	protected function showSnackbar($message, $code) {}
 	protected function content() {}
 	protected function init() {}
@@ -88,7 +88,7 @@ class WebBuilder {
 		}
 
 		$this->content();
-		$this->footer();
+		$this->footer($metadata);
 
 		$this->render();
 	}
@@ -150,6 +150,7 @@ class PageMetadata {
 	protected $title = "";
 	protected $stylesheets = [];
 	protected $scripts = [];
+	protected $scripts_on_end = [];
 
 	public function __construct() {}
 
@@ -170,10 +171,14 @@ class PageMetadata {
 		$this->stylesheets[] = $name;
 	}
 
-	public function addScript($name, $add_prefix=True) {
+	public function addScript($name, $add_prefix=True, $on_end=False) {
 		$path = $add_prefix ? $this->script_prefix : "";
 		$name = $path . $this->addPostfix($name, ".js");
-		$this->scripts[] = $name;
+		if ($on_end) {
+			$this->scripts_on_end[] = $name;
+		} else {
+			$this->scripts[] = $name;
+		}
 	}
 
 	public function setTitle($title) {
@@ -182,12 +187,14 @@ class PageMetadata {
 
 	public function getStylesheets() { return $this->stylesheets; }
 	public function getScripts() { return $this->scripts; }
+	public function getScriptsOnEnd() { return $this->scripts_on_end; }
 	public function getTitle() { return $this->title; }
 
 	public function getMetadata() {
 		$metadata = [
 			"stylesheets" => $this->getStylesheets(),
 			"scripts" => $this->getScripts(),
+			"scripts_on_end" => $this->getScriptsOnEnd(),
 			"title" => $this->getTitle()
 		];
 		return $metadata; 

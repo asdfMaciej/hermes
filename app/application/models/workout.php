@@ -7,14 +7,14 @@ class Workout extends \DBModel {
 	public $workout_id;
 	public $user_id;
 	public $gym_id;
-	public $name;
+	public $title;
 	public $date;
 	public $added;
 	public $modified;
 
 	protected static function queryNewsfeedList() {
 		$query = static::select([
-					static::class => ["workout_id", "name", "date"],
+					static::class => ["workout_id", "title", "date"],
 					User::class => ["name as user_name", "user_id", "avatar"],
 					Gym::class => ["gym_id", "name as gym_name"]
 				])
@@ -30,7 +30,7 @@ class Workout extends \DBModel {
 		// todo: complicated ON queries arent supported by orm
 		// todo: UNION isnt supported by orm
 		$rows = static::sql("
-		SELECT Workout.workout_id, Workout.name, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
+		SELECT Workout.workout_id, Workout.title, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
 		FROM followers AS Follower
 		INNER JOIN `workouts` AS Workout
 		ON Workout.user_id = Follower.user_id
@@ -42,7 +42,7 @@ class Workout extends \DBModel {
 
 		UNION
 
-		SELECT Workout.workout_id, Workout.name, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
+		SELECT Workout.workout_id, Workout.title, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
 		FROM `workouts` AS Workout
 		INNER JOIN users AS User
 		ON Workout.user_id = User.user_id
@@ -81,7 +81,7 @@ class Workout extends \DBModel {
 
 	public static function getById($database, $id) {
 		$row = static::select([
-					static::class => ["workout_id", "name", "date"],
+					static::class => ["workout_id", "title", "date"],
 					User::class => ["name as user_name", "user_id", "avatar"],
 					Gym::class => ["gym_id", "name as gym_name"]
 				])
