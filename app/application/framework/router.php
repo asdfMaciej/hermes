@@ -2,7 +2,7 @@
 class Router {
 	/* source modified based on
 		https://github.com/moagrius/RegexRouter/ */
-	private $pages_path = ROOT_PATH . "/pages/";
+	private $pages_path = ROOT_PATH . "/controllers/";
 	private $routes = array();
 
 	public $page404 = "404.php";

@@ -42,7 +42,7 @@ class TemplateBuilder {
 }
 
 class Template implements TemplateInterface {
-	protected $template_dir = ROOT_PATH . "/templates/";
+	protected $template_dir = ROOT_PATH . "/views/";
 	protected $template_path = "";
 	protected $nest_extract = [];
 

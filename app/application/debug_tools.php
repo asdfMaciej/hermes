@@ -3,7 +3,7 @@ if (!DEBUG)
 	die();
 
 if (defined('IMPORT_MODELS') && IMPORT_MODELS)
-	foreach (glob(ROOT_PATH . "/application/models/*.php") as $filename)
+	foreach (glob(ROOT_PATH . "/models/*.php") as $filename)
 		include_once $filename;
 
 if (defined('AS_RAW_TEXT') && AS_RAW_TEXT)

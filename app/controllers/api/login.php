@@ -1,5 +1,5 @@
 <?php
-require_once ROOT_PATH . "/lib/OAuth2/Autoloader.php";
+require_once ROOT_PATH . "/application/lib/OAuth2/Autoloader.php";
 OAuth2\Autoloader::register();
 
 class UsersStorage implements \OAuth2\Storage\UserCredentialsInterface {

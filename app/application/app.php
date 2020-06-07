@@ -1,7 +1,7 @@
 <?php
-include_once ROOT_PATH . "/framework/include.php";
+include_once __DIR__ . "/framework/include.php";
 
-foreach (glob(__DIR__ . "/models/*.php") as $filename) {
+foreach (glob(ROOT_PATH . "/models/*.php") as $filename) {
     include_once $filename;
 }
 

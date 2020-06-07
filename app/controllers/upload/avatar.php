@@ -1,9 +1,9 @@
 <?php
-namespace Web\Pages;
+namespace Web\Controllers;
 use \Model\User;
 
-include_once ROOT_PATH . "/lib/bulletproof/bulletproof.php";
-include_once ROOT_PATH . "/lib/bulletproof/utils/func.image-resize.php";
+include_once ROOT_PATH . "/application/lib/bulletproof/bulletproof.php";
+include_once ROOT_PATH . "/application/lib/bulletproof/utils/func.image-resize.php";
 
 class Page extends \PageBuilder {
 	protected function init() {

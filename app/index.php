@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/env/config.php";
+include_once __DIR__ . "/application/config.php";
 include_once ROOT_PATH . "/application/app.php";
 
 $router = new Router();
