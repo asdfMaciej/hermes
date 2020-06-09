@@ -112,5 +112,20 @@ class Workout extends \DBModel {
 
 		return $row;
 	}
+
+	public static function getComments($database, $id) {
+		$row = static::select([
+					Comment::class => ["comment_id", "comment", "created"],
+					User::class => ["name as user_name", "user_id", "avatar"],
+				])
+				->from(Comment::class)
+				->innerJoin(User::class, "user_id")
+				->where("Comment.workout_id = :id")
+				->setParameter(":id", $id)
+				->execute($database)
+				->getAll();
+
+		return $row;
+	}
 }
 ?>

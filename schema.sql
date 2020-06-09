@@ -20,7 +20,19 @@ USE `hermes`;
 CREATE TABLE IF NOT EXISTS `albums` (
   `album_id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`album_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela hermes.comments
+CREATE TABLE IF NOT EXISTS `comments` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `workout_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` varchar(2048) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`comment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -38,7 +50,19 @@ CREATE TABLE IF NOT EXISTS `exercises` (
   KEY `FK_exercises_exercise_types` (`type_id`),
   CONSTRAINT `FK_exercises_exercise_types` FOREIGN KEY (`type_id`) REFERENCES `exercise_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_exercises_workouts` FOREIGN KEY (`workout_id`) REFERENCES `workouts` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela hermes.exercise_categories
+CREATE TABLE IF NOT EXISTS `exercise_categories` (
+  `category_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+  PRIMARY KEY (`category_id`),
+  KEY `FK_a_categories_a_categories` (`parent_id`),
+  CONSTRAINT `FK_a_categories_a_categories` FOREIGN KEY (`parent_id`) REFERENCES `exercise_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -46,11 +70,27 @@ CREATE TABLE IF NOT EXISTS `exercises` (
 CREATE TABLE IF NOT EXISTS `exercise_types` (
   `type_id` smallint(6) NOT NULL AUTO_INCREMENT,
   `exercise_type` varchar(127) COLLATE utf8_polish_ci NOT NULL,
+  `category_id` int(11) NOT NULL,
   `show_duration` tinyint(1) NOT NULL DEFAULT 0,
   `show_reps` tinyint(1) NOT NULL DEFAULT 0,
   `show_weight` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`type_id`)
+  PRIMARY KEY (`type_id`),
+  KEY `FK_exercise_types_exercise_categories` (`category_id`),
+  CONSTRAINT `FK_exercise_types_exercise_categories` FOREIGN KEY (`category_id`) REFERENCES `exercise_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela hermes.followers
+CREATE TABLE IF NOT EXISTS `followers` (
+  `user_id` int(11) NOT NULL,
+  `follower_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`follower_id`),
+  UNIQUE KEY `user_id_follower_id` (`user_id`,`follower_id`),
+  KEY `FK_followers_users_2` (`follower_id`),
+  CONSTRAINT `FK_followers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_followers_users_2` FOREIGN KEY (`follower_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -67,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `gyms` (
   KEY `FK_gyms_gym_types` (`type_id`),
   CONSTRAINT `FK_gyms_albums` FOREIGN KEY (`album_id`) REFERENCES `albums` (`album_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_gyms_gym_types` FOREIGN KEY (`type_id`) REFERENCES `gym_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -188,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `avatar` varchar(255) COLLATE utf8_polish_ci NOT NULL DEFAULT 'uploads\\img\\avatars\\default.jpg',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -197,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `workouts` (
   `workout_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `gym_id` int(11) NOT NULL,
-  `name` varchar(127) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  `title` varchar(127) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `added` timestamp NOT NULL DEFAULT current_timestamp(),
   `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -206,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `workouts` (
   KEY `FK_workouts_gyms` (`gym_id`),
   CONSTRAINT `FK_workouts_gyms` FOREIGN KEY (`gym_id`) REFERENCES `gyms` (`gym_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_workouts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 

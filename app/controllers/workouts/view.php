@@ -5,11 +5,29 @@ use \Model\Workout;
 use \Model\Exercise;
 use \Model\Gym;
 use \Model\Photo;
+use \Model\Comment;
 
 class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->setTitle("Index");
-		$this->addActions([]);
+		$this->addActions([
+			"comment" => "onComment",
+		]);
+	}
+
+	protected function onComment() {
+		var_dump($_POST);
+		$comment = new Comment();
+		$comment->workout_id = $this->data->path->workout;
+		$comment->user_id = $this->account->user_id;
+		$comment->comment = $_POST["comment"] ?? "";
+		$success = $comment->save($this->database);
+
+		if ($success) {
+			$this->redirect("workout/".$this->data->path->workout);
+		} else {
+			$this->snackbar->set(400, "Nie udało się dodać treningu.");
+		}
 	}
 
 	protected function content() {
@@ -23,11 +41,13 @@ class Page extends \PageBuilder {
 		$gym = Gym::getSingleItem($this->database, ["gym_id" => $gym_id]);
 		$gym_album = Photo::getForAlbumId($this->database, $gym["album_id"]);
 
+		$comments = Workout::getComments($this->database, $id);
 		$this->response->addTemplate("workout/view.php", [
 			"workout" => $workout,
 			"gym" => $gym,
 			"exercises" => $exercises,
-			"gym_album" => $gym_album
+			"gym_album" => $gym_album,
+			"comments" => $comments
 		]);
 	}
 }

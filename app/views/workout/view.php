@@ -31,9 +31,9 @@
 		</div>
 	</div>
 	<div class="workout-exercises">
-		<h3 class="workout-exercises__header">
+		<h2 class="workout-exercises__header">
 			Przebieg treningu:
-		</h3>
+		</h2>
 		<div class="workout-exercises__list exercises-list">
 			<?php foreach ($exercises as $n => $exercise): ?>
 				<?php
@@ -69,5 +69,41 @@
 				</div>
 			<?php endforeach ?>
 		</div>
+	</div>
+	<div class="workout-comments">
+		<div class="workout-comments__add">
+			<h2>Dodaj komentarz:</h2>
+			<form action="``PATH_PREFIX``/workout/``$workout['workout_id']``" method="post">
+					<input type="hidden" name="action" value="comment">
+					<textarea placeholder="Napisz komentarz..." name="comment"></textarea>
+					<input type="submit" value="Dodaj">
+				</form>
+		</div>
+		
+		<?php if (!$comments): ?>
+		<div class="comment-none">
+			Nie ma jeszcze żadnych komentarzy. Bądź pierwszy!
+		</div>
+		<?php endif ?>
+		
+		<?php foreach ($comments as $comment): ?>
+		<div class="comment">
+			<a href="``PATH_PREFIX``/profile/``$comment['user_id']``">
+				<img class="comment__avatar" src="``PATH_PREFIX``/``$comment['avatar']``">
+			</a>
+			<div class="comment__main">
+				<a href="``PATH_PREFIX``/profile/``$comment['user_id']``" class="comment__name">
+					``$comment['user_name']``
+				</a>
+				<span class="comment__created">
+					``$comment['created']``
+				</span>
+				<div class="comment__content">
+					``$comment['comment']``
+				</div>
+				
+			</div>
+		</div>
+		<?php endforeach ?>
 	</div>
 </div>
