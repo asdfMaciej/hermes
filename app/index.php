@@ -17,7 +17,8 @@ $router->route('upload\/avatar\/?', 'upload/avatar.php');
 // workouts
 $router->route('workout\/add\/?', 'workouts/add.php');
 $router->route('workout\/\d+\/?', 'workouts/view.php');
-
+$router->route('workout\/\d+\/react\/?', 'workouts/react.php');
+$router->route('workout\/\d+\/unreact\/?', 'workouts/unreact.php');
 // gym
 $router->route('gym\/\d+\/?', 'gyms/view.php');
 

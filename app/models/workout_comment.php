@@ -1,7 +1,7 @@
 <?php
 namespace Model;
-class Comment extends \DBModel {
-	protected static $table_name = "comments";
+class WorkoutComment extends \DBModel {
+	protected static $table_name = "workout_comments";
 	protected static $primary_key = "comment_id";
 
 	public $comment_id;

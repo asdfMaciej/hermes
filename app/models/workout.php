@@ -115,15 +115,31 @@ class Workout extends \DBModel {
 
 	public static function getComments($database, $id) {
 		$row = static::select([
-					Comment::class => ["comment_id", "comment", "created"],
+					WorkoutComment::class => ["comment_id", "comment", "created"],
 					User::class => ["name as user_name", "user_id", "avatar"],
 				])
-				->from(Comment::class)
+				->from(WorkoutComment::class)
 				->innerJoin(User::class, "user_id")
-				->where("Comment.workout_id = :id")
+				->where("WorkoutComment.workout_id = :id")
 				->setParameter(":id", $id)
 				->execute($database)
 				->getAll();
+
+		return $row;
+	}
+
+	public static function getReactions($database, $workout_id, $user_id) {
+		$row = static::select([
+					"COUNT(WorkoutReaction.user_id) as count",
+					"EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :user_id AND workout_id = :id) AS reacted"
+				])
+				->from(WorkoutReaction::class)
+				->where("WorkoutReaction.workout_id = :id")
+				->groupBy("WorkoutReaction.workout_id")
+				->setParameter(":id", $workout_id)
+				->setParameter(":user_id", $user_id)
+				->execute($database)
+				->getRow();
 
 		return $row;
 	}

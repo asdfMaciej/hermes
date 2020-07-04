@@ -91,7 +91,6 @@ class User extends \DBModel {
 		")
 		->setParameter(":follower_id", $follower_id)
 		->setParameter(":following_id", $following_id)
-		->debug()
 		->execute($database);
 	}
 }

@@ -16,7 +16,6 @@ class Page extends \PageBuilder {
 	}
 
 	protected function onComment() {
-		var_dump($_POST);
 		$comment = new Comment();
 		$comment->workout_id = $this->data->path->workout;
 		$comment->user_id = $this->account->user_id;
@@ -42,12 +41,14 @@ class Page extends \PageBuilder {
 		$gym_album = Photo::getForAlbumId($this->database, $gym["album_id"]);
 
 		$comments = Workout::getComments($this->database, $id);
+		$reactions = Workout::getReactions($this->database, $id, $this->account->user_id);
 		$this->response->addTemplate("workout/view.php", [
 			"workout" => $workout,
 			"gym" => $gym,
 			"exercises" => $exercises,
 			"gym_album" => $gym_album,
-			"comments" => $comments
+			"comments" => $comments,
+			"reactions" => $reactions
 		]);
 	}
 }

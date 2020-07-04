@@ -16,9 +16,35 @@
 			<div class="workout-details__date">
 				``$workout["date"]``
 			</div>
-			
+			<div class="workout-details__reactions">
+				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``/``$reactions['reacted'] ? 'un' : ''``react" class='reaction-button ``$reactions["reacted"] ? "liked" : ""``'>
+					💪
+					<span class="reaction-count">``$reactions["count"] ?? 0``</span>
+				</a>				
+			</div>
 		</div>
 	</div>
+
+	<style>
+		.reaction-button {
+			box-shadow: -1px 2px 5px #0000002b;
+			display: inline-block;
+			padding: 4px 12px;
+			font-weight: 600;
+			text-decoration: none;
+			background: white;
+			color: black !important;
+		}
+		.reaction-button:hover {
+			box-shadow: -1px 2px 8px #0000003d;
+		}
+		.reaction-button.liked {
+			background: #92C52C;
+		}
+		.workout-details__reactions {
+			margin-top: 8px;
+		}
+	</style>
 
 	<div class="workout-gym">	
 		<a href="``PATH_PREFIX``/gym/``$gym['gym_id']``" class="workout-gym__picture">
@@ -41,7 +67,7 @@
 				if ($display_title):
 				?>
 					<h4 class="exercises-list__name">
-						``$exercise["exercise_type"]``
+						• ``$exercise["exercise_type"]``
 					</h4>
 				<?php endif ?>
 
@@ -58,7 +84,7 @@
 					<?php endif ?>
 					<?php if ($exercise["show_weight"]): ?>
 						<span>
-							po ``$exercise["weight"]`` kg
+							z ``$exercise["weight"]`` kg
 						</span>
 					<?php endif ?>
 					<?php if ($exercise["failure"]): ?>
