@@ -21,6 +21,7 @@ class PageBuilder extends \WebBuilder {
 			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
 		}
 		
+		$this->metadata->addScript("moment-with-locales.min.js");
 		$this->metadata->addScript("api.js");
 
 		$this->metadata->addStylesheet("elements.css");

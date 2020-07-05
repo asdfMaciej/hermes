@@ -30,25 +30,79 @@ class Workout extends \DBModel {
 		// todo: complicated ON queries arent supported by orm
 		// todo: UNION isnt supported by orm
 		$rows = static::sql("
-		SELECT Workout.workout_id, Workout.title, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
-		FROM followers AS Follower
-		INNER JOIN `workouts` AS Workout
-		ON Workout.user_id = Follower.user_id
-		INNER JOIN users AS User
-		ON Workout.user_id = User.user_id
-		INNER JOIN gyms AS Gym
-		ON Workout.gym_id = Gym.gym_id
-		WHERE Follower.follower_id = :user_id
+		SELECT
+		newsfeed.*,
+		COUNT(WorkoutComment.comment_id) AS comments,
+		WorkoutComment.comment,
+		WorkoutComment.created AS comment_created,
+		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+
+		FROM (
+			SELECT 
+				Workout.workout_id, Workout.title, Workout.date, 
+				User.name as user_name, User.user_id, User.avatar, 
+				Gym.gym_id, Gym.name as gym_name,
+				COUNT(WorkoutReaction.user_id) as reactions,
+				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :user_id AND workout_id = Workout.workout_id) AS reacted
+				
+			FROM followers AS Follower
+			INNER JOIN `workouts` AS Workout
+				ON Workout.user_id = Follower.user_id
+			INNER JOIN users AS User
+				ON Workout.user_id = User.user_id
+			INNER JOIN gyms AS Gym
+				ON Workout.gym_id = Gym.gym_id
+			LEFT JOIN workout_reactions AS WorkoutReaction
+				ON WorkoutReaction.workout_id = Workout.workout_id
+			WHERE Follower.follower_id = :user_id
+			
+			GROUP BY Workout.workout_id
+			ORDER BY Workout.workout_id DESC
+		) AS newsfeed
+
+		LEFT JOIN workout_comments AS WorkoutComment
+			ON WorkoutComment.workout_id = newsfeed.workout_id
+		LEFT JOIN users AS User
+			ON User.user_id = WorkoutComment.user_id
+
+		GROUP BY newsfeed.workout_id
 
 		UNION
 
-		SELECT Workout.workout_id, Workout.title, Workout.date, User.name as user_name, User.user_id, User.avatar, Gym.gym_id, Gym.name as gym_name
-		FROM `workouts` AS Workout
-		INNER JOIN users AS User
-		ON Workout.user_id = User.user_id
-		INNER JOIN gyms AS Gym
-		ON Workout.gym_id = Gym.gym_id
-		WHERE Workout.user_id = :user_id
+		SELECT
+		newsfeed.*,
+		COUNT(WorkoutComment.comment_id) AS comments,
+		WorkoutComment.comment,
+		WorkoutComment.created AS comment_created,
+		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+
+		FROM (
+			SELECT 
+				Workout.workout_id, Workout.title, Workout.date, 
+				User.name as user_name, User.user_id, User.avatar, 
+				Gym.gym_id, Gym.name as gym_name,
+				COUNT(WorkoutReaction.user_id) as reactions,
+				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :user_id AND workout_id = Workout.workout_id) AS reacted
+				
+			FROM `workouts` AS Workout
+			INNER JOIN users AS User
+				ON Workout.user_id = User.user_id
+			INNER JOIN gyms AS Gym
+				ON Workout.gym_id = Gym.gym_id
+			LEFT JOIN workout_reactions AS WorkoutReaction
+				ON WorkoutReaction.workout_id = Workout.workout_id
+			WHERE Workout.user_id = :user_id
+			
+			GROUP BY Workout.workout_id
+			ORDER BY Workout.workout_id DESC
+		) AS newsfeed
+
+		LEFT JOIN workout_comments AS WorkoutComment
+			ON WorkoutComment.workout_id = newsfeed.workout_id
+		LEFT JOIN users AS User
+			ON User.user_id = WorkoutComment.user_id
+
+		GROUP BY newsfeed.workout_id
 
 		ORDER BY workout_id DESC
 		")

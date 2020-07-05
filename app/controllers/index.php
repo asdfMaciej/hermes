@@ -13,6 +13,8 @@ class Index extends \PageBuilder {
 			"logout" => "onLogout",
 			"register" => "onRegister"
 		]);
+
+		$this->metadata->addScript("newsfeed.js", true, true);
 	}
 
 	protected function content() {
@@ -25,6 +27,8 @@ class Index extends \PageBuilder {
 				"account" => $this->account,
 				"statistics" => $statistics
 			]);
+
+			
 		} else {
 			$this->response->addTemplate("static/index.php", []);
 		}

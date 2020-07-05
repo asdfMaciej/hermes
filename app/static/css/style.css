@@ -54,24 +54,25 @@
 }
 
 .feed-workout__avatar {
-	width: 150px;
-	height: 150px;
+	width: 100px;
+	height: 100px;
 	overflow: hidden;
 	position: relative;
 }
 .feed-workout__avatar img {
-	width: 150px;
+	width: 100px;
 	position: absolute;
 	left: 50%;
-	margin-left: -75px;
+	margin-left: -50px;
 	top: 50%;
-	margin-top: -75px;
+	margin-top: -50px;
 }
 .feed-workout {
-	margin-bottom: 8px;
-	padding: 8px;
-	background: lightcyan;	
+	margin-bottom: 12px;
+	padding: 0px;
+	background: white;
 	display: flex;
+	box-shadow: var(--white-box-shadow);
 }
 .feed-workout__date {
 	font-size: 0.8rem;
@@ -79,6 +80,18 @@
 }
 .feed-workout__title {
 	font-weight: bold;
+	font-size: 1.1em;
+}
+.feed-workout__container {
+	width: 100%;
+	padding: 12px;
+}
+.feed-workout__reactions {
+	margin-top: 8px;
+	font-size: 0.9em;
+}
+.feed-workout__reactions .reaction-button {
+	margin-right: 4px;
 }
 .add-workout {
 	display: grid;
@@ -289,4 +302,29 @@
 }
 .comment__created {
 	font-style: italic;
+}
+.reaction-button {
+	box-shadow: -1px 2px 5px #0000002b;
+	display: inline-block;
+	padding: 4px 12px;
+	font-weight: 600;
+	text-decoration: none;
+	background: white;
+	color: black !important;
+}
+.reaction-button:hover {
+	box-shadow: -1px 2px 8px #0000003d;
+}
+.reaction-button.liked {
+	background: #cfff6e;
+}
+.workout-details__reactions {
+	margin-top: 8px;
+}
+.comment.comment--newsfeed {
+	margin-top: -12px;
+	font-size: 0.9em;
+}
+.comment.comment--newsfeed img {
+	width: 60px;
 }

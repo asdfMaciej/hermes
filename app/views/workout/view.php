@@ -25,27 +25,6 @@
 		</div>
 	</div>
 
-	<style>
-		.reaction-button {
-			box-shadow: -1px 2px 5px #0000002b;
-			display: inline-block;
-			padding: 4px 12px;
-			font-weight: 600;
-			text-decoration: none;
-			background: white;
-			color: black !important;
-		}
-		.reaction-button:hover {
-			box-shadow: -1px 2px 8px #0000003d;
-		}
-		.reaction-button.liked {
-			background: #92C52C;
-		}
-		.workout-details__reactions {
-			margin-top: 8px;
-		}
-	</style>
-
 	<div class="workout-gym">	
 		<a href="``PATH_PREFIX``/gym/``$gym['gym_id']``" class="workout-gym__picture">
 			<img src="``PATH_PREFIX``/``$gym_album[0]['path']``" alt="">
@@ -121,7 +100,7 @@
 				<a href="``PATH_PREFIX``/profile/``$comment['user_id']``" class="comment__name">
 					``$comment['user_name']``
 				</a>
-				<span class="comment__created">
+				<span class="comment__created date">
 					``$comment['created']``
 				</span>
 				<div class="comment__content">
