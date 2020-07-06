@@ -75,7 +75,7 @@ Vue.component('exercise', {
 });
 
 var t = new Vue({
-	el: "#app",
+	el: "#add-workout",
 	data: {
 		cache: {
 			exerciseCategories: [],

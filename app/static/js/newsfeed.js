@@ -1,7 +1,48 @@
-moment.locale('pl');
-let dates = document.querySelectorAll('.date');
-dates.forEach((date) => {
-	let iso = date.innerHTML;
-	date.innerHTML = moment(iso).fromNow();
-	date.setAttribute('title', iso);
-})
+function copy(o) {
+	return JSON.parse(JSON.stringify(o));
+}
+
+Vue.component('newsfeed-item', {
+	props: {
+		workout: undefined
+	},
+	template: '#newsfeed-item-template',
+	data: function() {return {
+	}},
+
+	methods: {
+		react: function() {}
+	},
+
+	computed: {
+	}
+});
+
+var t = new Vue({
+	el: "#newsfeed",
+	data: {
+		cache: {
+		},
+		selected: {
+		},
+		current: {
+
+		},
+		api: null
+	},
+
+	mounted: function() {
+		this.api = new API();
+	},
+
+	computed: {
+		validateWorkoutErrors: function() {
+		}
+	},
+
+	methods: {
+		submit: function() {
+			
+		}
+	}
+});

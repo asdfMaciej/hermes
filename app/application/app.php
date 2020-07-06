@@ -24,6 +24,9 @@ class PageBuilder extends \WebBuilder {
 		$this->metadata->addScript("moment-with-locales.min.js");
 		$this->metadata->addScript("api.js");
 
+		// add at end of file
+		$this->metadata->addScript("main.js", true, true);
+
 		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");
 	}

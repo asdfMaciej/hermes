@@ -1,10 +1,14 @@
-
+:root {
+    --header-height: 66px;
+}
 .page-content {
 	flex: 1 1;
 	padding: 8px;
 	width: 100%;
 	max-width: 1200px;
 	margin: auto;
+
+	padding-top: calc(var(--header-height) + 8px);
 }
 .page-header {
 	background: #d32f2f;
@@ -12,6 +16,12 @@
 	padding: 8px;
 	box-shadow: 0px 1px 1px #00000040;
 	display: flex;
+	height: var(--header-height);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 100;
 }
 .page-header__filler {
 	flex: 1 0;
@@ -187,6 +197,7 @@
 	background: white;
 	height: auto;
 	padding: 16px;
+	position: fixed;
 }
 .statistics-box__statistics {
 	margin-top: 8px;

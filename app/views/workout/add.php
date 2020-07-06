@@ -1,4 +1,4 @@
-<div id="app" class='add-workout'>
+<div id="add-workout" class='add-workout'>
 	<div class="add-workout__settings">
 		<div class="add-workout__settings-title">
 			<h1>Dodaj trening:</h1>

@@ -17,7 +17,7 @@
 				``$workout["date"]``
 			</div>
 			<div class="workout-details__reactions">
-				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``/``$reactions['reacted'] ? 'un' : ''``react" class='reaction-button ``$reactions["reacted"] ? "liked" : ""``'>
+				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``/``$reactions['reacted'] ? 'un' : ''``react" class='reaction-button ``$reactions["reacted"] ? "liked" : ""``' data-workout-id="``$workout['workout_id']``">
 					💪
 					<span class="reaction-count">``$reactions["count"] ?? 0``</span>
 				</a>				
