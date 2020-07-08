@@ -113,20 +113,94 @@ class Workout extends \DBModel {
 		return $rows;
 	}
 
-	public static function getNewsfeedForUser($database, $user_id) {
-		$rows = static::queryNewsfeedList()
-				->where("User.user_id = :user_id")
+	public static function getNewsfeedForUser($database, $user_id, $viewing_user_id) {
+		$rows = static::sql("
+		SELECT
+		newsfeed.*,
+		COUNT(WorkoutComment.comment_id) AS comments,
+		WorkoutComment.comment,
+		WorkoutComment.created AS comment_created,
+		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+
+		FROM (
+			SELECT 
+				Workout.workout_id, Workout.title, Workout.date, 
+				User.name as user_name, User.user_id, User.avatar, 
+				Gym.gym_id, Gym.name as gym_name,
+				COUNT(WorkoutReaction.user_id) as reactions,
+				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :viewing_user_id AND workout_id = Workout.workout_id) AS reacted
+				
+			FROM `workouts` AS Workout
+			INNER JOIN users AS User
+				ON Workout.user_id = User.user_id
+			INNER JOIN gyms AS Gym
+				ON Workout.gym_id = Gym.gym_id
+			LEFT JOIN workout_reactions AS WorkoutReaction
+				ON WorkoutReaction.workout_id = Workout.workout_id
+			WHERE Workout.user_id = :user_id
+			
+			GROUP BY Workout.workout_id
+			ORDER BY Workout.workout_id DESC
+		) AS newsfeed
+
+		LEFT JOIN workout_comments AS WorkoutComment
+			ON WorkoutComment.workout_id = newsfeed.workout_id
+		LEFT JOIN users AS User
+			ON User.user_id = WorkoutComment.user_id
+
+		GROUP BY newsfeed.workout_id
+
+		ORDER BY workout_id DESC
+				")
 				->setParameter(":user_id", $user_id)
+				->setParameter(":viewing_user_id", $viewing_user_id)
 				->execute($database)
 				->getAll();
 
 		return $rows;
 	}
 
-	public static function getNewsfeedForGym($database, $gym_id) {
-		$rows = static::queryNewsfeedList()
-				->where("Gym.gym_id = :gym_id")
+	public static function getNewsfeedForGym($database, $gym_id, $viewing_user_id) {
+		$rows = static::sql("
+		SELECT
+		newsfeed.*,
+		COUNT(WorkoutComment.comment_id) AS comments,
+		WorkoutComment.comment,
+		WorkoutComment.created AS comment_created,
+		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+
+		FROM (
+			SELECT 
+				Workout.workout_id, Workout.title, Workout.date, 
+				User.name as user_name, User.user_id, User.avatar, 
+				Gym.gym_id, Gym.name as gym_name,
+				COUNT(WorkoutReaction.user_id) as reactions,
+				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :viewing_user_id AND workout_id = Workout.workout_id) AS reacted
+				
+			FROM `workouts` AS Workout
+			INNER JOIN users AS User
+				ON Workout.user_id = User.user_id
+			INNER JOIN gyms AS Gym
+				ON Workout.gym_id = Gym.gym_id
+			LEFT JOIN workout_reactions AS WorkoutReaction
+				ON WorkoutReaction.workout_id = Workout.workout_id
+			WHERE Gym.gym_id = :gym_id
+			
+			GROUP BY Workout.workout_id
+			ORDER BY Workout.workout_id DESC
+		) AS newsfeed
+
+		LEFT JOIN workout_comments AS WorkoutComment
+			ON WorkoutComment.workout_id = newsfeed.workout_id
+		LEFT JOIN users AS User
+			ON User.user_id = WorkoutComment.user_id
+
+		GROUP BY newsfeed.workout_id
+
+		ORDER BY workout_id DESC
+				")
 				->setParameter(":gym_id", $gym_id)
+				->setParameter(":viewing_user_id", $viewing_user_id)
 				->execute($database)
 				->getAll();
 

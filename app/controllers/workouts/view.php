@@ -5,7 +5,7 @@ use \Model\Workout;
 use \Model\Exercise;
 use \Model\Gym;
 use \Model\Photo;
-use \Model\Comment;
+use \Model\WorkoutComment;
 
 class Page extends \PageBuilder {
 	protected function init() {
@@ -19,7 +19,7 @@ class Page extends \PageBuilder {
 	}
 
 	protected function onComment() {
-		$comment = new Comment();
+		$comment = new WorkoutComment();
 		$comment->workout_id = $this->data->path->workout;
 		$comment->user_id = $this->account->user_id;
 		$comment->comment = $_POST["comment"] ?? "";

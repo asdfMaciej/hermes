@@ -7,6 +7,3 @@ dates.forEach((date) => {
 	date.innerHTML = moment(iso).fromNow();
 	date.setAttribute('title', iso);
 });
-
-
-//api.post('reactions', {action: 'unreact', workout_id: 69}, (response, data) => {console.log(response)})

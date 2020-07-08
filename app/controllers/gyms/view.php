@@ -9,6 +9,9 @@ class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->setTitle("Index");
 		$this->addActions([]);
+
+		$this->metadata->addScript("reaction-button.js", true, true);
+		$this->metadata->addScript("newsfeed.js", true, true);
 	}
 
 	protected function content() {
@@ -28,7 +31,7 @@ class Page extends \PageBuilder {
 			"frequenters" => $frequenters
 		]);
 
-		$workouts = Workout::getNewsfeedForGym($this->database, $id);
+		$workouts = Workout::getNewsfeedForGym($this->database, $id, $this->account->user_id);
 		$this->response->addTemplate("newsfeed/newsfeed.php", [
 			"workouts" => $workouts
 		]);
