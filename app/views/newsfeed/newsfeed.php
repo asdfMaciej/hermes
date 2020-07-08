@@ -29,10 +29,7 @@
 					</div>
 				</a>
 				<div class="feed-workout__reactions">
-					<a href="#" class='reaction-button' :class="{'liked': workout.reacted == 1}">
-					💪
-						<span class="reaction-count">{{workout.reactions}}</span>
-					</a>
+					<reaction-button :workout='workout'></reaction-button>
 
 					<span>{{workout.comments}} {{(workout.comments == 0 || workout.comments >= 5) ? 'komentarzy' : (workout.comments == 1 ? 'komentarz' : 'komentarze')}}</span>
 				</div>
@@ -55,4 +52,11 @@
 			</div>
 		</div>
 	</div>
+</script>
+
+<script type="text/x-template" id="reaction-button-template">
+	<a href="#" @click.prevent='react' class='reaction-button' :class="{'liked': reacted == 1}">
+		💪
+		<span class="reaction-count">{{reactions}}</span>
+	</a>
 </script>

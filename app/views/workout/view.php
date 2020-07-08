@@ -1,4 +1,4 @@
-<div class="workout">
+<div class="workout" id="view-workout">
 	<div class="workout-details">
 		<div class="workout-details__photo">
 			<a href="``PATH_PREFIX``/profile/``$workout['user_id']``">
@@ -17,10 +17,7 @@
 				``$workout["date"]``
 			</div>
 			<div class="workout-details__reactions">
-				<a href="``PATH_PREFIX``/workout/``$workout['workout_id']``/``$reactions['reacted'] ? 'un' : ''``react" class='reaction-button ``$reactions["reacted"] ? "liked" : ""``' data-workout-id="``$workout['workout_id']``">
-					💪
-					<span class="reaction-count">``$reactions["count"] ?? 0``</span>
-				</a>				
+				<reaction-button :workout='{workout_id: ``$workout["workout_id"]``, reactions: ``$reactions["count"] ?? 0``, reacted: ``$reactions["reacted"] ?? 0``}'></reaction-button>				
 			</div>
 		</div>
 	</div>
@@ -112,3 +109,11 @@
 		<?php endforeach ?>
 	</div>
 </div>
+
+
+<script type="text/x-template" id="reaction-button-template">
+	<a href="#" @click.prevent='react' class='reaction-button' :class="{'liked': reacted == 1}">
+		💪
+		<span class="reaction-count">{{reactions}}</span>
+	</a>
+</script>

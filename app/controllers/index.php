@@ -14,6 +14,7 @@ class Index extends \PageBuilder {
 			"register" => "onRegister"
 		]);
 
+		$this->metadata->addScript("reaction-button.js", true, true);
 		$this->metadata->addScript("newsfeed.js", true, true);
 	}
 

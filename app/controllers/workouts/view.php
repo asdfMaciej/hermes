@@ -13,6 +13,9 @@ class Page extends \PageBuilder {
 		$this->addActions([
 			"comment" => "onComment",
 		]);
+
+		$this->metadata->addScript("reaction-button.js", true, true);
+		$this->metadata->addScript("view-workout.js", true, true);
 	}
 
 	protected function onComment() {
