@@ -3,6 +3,11 @@ Vue.component('newsfeed-item', {
 		workout: undefined
 	},
 	template: '#newsfeed-item-template',
+	methods: {
+		time: function(t) {
+			return moment(t).fromNow();
+		}
+	}
 });
 
 var t = new Vue({

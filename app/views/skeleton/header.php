@@ -22,7 +22,9 @@
 			<a href="``PATH_PREFIX``/" class='page-header__logo'>
 				<img src="``PATH_PREFIX``/static/img/logo.png">
 			</a><br>
-			<div class='page-header__filler'></div>
+			<form action="``PATH_PREFIX``/search" method="get" class="page-header__filler">
+				 <input id="user_search" name='q' type='text' placeholder='Znajdź użytkownika' value="``$_GET['q'] ?? ''``">
+			</form>
 			
 			<?php if ($account->isLoggedIn()): ?>
 				<button class='page-header__add' onclick="document.location = '``PATH_PREFIX``/workout/add'">Dodaj trening</button>

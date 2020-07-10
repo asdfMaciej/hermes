@@ -14,6 +14,7 @@ $router->route('profile\/\d+\/follow\/?', 'profiles/follow.php');
 $router->route('profile\/\d+\/unfollow\/?', 'profiles/unfollow.php');
 $router->route('upload\/avatar\/?', 'upload/avatar.php');
 $router->route('settings\/?', 'profiles/settings.php');
+$router->route('search\/?', 'profiles/search.php');
 
 // workouts
 $router->route('workout\/add\/?', 'workouts/add.php');

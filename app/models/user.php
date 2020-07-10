@@ -49,6 +49,23 @@ class User extends \DBModel {
 		return $row;
 	}
 
+	public static function searchProfiles($database, $query, $viewer_id) {
+		$row = static::select([
+					static::class => [
+						"user_id", "login", "name", "register_date", "avatar"
+					],
+					"EXISTS(SELECT 0 FROM followers WHERE user_id = user_id AND follower_id = :viewer_id) AS following"
+				])
+				->from(static::class)
+				->where("User.name LIKE :query")
+				->setParameter(":query", $query)
+				->setParameter(":viewer_id", $viewer_id)
+				->execute($database)
+				->getAll();
+
+		return $row;
+	}
+
 	public static function getStatistics($database, $id) {
 		$row = static::select([
 					"User.user_id",

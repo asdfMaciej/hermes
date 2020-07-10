@@ -17,7 +17,7 @@
 					</a>
 				</div>
 				<div class="feed-workout__date">
-					<span class="date">{{workout.date}}</span>
+					<span :title="workout.date" class="date">{{time(workout.date)}}</span>
 					-
 					<a :href="'``PATH_PREFIX``/gym/' + workout.gym_id">
 						{{workout.gym_name}}
@@ -43,8 +43,8 @@
 				<a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id" class="comment__name">
 					{{workout.comment_user_name}}
 				</a>
-				<span class="comment__created date">
-					{{workout.comment_created}}
+				<span :title="workout.comment_created" class="comment__created date">
+					{{time(workout.comment_created)}}
 				</span>
 				<div class="comment__content">
 					{{workout.comment}}
