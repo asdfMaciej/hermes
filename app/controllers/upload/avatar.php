@@ -33,6 +33,8 @@ class Page extends \PageBuilder {
 				$success = $user->save($this->database);
 			}
 		}
+
+		$this->account->loginUser($user);
 		return $this->redirect("profile/".$this->account->user_id);
 	}
 }

@@ -13,6 +13,7 @@ $router->route('profile\/\d+\/?', 'profiles/view.php');
 $router->route('profile\/\d+\/follow\/?', 'profiles/follow.php');
 $router->route('profile\/\d+\/unfollow\/?', 'profiles/unfollow.php');
 $router->route('upload\/avatar\/?', 'upload/avatar.php');
+$router->route('settings\/?', 'profiles/settings.php');
 
 // workouts
 $router->route('workout\/add\/?', 'workouts/add.php');

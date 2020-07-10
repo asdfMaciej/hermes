@@ -26,6 +26,7 @@
 			
 			<?php if ($account->isLoggedIn()): ?>
 				<button class='page-header__add' onclick="document.location = '``PATH_PREFIX``/workout/add'">Dodaj trening</button>
+				<button class='page-header__settings' onclick="document.location = '``PATH_PREFIX``/settings'">Ustawienia</button>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>

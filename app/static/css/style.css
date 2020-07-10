@@ -48,21 +48,57 @@
 }
 
 .profile-details__avatar img {
-	width: 150px;
+	width: 300px;
 	position: absolute;
 	left: 50%;
-	margin-left: -75px;
+	margin-left: -150px;
 	top: 50%;
-	margin-top: -75px;
+	margin-top: -150px;
 }
 
 .profile-details__avatar {
-	width: 150px;
-	height: 150px;
+	width: 300px;
+	height: 300px;
 	overflow: hidden;
 	position: relative;
 }
 
+.profile-details {
+	display: flex;
+	background: white;
+	padding: 12px;
+	box-shadow: var(--white-box-shadow);
+	margin-bottom: 16px;
+}
+
+.profile-details__container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	text-align: center;
+}
+
+.profile-details__follow a {
+	display:inline-block;
+	padding:0.3em 1.2em;
+	margin:0 0.3em 0.3em 0;
+	border-radius:2em;
+	text-decoration:none;
+	font-weight:400;
+	color:#FFFFFF;
+	background-color:#4eb5f1;
+	text-align:center;
+	transition: all 0.2s;
+}
+.profile-details__follow a:hover{
+	background-color:#4095c6;
+}
+.profile-details__follow a.unfollowed {
+	background-color: #f14e59;
+}
+.profile-details__follow a.unfollowed:hover {
+	background-color: #d64852;
+}
 .feed-workout__avatar {
 	width: 100px;
 	height: 100px;
