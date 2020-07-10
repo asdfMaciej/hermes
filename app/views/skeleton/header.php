@@ -1,6 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl-PL">
 	<head>	
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="apple-touch-icon" sizes="180x180" href="``PATH_PREFIX``/static/favicon/apple-touch-icon.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="``PATH_PREFIX``/static/favicon/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="``PATH_PREFIX``/static/favicon/favicon-16x16.png">
@@ -27,8 +29,8 @@
 			</form>
 			
 			<?php if ($account->isLoggedIn()): ?>
-				<button class='page-header__add' onclick="document.location = '``PATH_PREFIX``/workout/add'">Dodaj trening</button>
-				<button class='page-header__settings' onclick="document.location = '``PATH_PREFIX``/settings'">Ustawienia</button>
+				<a class='page-header__add white' href="``PATH_PREFIX``/workout/add">Dodaj trening</a>
+				<a class='page-header__settings white' href="``PATH_PREFIX``/settings">Ustawienia</a>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>

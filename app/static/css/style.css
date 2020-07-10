@@ -1,5 +1,7 @@
 :root {
-    --header-height: 66px;
+    --header-height: 48px;
+    --header-padding: 8px;
+    --footer-height: 48px;
 }
 .page-content {
 	flex: 1 1;
@@ -8,12 +10,14 @@
 	max-width: 1200px;
 	margin: auto;
 
+	min-height: calc(100vh - var(--footer-height));
+
 	padding-top: calc(var(--header-height) + 8px);
 }
 .page-header {
 	background: #d32f2f;
 	color: white;
-	padding: 8px;
+	padding: var(--header-padding);
 	box-shadow: 0px 1px 1px #00000040;
 	display: flex;
 	height: var(--header-height);
@@ -23,9 +27,14 @@
 	width: 100%;
 	z-index: 100;
 }
+.page-header__settings,
+.page-header__add {
+	font-size: 0.9em;
+	line-height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding));
+}
 .page-header__filler {
 	flex: 1 0;
-	padding: 4px 32px;
+	padding: 0px 32px 0px 16px;
 }
 .page-header__filler input {
 	width: 100%;
@@ -35,7 +44,7 @@
 	margin-right: 8px;
 }
 .page-header img {
-	height: 50px;
+	height: 32px;
 	margin-left: 8px;
 	margin-right: 8px;
 }
@@ -46,6 +55,7 @@
 	background: #333333;
 	color: white;
 	padding: 8px;
+	height: var(--footer-height);
 }
 .newsfeed {
 	display: flex;

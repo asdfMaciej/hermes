@@ -30,6 +30,10 @@ a:hover {
     color: #272727;
 }
 
+a.white, a.white:hover {
+    color: white;
+}
+
 a img:hover {
     opacity: 0.95;
 }
