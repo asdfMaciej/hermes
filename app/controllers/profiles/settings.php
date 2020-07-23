@@ -4,7 +4,7 @@ use \Model\User;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
+		$this->metadata->setTitle("Ustawienia konta");
 		$this->addActions([
 			"change" => "onChange"
 		]);
@@ -29,9 +29,9 @@ class Page extends \PageBuilder {
 		$user = User::getSingleItem($this->database, ["user_id" => $this->account->user_id]);
 		$user->name = $name; 
 		if ($user->save($this->database)) {
-			return $this->snackbar->set(200, "Zapisano zmiany.");
+            $this->redirect("settings");
 		} else {
-			return $this->snackbar->set(400, "Nie zapisano zmian.");
+            $this->redirect("settings");
 		}
 	}
 }

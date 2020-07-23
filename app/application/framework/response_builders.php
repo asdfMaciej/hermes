@@ -78,9 +78,6 @@ class WebBuilder {
 		$this->init();
 		$this->handleActions();
 
-		$metadata = $this->metadata->getMetadata();
-		$this->header($metadata);
-
 		if ($this->snackbar->getMessage()) {
 			$message = $this->snackbar->getMessage();
 			$code = $this->snackbar->getCode();
@@ -88,6 +85,9 @@ class WebBuilder {
 		}
 
 		$this->content();
+        $metadata = $this->metadata->getMetadata();
+
+        $this->header($metadata);
 		$this->footer($metadata);
 
 		$this->render();
@@ -134,13 +134,17 @@ class WebBuilder {
 		return True;
 	}
 
-	protected function redirect($path=null) {
+	protected function redirect($path=null, $prevent_form_resubmission=true) {
 		if (is_null($path))
 			throw new Exception("Unspecified path for a redirect.");
 
+		if ($prevent_form_resubmission) {
+            header("HTTP/1.1 303 See Other");
+        }
 		header('Location: '.PATH_PREFIX."/".$path);
 		exit();
 	}
+
 }
 
 class PageMetadata {
@@ -248,7 +252,7 @@ class DataFromArray implements ArrayAccess {
 	 * Enables accessing the model as an Array: 
 	*/
 	public function offsetSet($offset, $value) {
-		$this->$array[$offset] = $value;
+		$this->array[$offset] = $value;
 	}
 
 	public function offsetExists($offset) {

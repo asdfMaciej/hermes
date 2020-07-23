@@ -7,7 +7,6 @@ use \Model\Gym;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
 		$this->addActions([]);
 
 		$this->metadata->addScript("reaction-button.js", true, true);
@@ -21,6 +20,7 @@ class Page extends \PageBuilder {
 		if (!$gym)
 			return $this->response->addTemplate("codes/404.php");
 
+        $this->metadata->setTitle($gym["name"]);
 		$records = Gym::getExerciseRecords($this->database, $id);
 		$frequenters = Gym::getFrequenters($this->database, $id);
 		$album = Photo::getForAlbumId($this->database, $gym["album_id"]);

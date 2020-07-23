@@ -11,25 +11,36 @@ class TemplateBuilder {
 
 	public function __construct() {}
 
-	public function addTemplate($filename, $data=[]) {
-		if (is_string($filename)) {
-			$tmp = new Template();
-			if (!$tmp->setTemplateFile($filename)) {
-				return False;
-			}
-		} elseif ($filename instanceof TemplateInterface) {
-			$tmp = $filename;
-		} else {
-			throw new Exception("Template isn't neither a filename nor implements TemplateInterface.");
-		}
+	public function addTemplate($filename, $data=[], $insert_at_start=False) {
+        $template = $this->importTemplate($filename);
 
-		$this->templates[] = $tmp;
-		$this->templates_data[] = $data;
+        if ($insert_at_start) {
+            array_unshift($this->templates, $template);
+            array_unshift($this->templates_data, $data);
+        } else {
+            $this->templates[] = $template;
+            $this->templates_data[] = $data;
+        }
 	}
 
 	public function setResponseCode($code) {
 		$this->response_code = $code;
 	}
+
+	protected function importTemplate($filename) {
+        if (is_string($filename)) {
+            $tmp = new Template();
+            if (!$tmp->setTemplateFile($filename)) {
+                return False;
+            }
+        } elseif ($filename instanceof TemplateInterface) {
+            $tmp = $filename;
+        } else {
+            throw new Exception("Template isn't neither a filename nor implements TemplateInterface.");
+        }
+
+        return $tmp;
+    }
 
 	public function generate() {
 		http_response_code($this->response_code);

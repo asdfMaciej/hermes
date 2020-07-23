@@ -7,9 +7,6 @@ use \Model\Gym;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
-		$this->addActions([]);
-
 		$this->metadata->addScript("reaction-button.js", true, true);
 		$this->metadata->addScript("newsfeed.js", true, true);
 	}
@@ -20,6 +17,7 @@ class Page extends \PageBuilder {
 		if (!$user)
 			return $this->response->addTemplate("codes/404.php");
 
+        $this->metadata->setTitle($user["name"]);
 		$this->response->addTemplate("profile/view.php", [
 			"user" => $user,
 			"account" => $this->account

@@ -9,7 +9,6 @@ use \Model\WorkoutComment;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
 		$this->addActions([
 			"comment" => "onComment",
 		]);
@@ -37,6 +36,7 @@ class Page extends \PageBuilder {
 		$workout = Workout::getById($this->database, $id);
 		if (!$workout)
 			return $this->response->addTemplate("codes/404.php");
+        $this->metadata->setTitle($workout["title"]);
 
 		$exercises = Workout::getExercises($this->database, $id);
 		$gym_id = $workout["gym_id"];

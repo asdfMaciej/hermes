@@ -7,8 +7,7 @@ use \Model\Gym;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
-		$this->addActions([]);
+		$this->metadata->setTitle("Lista ćwiczeń");
 	}
 
 	protected function content() {

@@ -3,10 +3,7 @@ namespace Web\Pages;
 use \Model\User;
 
 class Page extends \PageBuilder {
-	protected function init() {
-		$this->metadata->setTitle("Index");
-		$this->addActions([]);
-	}
+	protected function init() {}
 
 	protected function content() {
 		$id = $this->data->path->profile;

@@ -6,7 +6,7 @@ use \Model\Exercise;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
+		$this->metadata->setTitle("Dodaj trening");
 		$this->addActions([
 			"add" => "onAdd"
 		]);

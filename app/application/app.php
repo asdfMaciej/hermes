@@ -41,7 +41,7 @@ class PageBuilder extends \WebBuilder {
 	}
 
 	protected function authRedirect() {
-		$this->redirect("");
+		$this->redirect("", false);
 	}
 
 	public function login($login, $password) {
@@ -61,7 +61,7 @@ class PageBuilder extends \WebBuilder {
 
 	protected function header($metadata) {
 		$metadata["account"] = $this->account;
-		$this->response->addTemplate("skeleton/header.php", $metadata);
+		$this->response->addTemplate("skeleton/header.php", $metadata, true);
 	}
 
 	protected function footer($metadata) {

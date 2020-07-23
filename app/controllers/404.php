@@ -4,7 +4,7 @@ use \Model\Category;
 
 class Index extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("404");
+		$this->metadata->setTitle("Nie znaleziono strony");
 	}
 
 	protected function content() {

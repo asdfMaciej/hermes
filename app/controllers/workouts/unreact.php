@@ -5,7 +5,6 @@ use \Model\WorkoutReaction;
 
 class Page extends \PageBuilder {
 	protected function init() {
-		$this->metadata->setTitle("Index");
 		$this->addActions([]);
 	}
 

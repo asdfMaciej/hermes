@@ -3,12 +3,13 @@ namespace Web\Pages;
 use \Model\User;
 
 class Page extends \PageBuilder {
-	protected function init() {
-		$this->metadata->setTitle("Index");
-	}
+	protected function init() {}
 
 	protected function content() {
-		$q = str_replace("%", "", $_GET["q"] ?? "");
+	    $searched_string = $_GET["q"] ?? "";
+        $this->metadata->setTitle("Wyszukiwarka - $searched_string");
+
+		$q = str_replace("%", "", $searched_string);
 		$query = "%" . $q . "%";
 		$users = User::searchProfiles($this->database, $query, $this->account->user_id);
 

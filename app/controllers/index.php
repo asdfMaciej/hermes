@@ -7,7 +7,6 @@ class Index extends \PageBuilder {
 	protected $require_auth = false;
 
 	protected function init() {
-		$this->metadata->setTitle("Index");
 		$this->addActions([
 			"login" => "onLogin",
 			"logout" => "onLogout",
@@ -20,6 +19,7 @@ class Index extends \PageBuilder {
 
 	protected function content() {
 		if ($this->account->isLoggedIn()) {
+            $this->metadata->setTitle("Aktualności");
 			$workouts = Workout::getNewsfeedList($this->database, $this->account->user_id);
 			$statistics = User::getStatistics($this->database, $this->account->user_id);
 
@@ -28,9 +28,8 @@ class Index extends \PageBuilder {
 				"account" => $this->account,
 				"statistics" => $statistics
 			]);
-
-			
 		} else {
+            $this->metadata->setTitle("Trenuj ze znajomymi");
 			$this->response->addTemplate("static/index.php", []);
 		}
 	}
