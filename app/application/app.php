@@ -27,6 +27,7 @@ class PageBuilder extends \WebBuilder {
 
 		// add at end of file
 		$this->metadata->addScript("main.js", true, true);
+		$this->metadata->addScript("https://unpkg.com/ionicons@5.1.2/dist/ionicons.js", false, true);
 
 		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");

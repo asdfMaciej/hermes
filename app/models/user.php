@@ -70,7 +70,7 @@ class User extends \DBModel {
 		$row = static::select([
 					"User.user_id",
 					"COUNT(Workout.workout_id) as workout_count",
-					"date(MAX(Workout.date)) as workout_last_date"
+					"MAX(Workout.date) as workout_last_date"
 				])
 				->from(static::class)
 				->where("User.user_id = :id")

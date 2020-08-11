@@ -30,14 +30,18 @@
 			
 			<?php if ($account->isLoggedIn()): ?>
 				<a class='page-header__add white' href="``PATH_PREFIX``/workout/add">Dodaj trening</a>
-				<a class='page-header__settings white' href="``PATH_PREFIX``/settings">Ustawienia</a>
+				<a class='page-header__settings white' href="``PATH_PREFIX``/settings">
+					<ion-icon name="settings-sharp"></ion-icon>
+				</a>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
 					<img src="``PATH_PREFIX``/``$account->avatar``">
 				</a><br>
 
-				<form action="``PATH_PREFIX``/" method="post">
+				<form action="``PATH_PREFIX``/" method="post" id="logout-form">
 					<input type="hidden" name="action" value="logout">
-					<input type="submit" value="Wyloguj się">
+					<a href="#" class="white">
+						<ion-icon name="log-out-outline"></ion-icon>
+					</a>
 				</form>
 			<?php else: ?>
 				<form action="``PATH_PREFIX``/" method="post">

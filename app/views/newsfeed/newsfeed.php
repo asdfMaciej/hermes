@@ -31,15 +31,15 @@
 				<div class="feed-workout__reactions">
 					<reaction-button :workout='workout'></reaction-button>
 
-					<span>{{workout.comments}} {{(workout.comments == 0 || workout.comments >= 5) ? 'komentarzy' : (workout.comments == 1 ? 'komentarz' : 'komentarze')}}</span>
+					<a :href="'``PATH_PREFIX``/workout/' + workout.workout_id">{{workout.comments}} {{(workout.comments == 0 || workout.comments >= 5) ? 'komentarzy' : (workout.comments == 1 ? 'komentarz' : 'komentarze')}}</a>
 				</div>
 			</div>
 		</div>
 		<div class="comment comment--newsfeed" v-if='workout.comment'>
-			<a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id">
-				<img class="comment__avatar" :src="'``PATH_PREFIX``/' + workout.comment_avatar">
-			</a>
 			<div class="comment__main">
+                <a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id">
+                    <img class="comment__avatar" :src="'``PATH_PREFIX``/' + workout.comment_avatar">
+                </a>
 				<a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id" class="comment__name">
 					{{workout.comment_user_name}}
 				</a>

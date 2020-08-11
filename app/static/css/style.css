@@ -7,7 +7,7 @@
 	flex: 1 1;
 	padding: 8px;
 	width: 100%;
-	max-width: 1200px;
+	max-width: 1400px;
 	margin: auto;
 
 	min-height: calc(100vh - var(--footer-height));
@@ -27,10 +27,16 @@
 	width: 100%;
 	z-index: 100;
 }
-.page-header__settings,
+
 .page-header__add {
 	font-size: 0.9em;
 	line-height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding));
+}
+
+.page-header__settings {
+	font-size: 1.5em;
+	display: flex;
+	align-items: center;
 }
 .page-header__filler {
 	flex: 1 0;
@@ -50,6 +56,9 @@
 }
 .page-header__logo img {
 	filter: brightness(0) invert(1);
+}
+#logout-form {
+	font-size: 1.7em;
 }
 .page-footer {
 	background: #333333;
@@ -262,16 +271,17 @@
 }
 .statistics-box__avatar {
 	display: flex;
-	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	padding: 8px;
 }
 .statistics-box__avatar img {
-	max-width: 70px;
+	max-width: 50px;
 }
 .statistics-box__name {
 	font-weight: bold;
 	text-align: center;
+	padding: 8px;
 }
 .statistics-box {
 	background: white;
@@ -281,13 +291,16 @@
 }
 .statistics-box__statistics {
 	margin-top: 8px;
-	padding-bottom: 8px;
-	border-bottom: 1px solid black;
+	padding-bottom: 8px;	
 }
 .statistics-box__add {
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 4px;
+	padding-bottom: 12px;
 	display: block;
+	font-weight: 600;
+	text-align: center;
+	font-size: 1.2em;
+	border-bottom: 1px solid #848484;
 }
 .landing-page {
 	display: flex;
@@ -316,12 +329,8 @@
 .workout-details__photo {
 	grid-area: photo;
 }
-.workout-details__date {
-	font-style: italic;
-}
-.workout-details__username {
-
-}
+.workout-details__date {}
+.workout-details__username {}
 .workout-details__row {
 	flex: 1;
 	padding-left: 8px;
@@ -338,6 +347,7 @@
 .workout-gym__name {
 	margin-top: 8px;
 	text-align: center;
+	font-weight: bold;
 }
 .workout-exercises {
 	grid-area: exercises;
@@ -375,7 +385,6 @@
 }
 .comment-none {
 	margin-top: 12px;
-	font-style: italic;
 }
 .comment {
 	display: flex;
@@ -391,9 +400,7 @@
 .comment__main {
 	padding: 8px;
 }
-.comment__created {
-	font-style: italic;
-}
+.comment__created {}
 .reaction-button {
 	box-shadow: -1px 2px 5px #0000002b;
 	display: inline-block;
@@ -419,3 +426,54 @@
 .comment.comment--newsfeed img {
 	width: 60px;
 }
+
+.comment__avatar {
+	float: left;
+	margin: 0 12px 0 0;
+}
+@media (max-width: 768px) {
+	.statistics-box {
+		position: relative;
+		margin: 8px;
+	}
+	.frontpage {
+		grid-template-areas: "statistics" "newsfeed";
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto;
+	}
+	.frontpage__newsfeed {
+		padding: 8px;
+	}
+	.page-header__logo {
+		display: none;
+	}
+	.page-header__filler {
+		padding: 0px 8px;
+	}
+	.workout {
+		grid-template-areas: "details details" "gym gym" "exercises exercises" "comments comments";
+	}
+	.workout-gym {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		flex-direction: column;
+	}
+	.workout-gym__picture img {
+		max-width: 200px;
+		width: 100%;
+	}
+	.workout-gym__name {
+		flex: 1;
+	}
+}
+@media (max-width: 400px) {
+	.workout-details {
+		flex-direction: column;
+	}
+	.workout-details__photo img {
+		margin: 0;
+		width: 80px;
+	}
+}
+

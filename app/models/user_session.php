@@ -7,7 +7,8 @@ class UserSession extends \SessionModel {
 		"password" => "",
 		"name" => "",
 		"register_date" => "",
-		"avatar" => ""
+		"avatar" => "",
+		"first_name" => ""
 	];
 
 	public function isLoggedIn() {
@@ -18,6 +19,8 @@ class UserSession extends \SessionModel {
 		foreach ($this->fields as $field_name => $val) {
 			$this->{$field_name} = $user_model->{$field_name};
 		}
+
+		$this->first_name = explode(" ", $this->name)[0];
 	}
 
 	public function logout() {

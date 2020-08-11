@@ -3,21 +3,22 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+:root {
+    --white-box-shadow: 1px 1px 6px #00000014;
+    --font-family: Inter, Arial, sans-serif;
+}
 body {
 	display: flex;
 	flex-direction: column;
-	font-family: sans-serif;
 	background: #f7f6f6;
 	color: #454545;
-
-	font-family: Open Sans, Arial, sans-serif;
+	font-family: var(--font-family);
+    letter-spacing: -0.3px; /* offset the Inter font */
     font-size: 16px;
     line-height: 1.4;
     text-align: justify;
 }
-:root {
-    --white-box-shadow: 1px 1px 6px #00000014;
-}
+
 a {
     color: black;
     text-decoration: none;
@@ -41,7 +42,7 @@ a img:hover {
 button {
     font-size: 0.9em;
     padding: 4px;
-    font-family: Open Sans, Arial, sans-serif;
+    font-family: var(--font-family);
 }
 
 .noselect {
@@ -60,7 +61,7 @@ small {
 input, textarea {
     font-size: 0.9em;
     padding: 4px;
-    font-family: Open Sans, Arial, sans-serif;
+    font-family: var(--font-family);
 }
 
 ul li img {
@@ -111,9 +112,14 @@ blockquote:after {
     clear: both
 }
 
+h1, h2, h3, h4, h5, h6 {
+    line-height: 200%;
+}
+
 @media screen and (max-width: 500px) {
     body {
-        text-align:left
+        text-align: left;
+        font-size: 15px;
     }
 
     blockquote span {
@@ -132,6 +138,3 @@ blockquote:after {
     }
 }
 
-h1, h2, h3, h4, h5, h6 {
-	line-height: 200%;
-}

@@ -7,3 +7,10 @@ dates.forEach((date) => {
 	date.innerHTML = moment(iso).fromNow();
 	date.setAttribute('title', iso);
 });
+
+let logoutForm = document.querySelector("#logout-form");
+if (logoutForm) {
+	logoutForm.addEventListener("click", () => {
+		logoutForm.submit();
+	});
+}

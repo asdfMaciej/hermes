@@ -90,10 +90,10 @@
 		
 		<?php foreach ($comments as $comment): ?>
 		<div class="comment">
-			<a href="``PATH_PREFIX``/profile/``$comment['user_id']``">
-				<img class="comment__avatar" src="``PATH_PREFIX``/``$comment['avatar']``">
-			</a>
 			<div class="comment__main">
+                <a href="``PATH_PREFIX``/profile/``$comment['user_id']``">
+                    <img class="comment__avatar" src="``PATH_PREFIX``/``$comment['avatar']``">
+                </a>
 				<a href="``PATH_PREFIX``/profile/``$comment['user_id']``" class="comment__name">
 					``$comment['user_name']``
 				</a>

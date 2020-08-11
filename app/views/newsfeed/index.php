@@ -3,18 +3,24 @@
 		<a href="``PATH_PREFIX``/profile/``$account->user_id``" class='statistics-box__avatar'>
 			<img src="``PATH_PREFIX``/``$account->avatar``">
 				<div class="statistics-box__name">
-				``$account->name``
+				Cześć, ``$account->first_name``!
 			</div>
 		</a>
-		<div class="statistics-box__statistics">
-			<div>
-				<h4>Na siłowni byłeś:</h4>
-				``$statistics["workout_count"]`` razy
-				<h4>Ostatni trening zrobiłeś:</h4>
-				``$statistics["workout_last_date"]``
-			</div>
-		</div>
+
 		<a class='statistics-box__add' href="``PATH_PREFIX``/workout/add">Dodaj trening!</a>
+		
+		<div class="statistics-box__statistics">
+			<h4>Na siłowni byłeś:</h4>
+			<span>
+				``$statistics["workout_count"]`` razy
+			</span>
+			
+			<h4>Ostatni trening zrobiłeś:</h4>
+			<span class='date'>
+				``$statistics["workout_last_date"]``
+			</span>
+		</div>
+		
 	</div>
 	<div class="frontpage__newsfeed">
 		<?php if (!$workouts): ?>
