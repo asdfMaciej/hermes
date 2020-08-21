@@ -23,8 +23,12 @@
 		<div class='page-header' id="header">
 			<a href="``PATH_PREFIX``/" class='page-header__logo'>
 				<img src="``PATH_PREFIX``/static/img/logo.png">
-			</a><br>
+			</a>
+            <a href="#" class="page-header__search-button white">
+                <ion-icon name="search"></ion-icon>
+            </a>
 			<form action="``PATH_PREFIX``/search" method="get" class="page-header__filler">
+
 				 <input id="user_search" name='q' type='text' placeholder='Znajdź użytkownika' value="``$_GET['q'] ?? ''``">
 			</form>
 			
