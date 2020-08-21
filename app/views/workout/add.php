@@ -37,7 +37,7 @@
 			v-model='current.workout.exercises[i]'
 			@delete='current.workout.exercises.splice(i, 1)'
 			:hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'></exercise>
-		<h4 v-if="current.workout.exercises.length == 0">Dodaj ćwiczenia do treningu.</h4>
+		<h4 v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</h4>
 	</div>
 	
 	<div class="add-workout__submit">

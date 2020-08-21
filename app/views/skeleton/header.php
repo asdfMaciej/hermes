@@ -33,7 +33,10 @@
 			</form>
 			
 			<?php if ($account->isLoggedIn()): ?>
-				<a class='page-header__add white' href="``PATH_PREFIX``/workout/add">Dodaj trening</a>
+				<a class='page-header__add white' href="``PATH_PREFIX``/workout/add">
+                    <span>Dodaj trening</span>
+                    <ion-icon name="add-outline"></ion-icon>
+                </a>
 				<a class='page-header__settings white' href="``PATH_PREFIX``/settings">
 					<ion-icon name="settings-sharp"></ion-icon>
 				</a>

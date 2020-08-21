@@ -32,13 +32,16 @@
 	font-size: 0.9em;
 	line-height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding));
 }
-
+.page-header__add ion-icon {
+	display: none;
+}
 .page-header__settings,
 .page-header__search-button{
 	font-size: 1.5em;
 	display: flex;
 	align-items: center;
 }
+
 .page-header__filler {
 	flex: 1 0;
 	padding: 0px 32px 0px 16px;
@@ -489,6 +492,22 @@
 	.workout-gym__name {
 		flex: 1;
 	}
+	.add-workout {
+		grid-template-areas: 'settings'
+							'list'
+							'add'
+							'preview'
+							'submit';
+
+	}
+	.add-workout__settings {
+		flex-direction: column;
+		padding: 12px;
+	}
+	.add-workout__settings-title,
+	.add-workout__settings-gym {
+		margin: 8px 0px;
+	}
 }
 @media (max-width: 400px) {
 	.workout-details {
@@ -497,6 +516,17 @@
 	.workout-details__photo img {
 		margin: 0;
 		width: 80px;
+	}
+	.page-header__add ion-icon {
+		display: block;
+	}
+	.page-header__add span {
+		display: none;
+	}
+	.page-header__add {
+		font-size: 1.5em;
+		display: flex;
+		align-items: center;
 	}
 }
 
