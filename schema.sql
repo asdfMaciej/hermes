@@ -24,18 +24,6 @@ CREATE TABLE IF NOT EXISTS `albums` (
 
 -- Eksport danych został odznaczony.
 
--- Zrzut struktury tabela hermes.comments
-CREATE TABLE IF NOT EXISTS `comments` (
-  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `workout_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `comment` varchar(2048) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
-  `created` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
--- Eksport danych został odznaczony.
-
 -- Zrzut struktury tabela hermes.exercises
 CREATE TABLE IF NOT EXISTS `exercises` (
   `exercise_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -218,6 +206,15 @@ CREATE TABLE IF NOT EXISTS `photos` (
 
 -- Eksport danych został odznaczony.
 
+-- Zrzut struktury tabela hermes.reaction_types
+CREATE TABLE IF NOT EXISTS `reaction_types` (
+  `type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reaction` varchar(6) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
 -- Zrzut struktury tabela hermes.users
 CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -247,6 +244,37 @@ CREATE TABLE IF NOT EXISTS `workouts` (
   CONSTRAINT `FK_workouts_gyms` FOREIGN KEY (`gym_id`) REFERENCES `gyms` (`gym_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_workouts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela hermes.workout_comments
+CREATE TABLE IF NOT EXISTS `workout_comments` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `workout_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` varchar(2048) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`comment_id`),
+  KEY `FK_comments_workouts` (`workout_id`),
+  KEY `FK_comments_users` (`user_id`),
+  CONSTRAINT `FK_comments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_comments_workouts` FOREIGN KEY (`workout_id`) REFERENCES `workouts` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela hermes.workout_reactions
+CREATE TABLE IF NOT EXISTS `workout_reactions` (
+  `workout_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  PRIMARY KEY (`workout_id`,`user_id`),
+  KEY `FK_workout_reactions_users` (`user_id`),
+  KEY `FK_workout_reactions_reaction_types` (`type_id`),
+  CONSTRAINT `FK_workout_reactions_reaction_types` FOREIGN KEY (`type_id`) REFERENCES `reaction_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_workout_reactions_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_workout_reactions_workouts` FOREIGN KEY (`workout_id`) REFERENCES `workouts` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
