@@ -1,26 +1,39 @@
 <div id="add-workout" class='add-workout'>
 	<div class="add-workout__settings">
 		<div class="add-workout__settings-title">
-			<h1>Dodaj trening:</h1>
-			<input type="text" v-model='current.workout.workout.title' placeholder='Podaj nazwę treningu'>
+			<h1 v-if="!editTitle" @click="openTitleEdition">
+                {{current.workout.workout.title}}
+                <ion-icon name="create-outline"></ion-icon>
+            </h1>
+            <input type="text" v-if='editTitle' v-model='current.workout.workout.title'
+                   placeholder='Podaj nazwę treningu' @keyup.enter="editTitle = false" ref="edittitle">
+            <h4>{{timeElapsed}}</h4>
+
 		</div>
 
 		<div class="add-workout__settings-gym">	
 			<h3>Wybierz miejsce ćwiczeń:</h3>
-			<div v-for="gym in cache.gyms" :class='{"exercise-selected": gym.gym_id == current.workout.workout.gym_id}'>
-				<a href='#' @click.prevent='current.workout.workout.gym_id = gym.gym_id'>
-					{{gym.name}}
-				</a>
-			</div>
+            <ul>
+                <li v-for="gym in cache.gyms" :class='{"exercise-selected": gym.gym_id == current.workout.workout.gym_id}'>
+                    <a href='#' @click.prevent='current.workout.workout.gym_id = gym.gym_id'>
+                        {{gym.name}}
+                    </a>
+                </li>
+            </ul>
 		</div>
 	</div>
 
-	<div class="add-workout__list">
+	<div class="add-workout__list" v-if="showAddExercise">
 		<h2>Wybierz:</h2>
-		<exercise-category :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories">
-		</exercise-category>
+        <ul>
+            <li v-for='exerciseType in cache.exerciseTypes'>
+                <a href='#' @click.prevent='selectExerciseType(exerciseType)'>
+                    {{exerciseType.exercise_type}}
+                </a>
+            </li>
+        </ul>
 	</div>
-
+    <!--
 	<div v-if='selected.exerciseType.type_id' class='add-workout__add'>
 		<h2>Dodaj:</h2>
 		<exercise edit-only :value='selected.exerciseType' @input='addExercise($event)'>
@@ -29,18 +42,23 @@
 	<div v-else>
 		<h2>Dodaj:</h2>
 		<h4>Nie wybrałeś żadnego ćwiczenia.</h4>
-	</div>
+	</div>-->
 	
-	<div class="add-workout__preview">
+	<div class="add-workout__preview" v-if="!showAddExercise" ref="exercises">
 		<h2>Dodane ćwiczenia:</h2>
 		<exercise v-for="(exercise, i) in current.workout.exercises" 
 			v-model='current.workout.exercises[i]'
 			@delete='current.workout.exercises.splice(i, 1)'
-			:hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'></exercise>
-		<h4 v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</h4>
-	</div>
+			:hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'
+            :is-first="i == 0"></exercise>
+		<span v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</span>
+        <div class="add-workout__list-buttons">
+            <a href="#" @click.prevent="showAddExercise = true" class="add-workout__add-exercise">Dodaj nowe ćwiczenie</a>
+        </div>
+
+    </div>
 	
-	<div class="add-workout__submit">
+	<div class="add-workout__submit" v-if="!showAddExercise">
 		<div class="add-workout__error" v-for='error in validateWorkoutErrors'>
 			{{error}}
 		</div>
@@ -69,25 +87,25 @@
 </script>
 
 <script type="text/x-template" id="exercise-template">
-	<div class="exercise">
-		<h3 v-if="!hideTitle">{{exercise.exercise_type}}</h3>
-		<div v-if='exercise.show_reps == 1'>
-			<span>Ilość powtórzeń:</span>
-			<input v-if='edit' type="number" v-model="exercise.reps">
-			<span v-else>{{exercise.reps}}</span>
-		</div>
-		<div v-if='exercise.show_weight == 1'>
-			<span>Obciążenie:{{edit ? ' [kg]' : ''}}</span>
-			<input v-if='edit' type="number" v-model="exercise.weight">
-			<span v-else>{{exercise.weight}} kg</span>
-		</div>
-		<div v-if='exercise.show_duration == 1'>
-			<span>Czas trwania:{{edit ? ' [s]' : ''}}</span>
-			<input v-if='edit' type="number" v-model="exercise.duration">
-			<span v-else>{{exercise.duration}} s</span>
-		</div>
-		<button @click='remove' v-if='!viewOnly && !editOnly'>Usuń</button>
-		<button @click='showEdit = true && !viewOnly' v-if='!edit'>Edytuj</button>
-		<button @click='finishEdit' v-if='edit' :disabled='!valid'>Zapisz</button>
+	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
+		<span class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</span>
+        <a href="#" @click.prevent="" class="exercise__add-rep" v-if="!hideTitle">
+            Dodaj serię
+        </a>
+        <div class="exercise__attributes">
+            <div class="exercise_attribute" v-if='exercise.show_reps == 1'>
+                <input type="number" v-model="exercise.reps" placeholder="Ilość">
+                powtórzeń
+            </div>
+            <div class="exercise_attribute" v-if='exercise.show_weight == 1'>
+                <input type="number" v-model="exercise.weight" placeholder="Waga">
+                kg
+            </div>
+            <div class="exercise_attribute" v-if='exercise.show_duration == 1'>
+                <input type="number" v-model="exercise.duration" placeholder="Czas">
+                sekund
+            </div>
+        </div>
+
 	</div>
 </script>

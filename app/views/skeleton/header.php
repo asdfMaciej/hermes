@@ -24,15 +24,14 @@
 			<a href="``PATH_PREFIX``/" class='page-header__logo'>
 				<img src="``PATH_PREFIX``/static/img/logo.png">
 			</a>
-            <a href="#" class="page-header__search-button white">
-                <ion-icon name="search"></ion-icon>
-            </a>
-			<form action="``PATH_PREFIX``/search" method="get" class="page-header__filler">
-
-				 <input id="user_search" name='q' type='text' placeholder='Znajdź użytkownika' value="``$_GET['q'] ?? ''``">
-			</form>
-			
 			<?php if ($account->isLoggedIn()): ?>
+                <a href="#" class="page-header__search-button white">
+                    <ion-icon name="search"></ion-icon>
+                </a>
+                <form action="``PATH_PREFIX``/search" method="get" class="page-header__filler">
+
+                    <input id="user_search" name='q' type='text' placeholder='Znajdź użytkownika' value="``$_GET['q'] ?? ''``">
+                </form>
 				<a class='page-header__add white' href="``PATH_PREFIX``/workout/add">
                     <span>Dodaj trening</span>
                     <ion-icon name="add-outline"></ion-icon>
@@ -51,6 +50,7 @@
 					</a>
 				</form>
 			<?php else: ?>
+                <div class="page-header__filler"></div>
 				<form action="``PATH_PREFIX``/" method="post">
 					<input type="hidden" name="action" value="login">
 					<input type="text" name="login" placeholder="Login">

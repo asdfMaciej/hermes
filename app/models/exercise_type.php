@@ -10,5 +10,17 @@ class ExerciseType extends \DBModel {
 	public $show_duration;
 	public $show_reps;
 	public $show_weight;
+
+	public function getExerciseTypes($database) {
+        $rows = static::select([
+            ExerciseType::class => "*"
+        ])
+        ->from(static::class)
+        ->orderBy("ExerciseType.exercise_type")
+        ->execute($database)
+        ->getAll();
+
+        return $rows;
+    }
 }
 ?>

@@ -31,6 +31,7 @@ $router->route('exercises\/?', 'exercises/view_all.php');
 $router->route('api\/login\/?', 'api/login.php');
 $router->route('api\/workouts\/?', 'api/workouts.php');
 $router->route('api\/exercise_categories\/?', 'api/exercise_categories.php');
+$router->route('api\/exercise_types\/?', 'api/exercise_types.php');
 $router->route('api\/gyms\/?', 'api/gyms.php');
 $router->route('api\/reactions\/?', 'api/reactions.php');
 

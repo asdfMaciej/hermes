@@ -15,6 +15,7 @@ Vue.component('exercise-category', {
 Vue.component('exercise', {
 	props: {
 		value: undefined,
+		isFirst: Boolean,
 		editOnly: Boolean,
 		viewOnly: Boolean,
 		hideTitle: Boolean
@@ -79,6 +80,7 @@ var t = new Vue({
 	data: {
 		cache: {
 			exerciseCategories: [],
+			exerciseTypes: [],
 			gyms: []
 		},
 		selected: {
@@ -88,12 +90,16 @@ var t = new Vue({
 			workout: {
 				workout: {
 					gym_id: null,
-					title: ""
+					title: "Popołudniowy trening"
 				},
-				exercises: []
+				exercises: [],
+				startMoment: null
 			}
 		},
-		api: null
+		timeElapsed: '00:00',
+		api: null,
+		editTitle: false,
+		showAddExercise: false
 	},
 
 	mounted: function() {
@@ -101,9 +107,19 @@ var t = new Vue({
 		this.api.get('exercise_categories', (response, data) => {
 			this.cache.exerciseCategories = data.exercise_categories;
 		});
+		this.api.get('exercise_types', (response, data) => {
+			this.cache.exerciseTypes = data.exercise_types;
+		});
+
 		this.api.get('gyms', (response, data) => {
 			this.cache.gyms = data.gyms;
 		});
+		this.current.workout.startMoment = moment();
+		setInterval(() => {
+			this.$data.timeElapsed = moment(
+				moment() - this.current.workout.startMoment
+			).format('mm:ss');
+		}, 1000);
 	},
 
 	computed: {
@@ -125,6 +141,13 @@ var t = new Vue({
 			this.addWorkout(this.current.workout);
 		},
 
+		openTitleEdition: function() {
+			this.editTitle = true;
+			this.$nextTick(() => {
+				this.$refs.edittitle.focus();
+			});
+		},
+
 		addExercise: function(exercise) {
 			console.log(exercise);
 			this.current.workout.exercises.push(copy(exercise));
@@ -132,6 +155,21 @@ var t = new Vue({
 
 		isEmptyObject: function(obj) {
 			return Object.keys(obj).length === 0; 
+		},
+
+		selectExerciseType: function(exerciseType) {
+			// todo: fix scroll into view
+			this.showAddExercise = false;
+			this.addExercise(exerciseType);
+			this.$nextTick(() => {
+				this.$nextTick(() => {
+					this.$refs.exercises.scrolIntoView({
+						behavior: "smooth",
+						block: "end"
+					});
+				});
+			});
+
 		},
 
 		addWorkout: function(workout) {
