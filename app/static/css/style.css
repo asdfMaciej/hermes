@@ -201,30 +201,28 @@
 	margin-right: 4px;
 }
 .add-workout {
-	display: grid;
-	grid-template-areas: 'settings'
-						 'preview'
-						 'list'
-						 'submit';
+	display: flex;
+	flex-direction: column;
 	min-height: 100%;
 	width: 100%;
 }
-.add-workout__list {
-
-}
-.add-workout__add {
-	grid-area: add;
-}
-.add-workout__preview {
-	grid-area: preview;
-}
 .add-workout__preview,
 .add-workout__settings,
-.add-workout__list {
+.add-workout__list,
+.add-workout__submit button {
 	padding: 24px;
 	margin: 8px 0;
 	background: white;
 	box-shadow: var(--white-box-shadow);
+}
+.add-workout__submit button {
+	border: none;
+	border-bottom: 2px solid #d32f2f;
+	font-weight: 700;
+	padding: 12px;
+}
+.add-workout__submit button[disabled] {
+	background: #fddddd;
 }
 .add-workout__submit {
 	grid-area: submit;
@@ -546,12 +544,7 @@
 	.workout-gym__name {
 		flex: 1;
 	}
-	.add-workout {
-		grid-template-areas: 'settings'
-							'preview'
-							'submit';
-
-	}
+	.add-workout {}
 	.add-workout__settings {
 		flex-direction: column;
 		padding: 12px;

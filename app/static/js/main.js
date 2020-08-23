@@ -1,3 +1,7 @@
+function clone(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
+
 moment.locale('pl');
 var api = new API();
 

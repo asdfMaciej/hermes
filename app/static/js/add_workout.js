@@ -51,6 +51,15 @@ Vue.component('exercise', {
 
 		remove: function() {
 			this.$emit('delete');
+		},
+
+		addRep: function() {
+			let exercise = clone(this.exercise);
+			delete exercise.reps;
+			delete exercise.weight;
+			delete exercise.duration;
+			this.$root.addExercise(exercise);
+			this.$nextTick(this.$root.scrollToExercisesBottom);
 		}
 	},
 
@@ -99,7 +108,8 @@ var t = new Vue({
 		timeElapsed: '00:00',
 		api: null,
 		editTitle: false,
-		showAddExercise: false
+		showAddExercise: false,
+		showModal: false
 	},
 
 	mounted: function() {
@@ -133,12 +143,23 @@ var t = new Vue({
 				errors.push("Nie dodano żadnych ćwiczeń!");
 
 			return errors;
+		},
+
+		workoutErrors: function() {
+			return this.validateWorkoutErrors.join(' ');
 		}
 	},
 
 	methods: {
 		submit: function() {
-			this.addWorkout(this.current.workout);
+			if (this.validateWorkoutErrors.length > 0) {
+				this.showModal = true;
+				setTimeout(() => {
+					this.showModal = false;
+				}, 5000);
+			} else {
+				this.addWorkout(this.current.workout);
+			}
 		},
 
 		openTitleEdition: function() {
@@ -158,18 +179,19 @@ var t = new Vue({
 		},
 
 		selectExerciseType: function(exerciseType) {
-			// todo: fix scroll into view
 			this.showAddExercise = false;
 			this.addExercise(exerciseType);
-			this.$nextTick(() => {
-				this.$nextTick(() => {
-					this.$refs.exercises.scrolIntoView({
-						behavior: "smooth",
-						block: "end"
-					});
-				});
-			});
+			this.$nextTick(this.scrollToExercisesBottom);
+		},
 
+		scrollToExercisesBottom: function() {
+			// Vue refs dont work for me, even with $nextTick
+			// they return undefined even though it theoretically should work
+			// Google is unhelpful, so I used querySelector instead of Vue
+			document.querySelector(".add-workout__preview").scrollIntoView({
+				behavior: "smooth",
+				block: "end"
+			});
 		},
 
 		addWorkout: function(workout) {

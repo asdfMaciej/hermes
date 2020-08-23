@@ -8,18 +8,6 @@
             <input type="text" v-if='editTitle' v-model='current.workout.workout.title'
                    placeholder='Podaj nazwę treningu' @keyup.enter="editTitle = false" ref="edittitle">
             <h4>{{timeElapsed}}</h4>
-
-		</div>
-
-		<div class="add-workout__settings-gym">	
-			<h3>Wybierz miejsce ćwiczeń:</h3>
-            <ul>
-                <li v-for="gym in cache.gyms" :class='{"exercise-selected": gym.gym_id == current.workout.workout.gym_id}'>
-                    <a href='#' @click.prevent='current.workout.workout.gym_id = gym.gym_id'>
-                        {{gym.name}}
-                    </a>
-                </li>
-            </ul>
 		</div>
 	</div>
 
@@ -57,15 +45,29 @@
         </div>
 
     </div>
-	
+
+    <div class="add-workout__settings" v-if="!showAddExercise">
+        <div class="add-workout__settings-gym">
+            <h3>Wybierz miejsce ćwiczeń:</h3>
+            <ul>
+                <li v-for="gym in cache.gyms" :class='{"exercise-selected": gym.gym_id == current.workout.workout.gym_id}'>
+                    <a href='#' @click.prevent='current.workout.workout.gym_id = gym.gym_id'>
+                        {{gym.name}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
 	<div class="add-workout__submit" v-if="!showAddExercise">
-		<div class="add-workout__error" v-for='error in validateWorkoutErrors'>
-			{{error}}
-		</div>
-		<button :disabled='validateWorkoutErrors.length > 0' @click="submit">
+		<button @click="submit" :disabled="showModal">
 			Dodaj trening
 		</button>
 	</div>
+
+    <div class="add-workout__error" v-if="showModal">{{workoutErrors}}</div>
+
+
 	
 </div>
 
@@ -89,7 +91,7 @@
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
 		<span class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</span>
-        <a href="#" @click.prevent="" class="exercise__add-rep" v-if="!hideTitle">
+        <a href="#" @click.prevent="addRep" class="exercise__add-rep" v-if="!hideTitle">
             Dodaj serię
         </a>
         <div class="exercise__attributes">
