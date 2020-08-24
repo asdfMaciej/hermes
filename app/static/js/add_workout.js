@@ -109,7 +109,7 @@ var t = new Vue({
 		api: null,
 		editTitle: false,
 		showAddExercise: false,
-		showModal: false
+		showModal: false,
 	},
 
 	mounted: function() {
@@ -143,10 +143,6 @@ var t = new Vue({
 				errors.push("Nie dodano żadnych ćwiczeń!");
 
 			return errors;
-		},
-
-		workoutErrors: function() {
-			return this.validateWorkoutErrors.join(' ');
 		}
 	},
 
@@ -157,6 +153,8 @@ var t = new Vue({
 				setTimeout(() => {
 					this.showModal = false;
 				}, 5000);
+
+				this.snackbar(400, this.validateWorkoutErrors.join(' '));
 			} else {
 				this.addWorkout(this.current.workout);
 			}
@@ -208,6 +206,11 @@ var t = new Vue({
 		snackbar: function(code, message) {
 			let prefix = code >= 400 ? "[!]" : "[*]";
 			console.log(prefix + ' ' + message);
+			this.$refs.snackbar.innerHTML = message;
+			this.$refs.snackbar.classList.add('show');
+			setTimeout(() => {
+				this.$refs.snackbar.classList.remove('show');
+			}, 3000);
 		},
 
 		redirect: function(page) {
