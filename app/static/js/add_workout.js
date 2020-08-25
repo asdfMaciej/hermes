@@ -18,7 +18,8 @@ Vue.component('exercise', {
 		isFirst: Boolean,
 		editOnly: Boolean,
 		viewOnly: Boolean,
-		hideTitle: Boolean
+		hideTitle: Boolean,
+		showAddRep: Boolean
 	},
 	template: '#exercise-template',
 	data: function() {return {
@@ -55,9 +56,9 @@ Vue.component('exercise', {
 
 		addRep: function() {
 			let exercise = clone(this.exercise);
-			delete exercise.reps;
+			/*delete exercise.reps;
 			delete exercise.weight;
-			delete exercise.duration;
+			delete exercise.duration;*/
 			this.$root.addExercise(exercise);
 			this.$nextTick(this.$root.scrollToExercisesBottom);
 		}
@@ -99,7 +100,7 @@ var t = new Vue({
 			workout: {
 				workout: {
 					gym_id: null,
-					title: "Popołudniowy trening"
+					title: "Trening szefa"
 				},
 				exercises: [],
 				startMoment: null
@@ -109,7 +110,7 @@ var t = new Vue({
 		api: null,
 		editTitle: false,
 		showAddExercise: false,
-		showModal: false,
+		blockSubmit: false,
 	},
 
 	mounted: function() {
@@ -147,17 +148,48 @@ var t = new Vue({
 	},
 
 	methods: {
+		blockSubmitButton: function(durationMs) {
+			this.blockSubmit = true;
+			setTimeout(() => {
+				this.blockSubmit = false;
+			}, durationMs);
+		},
+
 		submit: function() {
 			if (this.validateWorkoutErrors.length > 0) {
-				this.showModal = true;
-				setTimeout(() => {
-					this.showModal = false;
-				}, 5000);
-
+				this.blockSubmitButton(3000);
 				this.snackbar(400, this.validateWorkoutErrors.join(' '));
-			} else {
-				this.addWorkout(this.current.workout);
+				return;
 			}
+
+			// duration and reps have to be filled in
+			let mandatoryInputs = document.querySelectorAll("input.exercise_attribute__duration, input.exercise_attribute__reps");
+			let missingFields = false;
+			mandatoryInputs.forEach((input) => {
+				if (!input.value) {
+					input.setCustomValidity("Uzupełnij pole!");
+					missingFields = true;
+				} else {
+					input.setCustomValidity("");
+				}
+			});
+
+			// weight can be empty, fill in zeros for clarity
+			// using Vue instead of selectors due to reactivity
+			for (let index in this.current.workout.exercises) {
+				let exercise = this.current.workout.exercises[index];
+				if (exercise.show_weight && !exercise.weight) {
+					Vue.set(this.current.workout.exercises[index], 'weight', 0);
+				}
+			}
+
+			if (missingFields) {
+				this.blockSubmitButton(3000);
+				this.snackbar(400, "Uzupełnij wszystkie pola!");
+				return;
+			}
+
+			this.addWorkout(this.current.workout);
 		},
 
 		openTitleEdition: function() {

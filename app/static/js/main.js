@@ -24,3 +24,5 @@ const header = document.querySelector(".page-header");
 showSearch.addEventListener("click", () => {
 	header.classList.toggle('show-search');
 });
+
+Vue.config.ignoredElements = ['ion-icon'];

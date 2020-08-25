@@ -4,8 +4,7 @@
         <div class="add-workout__settings">
             <div class="add-workout__settings-title">
                 <h1 v-if="!editTitle" @click="openTitleEdition">
-                    {{current.workout.workout.title}}
-                    <ion-icon name="create-outline"></ion-icon>
+                    {{current.workout.workout.title}}&nbsp;<ion-icon name="create-outline"></ion-icon>
                 </h1>
                 <input type="text" v-if='editTitle' v-model='current.workout.workout.title'
                        placeholder='Podaj nazwę treningu' @keyup.enter="editTitle = false" ref="edittitle">
@@ -30,6 +29,7 @@
                 v-model='current.workout.exercises[i]'
                 @delete='current.workout.exercises.splice(i, 1)'
                 :hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'
+                      :show-add-rep="i == (current.workout.exercises.length - 1) || current.workout.exercises[i+1].type_id != exercise.type_id"
                 :is-first="i == 0"></exercise>
             <span v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</span>
             <div class="add-workout__list-buttons">
@@ -52,7 +52,7 @@
         </div>
 
         <div class="add-workout__submit" v-if="!showAddExercise">
-            <button @click="submit" :disabled="showModal">
+            <button @click="submit" :disabled="blockSubmit">
                 Dodaj trening
             </button>
         </div>
@@ -79,23 +79,23 @@
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
 		<span class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</span>
-        <a href="#" @click.prevent="addRep" class="exercise__add-rep" v-if="!hideTitle">
-            Dodaj serię
-        </a>
+
         <div class="exercise__attributes">
             <div class="exercise_attribute" v-if='exercise.show_reps == 1'>
-                <input type="number" v-model="exercise.reps" placeholder="Ilość">
+                <input class="exercise_attribute__reps" type="number" v-model="exercise.reps" placeholder="Ilość" @focus="exercise.reps = ''">
                 powtórzeń
             </div>
             <div class="exercise_attribute" v-if='exercise.show_weight == 1'>
-                <input type="number" v-model="exercise.weight" placeholder="Waga">
+                <input class="exercise_attribute__weight" type="number" v-model="exercise.weight" placeholder="Waga" @focus="exercise.weight = ''">
                 kg
             </div>
             <div class="exercise_attribute" v-if='exercise.show_duration == 1'>
-                <input type="number" v-model="exercise.duration" placeholder="Czas">
+                <input class="exercise_attribute__duration" type="number" v-model="exercise.duration" placeholder="Czas" @focus="exercise.duration = ''">
                 sekund
             </div>
         </div>
-
+        <a href="#" @click.prevent="addRep" class="exercise__add-rep" v-if="showAddRep">
+            Dodaj serię
+        </a>
 	</div>
 </script>

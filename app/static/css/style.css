@@ -310,7 +310,7 @@
 }
 .exercise__add-rep {
 	display: block;
-	margin-bottom: 8px;
+	margin-top: 8px;
 	font-weight: 500;
 }
 .exercise.group-end {
@@ -325,6 +325,11 @@
 	border-bottom: 2px solid #b7b4b4;
 	width: 72px;
 }
+.exercise_attribute input:invalid {
+	background: #d32f2f1f;
+	border-bottom: 2px solid #d32f2f;
+}
+
 .gym-record img {
 	width: 100px;
 }
