@@ -35,6 +35,10 @@ Vue.component('exercise', {
 			}
 		},
 
+		toggleFailure: function() {
+			this.$emit('toggle-failure', this.value);
+		},
+
 		validateExercise: function(e) {
 			if (!e.type_id)
 				return false;
@@ -200,7 +204,7 @@ var t = new Vue({
 		},
 
 		addExercise: function(exercise) {
-			console.log(exercise);
+			exercise.failure = 1;
 			this.current.workout.exercises.push(copy(exercise));
 		},
 

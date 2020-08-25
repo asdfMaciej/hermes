@@ -28,6 +28,7 @@
             <exercise v-for="(exercise, i) in current.workout.exercises"
                 v-model='current.workout.exercises[i]'
                 @delete='current.workout.exercises.splice(i, 1)'
+                      @toggle-failure="current.workout.exercises[i].failure = current.workout.exercises[i].failure ? 0 : 1"
                 :hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'
                       :show-add-rep="i == (current.workout.exercises.length - 1) || current.workout.exercises[i+1].type_id != exercise.type_id"
                 :is-first="i == 0"></exercise>
@@ -78,22 +79,36 @@
 
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
-		<span class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</span>
-
-        <div class="exercise__attributes">
+		<div class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</div>
+        <div class="exercise__headers" v-if="!hideTitle">
+            <span class="no">Seria</span>
+            <span class="reps" v-if='exercise.show_reps == 1'>Powtórzenia</span>
+            <span class="weight" v-if='exercise.show_weight == 1'>Obciążenie</span>
+            <span class="duration" v-if='exercise.show_duration == 1'>Czas</span>
+        </div>
+        <div class="exercise__attributes" :class="{unfinished: exercise.failure, finished: !exercise.failure}">
+            <div class="exercise__no">
+                1.
+            </div>
             <div class="exercise_attribute" v-if='exercise.show_reps == 1'>
                 <input class="exercise_attribute__reps" type="number" v-model="exercise.reps" placeholder="Ilość" @focus="exercise.reps = ''">
-                powtórzeń
             </div>
             <div class="exercise_attribute" v-if='exercise.show_weight == 1'>
                 <input class="exercise_attribute__weight" type="number" v-model="exercise.weight" placeholder="Waga" @focus="exercise.weight = ''">
-                kg
             </div>
             <div class="exercise_attribute" v-if='exercise.show_duration == 1'>
                 <input class="exercise_attribute__duration" type="number" v-model="exercise.duration" placeholder="Czas" @focus="exercise.duration = ''">
-                sekund
             </div>
+            <div class="exercise__checkmark" :class="{unchecked: exercise.failure, checked: !exercise.failure}" @click="toggleFailure">
+                <ion-icon name="checkmark-circle-outline" v-if="exercise.failure"></ion-icon>
+                <ion-icon name="checkmark-circle" v-if="!exercise.failure"></ion-icon>
+            </div>
+            <a href="#" @click.prevent="remove" class="exercise-remove">
+                <ion-icon name="close-outline" @click="remove"></ion-icon>
+            </a>
+
         </div>
+
         <a href="#" @click.prevent="addRep" class="exercise__add-rep" v-if="showAddRep">
             Dodaj serię
         </a>

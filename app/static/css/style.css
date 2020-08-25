@@ -294,11 +294,30 @@
 .exercise__attributes {
 	display: flex;
 }
+.exercise__attributes.unfinished {
+	background: #f3f3f3;
+}
 .exercise-selected {
 	font-weight: bold;
 }
 .exercise_attribute {
-	padding: 4px 16px 4px 8px;
+	padding: 8px;
+}
+.exercise__checkmark {
+	display: flex;
+	align-items: center;
+	width: 32px;
+	font-size: 1.6em;
+	margin-right: 8px;
+}
+.exercise__checkmark.checked {
+	color: #d32f2f;
+}
+.exercise__no {
+	display: flex;
+	align-items: center;
+	width: 44px;
+	padding-left: 8px;
 }
 .exercise__name {
 	color: #d32f2f;
@@ -318,18 +337,40 @@
 	margin-top: 12px;
 	padding-top: 8px;
 }
-
+.exercise__headers {
+	display: flex;
+	margin-top: 12px;
+	margin-bottom: 6px;
+}
+.exercise_headers > * {
+	padding: 8px;
+	color: #848484;
+}
+.exercise__headers .reps,
+.exercise__headers .weight,
+.exercise__headers .duration {
+	width: 96px;
+	padding-left: 8px;
+}
+.exercise__headers .no {
+	width: 42px;
+}
 .exercise_attribute input {
 	padding: 8px;
 	border: 0;
 	border-bottom: 2px solid #b7b4b4;
-	width: 72px;
+	width: 80px;
+	background: none;
 }
 .exercise_attribute input:invalid {
 	background: #d32f2f1f;
 	border-bottom: 2px solid #d32f2f;
 }
-
+.exercise-remove {
+	font-size: 1.4em;
+	display: flex;
+	align-items: center;
+}
 .gym-record img {
 	width: 100px;
 }
