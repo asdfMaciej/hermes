@@ -2,6 +2,7 @@
 namespace Web\Pages;
 use \Model\Workout;
 use \Model\Exercise;
+use mysql_xdevapi\Exception;
 
 class Page extends \APIBuilder {
 	public function post() {
@@ -16,6 +17,15 @@ class Page extends \APIBuilder {
 			$workout_id = $this->database->lastInsertId();
 
 			foreach ($exercises as $exercise) {
+			    if ($exercise["show_reps"] && intval($exercise["reps"]) <= 0)
+			        throw new Exception("Reps <= 0");
+
+			    if ($exercise["show_duration"] && intval($exercise["duration"]) <= 0)
+			        throw new Exception("Duration <= 0");
+
+			    if ($exercise["show_weight"] && intval($exercise["weight"]) < 0)
+			        throw new Exception("Weight < 0");
+
 				$exercise["workout_id"] = $workout_id;
 				Exercise::fromArray($exercise)->save($this->database);
 			}
