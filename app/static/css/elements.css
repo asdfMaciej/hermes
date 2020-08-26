@@ -45,6 +45,9 @@ button {
     padding: 4px;
     font-family: var(--font-family);
 }
+button:enabled {
+    cursor: pointer;
+}
 
 .noselect {
     -webkit-touch-callout: none;

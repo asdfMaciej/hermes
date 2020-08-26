@@ -242,9 +242,14 @@
 	font-weight: 700;
 	padding: 12px;
 }
-.add-workout__submit button[disabled] {
+.add-workout__submit button:disabled {
 	background: #fddddd;
 }
+.add-workout__submit button:enabled:hover {
+	box-shadow: none;
+	background: #fdfdfd;
+}
+
 .add-workout__submit {
 	grid-area: submit;
 	display: flex;
@@ -294,9 +299,7 @@
 .exercise__attributes {
 	display: flex;
 }
-.exercise__attributes.unfinished {
-	background: #f3f3f3;
-}
+.exercise__attributes.unfinished {}
 .exercise-selected {
 	font-weight: bold;
 }
@@ -309,6 +312,7 @@
 	width: 32px;
 	font-size: 1.6em;
 	margin-right: 8px;
+	cursor: pointer;
 }
 .exercise__checkmark.checked {
 	color: #d32f2f;
@@ -349,7 +353,7 @@
 .exercise__headers .reps,
 .exercise__headers .weight,
 .exercise__headers .duration {
-	width: 96px;
+	width: auto;
 	padding-left: 8px;
 }
 .exercise__headers .no {

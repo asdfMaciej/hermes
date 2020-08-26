@@ -31,7 +31,9 @@
                       @toggle-failure="current.workout.exercises[i].failure = current.workout.exercises[i].failure ? 0 : 1"
                 :hide-title='i == 0 ? false : current.workout.exercises[i-1].type_id == exercise.type_id'
                       :show-add-rep="i == (current.workout.exercises.length - 1) || current.workout.exercises[i+1].type_id != exercise.type_id"
-                :is-first="i == 0"></exercise>
+                :is-first="i == 0"
+                :order="exerciseOrderInType[i]"
+                :index="i"></exercise>
             <span v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</span>
             <div class="add-workout__list-buttons">
                 <a href="#" @click.prevent="showAddExercise = true" class="add-workout__add-exercise">Dodaj nowe ćwiczenie</a>
@@ -83,12 +85,12 @@
         <div class="exercise__headers" v-if="!hideTitle">
             <span class="no">Seria</span>
             <span class="reps" v-if='exercise.show_reps == 1'>Powtórzenia</span>
-            <span class="weight" v-if='exercise.show_weight == 1'>Obciążenie</span>
-            <span class="duration" v-if='exercise.show_duration == 1'>Czas</span>
+            <span class="weight" v-if='exercise.show_weight == 1'>Obciążenie [kg]</span>
+            <span class="duration" v-if='exercise.show_duration == 1'>Czas [s]</span>
         </div>
         <div class="exercise__attributes" :class="{unfinished: exercise.failure, finished: !exercise.failure}">
             <div class="exercise__no">
-                1.
+                {{order}}.
             </div>
             <div class="exercise_attribute" v-if='exercise.show_reps == 1'>
                 <input class="exercise_attribute__reps" type="number" v-model="exercise.reps" placeholder="Ilość" @focus="exercise.reps = ''">

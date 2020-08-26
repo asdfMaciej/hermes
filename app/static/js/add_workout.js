@@ -19,7 +19,9 @@ Vue.component('exercise', {
 		editOnly: Boolean,
 		viewOnly: Boolean,
 		hideTitle: Boolean,
-		showAddRep: Boolean
+		showAddRep: Boolean,
+		order: Number,
+		index: Number
 	},
 	template: '#exercise-template',
 	data: function() {return {
@@ -59,11 +61,7 @@ Vue.component('exercise', {
 		},
 
 		addRep: function() {
-			let exercise = clone(this.exercise);
-			/*delete exercise.reps;
-			delete exercise.weight;
-			delete exercise.duration;*/
-			this.$root.addExercise(exercise);
+			this.$root.addExercise(this.exercise, this.index+1);
 			this.$nextTick(this.$root.scrollToExercisesBottom);
 		}
 	},
@@ -148,6 +146,28 @@ var t = new Vue({
 				errors.push("Nie dodano żadnych ćwiczeń!");
 
 			return errors;
+		},
+
+		/**
+		 * For a given exercise index, it returns its position for its exercise type.
+		 * For example:
+		 * given [Plank, Plank, Squats, Plank, Deadlift]
+		 * the expected return is [1, 2, 1, 3, 1]
+		 * @returns {[]}
+		 */
+		exerciseOrderInType: function() {
+			let typeIndexes = {};
+			let index = [];
+			for (let exercise of this.current.workout.exercises) {
+				let typeId = exercise.type_id;
+				if (!(typeId in typeIndexes))
+					typeIndexes[typeId] = 1;
+
+				index.push(typeIndexes[typeId]);
+				typeIndexes[typeId] = typeIndexes[typeId] + 1;
+			}
+
+			return index;
 		}
 	},
 
@@ -203,9 +223,15 @@ var t = new Vue({
 			});
 		},
 
-		addExercise: function(exercise) {
+		addExercise: function(exercise, index) {
+			exercise = copy(exercise);
 			exercise.failure = 1;
-			this.current.workout.exercises.push(copy(exercise));
+			if (index) {
+				this.current.workout.exercises.splice(index, 0, exercise);
+			} else {
+				this.current.workout.exercises.push(exercise);
+			}
+
 		},
 
 		isEmptyObject: function(obj) {
