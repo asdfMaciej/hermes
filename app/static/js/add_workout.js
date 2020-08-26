@@ -16,44 +16,15 @@ Vue.component('exercise', {
 	props: {
 		value: undefined,
 		isFirst: Boolean,
-		editOnly: Boolean,
-		viewOnly: Boolean,
 		hideTitle: Boolean,
 		showAddRep: Boolean,
 		order: Number,
 		index: Number
 	},
 	template: '#exercise-template',
-	data: function() {return {
-		showEdit: false
-	}},
-
 	methods: {
-		finishEdit: function() {
-			if (this.validateExercise(this.value)) {
-				this.$emit('input', this.value);
-				this.$emit('add', this.value);
-				this.showEdit = false;
-			}
-		},
-
 		toggleFailure: function() {
 			this.$emit('toggle-failure', this.value);
-		},
-
-		validateExercise: function(e) {
-			if (!e.type_id)
-				return false;
-
-			if ((e.show_reps == 1 && (e.reps == null || e.reps === ""))
-				|| (e.show_duration == 1 && (e.duration == null || e.duration === ""))
-				|| (e.show_weight == 1 && (e.weight == null || e.weight === "")))
-				return false;
-
-			if (e.reps <= 0 || e.weight < 0 || e.duration <= 0)
-				return false;
-
-			return true;
 		},
 
 		remove: function() {
@@ -69,20 +40,6 @@ Vue.component('exercise', {
 	computed: {
 		exercise: function() {
 			return this.value;
-		},
-
-		valid: function() {
-			return this.validateExercise(this.value);
-		},
-
-		edit: function() {
-			if (this.editOnly)
-				return true;
-
-			if (this.viewOnly)
-				return false;
-
-			return this.showEdit;
 		}
 	}
 });

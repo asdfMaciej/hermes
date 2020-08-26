@@ -14,13 +14,8 @@
 
         <div class="add-workout__list" v-if="showAddExercise">
             <h2>Wybierz:</h2>
-            <ul>
-                <li v-for='exerciseType in cache.exerciseTypes'>
-                    <a href='#' @click.prevent='selectExerciseType(exerciseType)'>
-                        {{exerciseType.exercise_type}}
-                    </a>
-                </li>
-            </ul>
+            <exercise-category :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories">
+            </exercise-category>
         </div>
 
         <div class="add-workout__preview" v-if="!showAddExercise" ref="exercises">
@@ -66,13 +61,13 @@
 	<div class="exercise-category">
 		<span class="exercise-category__title" @click='show = !show'>{{show ? '▲' : '▼'}} {{category.name}}</span>
 
-		<ul v-if='show' class="exercise-category__exercises">
-			<li v-for='exerciseType in category.exercises'>
-				<a href='#' @click.prevent='$root.selected.exerciseType = exerciseType' :class='{"exercise-selected": exerciseType == $root.selected.exerciseType}'>
-					{{exerciseType.exercise_type}}
-				</a>
-			</li>
-		</ul>
+        <ul v-if='show'>
+            <li v-for='exerciseType in category.exercises'>
+                <a href='#' @click.prevent='$root.selectExerciseType(exerciseType)'>
+                    {{exerciseType.exercise_type}}
+                </a>
+            </li>
+        </ul>
 
 		<exercise-category :category='exerciseCategory' v-for="exerciseCategory in category.categories" v-if='show'>
 		</exercise-category>
