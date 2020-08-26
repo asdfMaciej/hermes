@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `exercises` (
   KEY `FK_exercises_exercise_types` (`type_id`),
   CONSTRAINT `FK_exercises_exercise_types` FOREIGN KEY (`type_id`) REFERENCES `exercise_types` (`type_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_exercises_workouts` FOREIGN KEY (`workout_id`) REFERENCES `workouts` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `exercise_categories` (
   PRIMARY KEY (`category_id`),
   KEY `FK_a_categories_a_categories` (`parent_id`),
   CONSTRAINT `FK_a_categories_a_categories` FOREIGN KEY (`parent_id`) REFERENCES `exercise_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `exercise_categories` (
 CREATE TABLE IF NOT EXISTS `exercise_types` (
   `type_id` smallint(6) NOT NULL AUTO_INCREMENT,
   `exercise_type` varchar(127) COLLATE utf8_polish_ci NOT NULL,
+  `exercise_type_en` varchar(127) COLLATE utf8_polish_ci NOT NULL,
   `category_id` int(11) NOT NULL,
   `show_duration` tinyint(1) NOT NULL DEFAULT 0,
   `show_reps` tinyint(1) NOT NULL DEFAULT 0,
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `exercise_types` (
   PRIMARY KEY (`type_id`),
   KEY `FK_exercise_types_exercise_categories` (`category_id`),
   CONSTRAINT `FK_exercise_types_exercise_categories` FOREIGN KEY (`category_id`) REFERENCES `exercise_categories` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -243,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `workouts` (
   KEY `FK_workouts_gyms` (`gym_id`),
   CONSTRAINT `FK_workouts_gyms` FOREIGN KEY (`gym_id`) REFERENCES `gyms` (`gym_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_workouts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 
@@ -259,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `workout_comments` (
   KEY `FK_comments_users` (`user_id`),
   CONSTRAINT `FK_comments_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_comments_workouts` FOREIGN KEY (`workout_id`) REFERENCES `workouts` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- Eksport danych został odznaczony.
 

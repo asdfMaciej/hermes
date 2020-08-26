@@ -32,10 +32,11 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COUNT(WorkoutComment.comment_id) AS comments,
+		COALESCE(WorkoutCommentJoin.comments, 0),
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+		
 
 		FROM (
 			SELECT 
@@ -59,22 +60,33 @@ class Workout extends \DBModel {
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
 		) AS newsfeed
+		
+		LEFT JOIN (
+			SELECT 
+				COUNT(comment_id) AS comments,
+				MAX(comment_id) AS comment_id,
+				workout_id
+			FROM workout_comments
 
+			GROUP BY workout_id
+		) AS WorkoutCommentJoin
+			ON WorkoutCommentJoin.workout_id = newsfeed.workout_id 
+		
 		LEFT JOIN workout_comments AS WorkoutComment
-			ON WorkoutComment.workout_id = newsfeed.workout_id
+			ON WorkoutComment.comment_id = WorkoutCommentJoin.comment_id
+		
 		LEFT JOIN users AS User
 			ON User.user_id = WorkoutComment.user_id
-
-		GROUP BY newsfeed.workout_id
 
 		UNION
 
 		SELECT
 		newsfeed.*,
-		COUNT(WorkoutComment.comment_id) AS comments,
+		COALESCE(WorkoutCommentJoin.comments, 0),
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+		
 
 		FROM (
 			SELECT 
@@ -96,13 +108,23 @@ class Workout extends \DBModel {
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
 		) AS newsfeed
+		
+		LEFT JOIN (
+			SELECT 
+				COUNT(comment_id) AS comments,
+				MAX(comment_id) AS comment_id,
+				workout_id
+			FROM workout_comments
 
+			GROUP BY workout_id
+		) AS WorkoutCommentJoin
+			ON WorkoutCommentJoin.workout_id = newsfeed.workout_id 
+		
 		LEFT JOIN workout_comments AS WorkoutComment
-			ON WorkoutComment.workout_id = newsfeed.workout_id
+			ON WorkoutComment.comment_id = WorkoutCommentJoin.comment_id
+		
 		LEFT JOIN users AS User
 			ON User.user_id = WorkoutComment.user_id
-
-		GROUP BY newsfeed.workout_id
 
 		ORDER BY workout_id DESC
 		")
@@ -117,10 +139,11 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COUNT(WorkoutComment.comment_id) AS comments,
+		COALESCE(WorkoutCommentJoin.comments, 0),
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+		
 
 		FROM (
 			SELECT 
@@ -128,7 +151,7 @@ class Workout extends \DBModel {
 				User.name as user_name, User.user_id, User.avatar, 
 				Gym.gym_id, Gym.name as gym_name,
 				COUNT(WorkoutReaction.user_id) as reactions,
-				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :viewing_user_id AND workout_id = Workout.workout_id) AS reacted
+				EXISTS(SELECT 0 FROM workout_reactions WHERE user_id = :user_id AND workout_id = Workout.workout_id) AS reacted
 				
 			FROM `workouts` AS Workout
 			INNER JOIN users AS User
@@ -142,13 +165,23 @@ class Workout extends \DBModel {
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
 		) AS newsfeed
+		
+		LEFT JOIN (
+			SELECT 
+				COUNT(comment_id) AS comments,
+				MAX(comment_id) AS comment_id,
+				workout_id
+			FROM workout_comments
 
+			GROUP BY workout_id
+		) AS WorkoutCommentJoin
+			ON WorkoutCommentJoin.workout_id = newsfeed.workout_id 
+		
 		LEFT JOIN workout_comments AS WorkoutComment
-			ON WorkoutComment.workout_id = newsfeed.workout_id
+			ON WorkoutComment.comment_id = WorkoutCommentJoin.comment_id
+		
 		LEFT JOIN users AS User
 			ON User.user_id = WorkoutComment.user_id
-
-		GROUP BY newsfeed.workout_id
 
 		ORDER BY workout_id DESC
 				")
@@ -164,10 +197,11 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COUNT(WorkoutComment.comment_id) AS comments,
+		COALESCE(WorkoutCommentJoin.comments, 0),
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
+		
 
 		FROM (
 			SELECT 
@@ -189,13 +223,23 @@ class Workout extends \DBModel {
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
 		) AS newsfeed
+		
+		LEFT JOIN (
+			SELECT 
+				COUNT(comment_id) AS comments,
+				MAX(comment_id) AS comment_id,
+				workout_id
+			FROM workout_comments
 
+			GROUP BY workout_id
+		) AS WorkoutCommentJoin
+			ON WorkoutCommentJoin.workout_id = newsfeed.workout_id 
+		
 		LEFT JOIN workout_comments AS WorkoutComment
-			ON WorkoutComment.workout_id = newsfeed.workout_id
+			ON WorkoutComment.comment_id = WorkoutCommentJoin.comment_id
+		
 		LEFT JOIN users AS User
 			ON User.user_id = WorkoutComment.user_id
-
-		GROUP BY newsfeed.workout_id
 
 		ORDER BY workout_id DESC
 				")

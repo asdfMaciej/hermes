@@ -1,6 +1,7 @@
 <?php
 namespace Web\Controllers;
 use \Model\User;
+use mysql_xdevapi\Exception;
 
 include_once ROOT_PATH . "/application/lib/bulletproof/bulletproof.php";
 include_once ROOT_PATH . "/application/lib/bulletproof/utils/func.image-resize.php";
@@ -31,7 +32,9 @@ class Page extends \PageBuilder {
 				$user = User::getSingleItem($this->database, ["user_id" => $this->account->user_id]);
 				$user->avatar = "uploads\\img\\avatars\\" . $image->getName().".".$image->getMime();
 				$success = $user->save($this->database);
-			}
+			} else {
+			    throw new \Exception($image->getError());
+            }
 		}
 
 		$this->account->loginUser($user);

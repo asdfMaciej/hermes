@@ -13,8 +13,9 @@ class Gym extends \DBModel {
 
 	public static function getExerciseRecords($database, $gym_id) {
 		/*
-		todo: subqueries arent supported in orm
+		todo: broken query - ex aqueo are displayed twice due to group by sql limitations
 		*/
+		return [];
 		$rows = static::sql("
 		SELECT e.workout_id, e.type_id, e.reps, e.weight, date(w.date) as date, w.gym_id, u.name, u.avatar, 
 		et.exercise_type, et.show_duration, et.show_reps, et.show_weight
@@ -36,7 +37,6 @@ class Gym extends \DBModel {
 		ON w.workout_id = e.workout_id
 		INNER JOIN users AS u
 		ON u.user_id = w.user_id
-		GROUP BY e.type_id
 		")
 		->setParameter(":gym_id", $gym_id)
 		->execute($database)
@@ -57,7 +57,7 @@ class Gym extends \DBModel {
 		->groupBy("User.user_id")
 		->orderBy("visits", "desc")
 		->limit(5)
-		->execute($database)
+            ->execute($database)
 		->getAll();
 		return $rows;
 	}
