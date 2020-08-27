@@ -31,7 +31,7 @@
                 :index="i"></exercise>
             <span v-if="current.workout.exercises.length == 0">Nie wybrałeś żadnych ćwiczeń.</span>
             <div class="add-workout__list-buttons">
-                <a href="#" @click.prevent="showAddExercise = true" class="add-workout__add-exercise">Dodaj nowe ćwiczenie</a>
+                <a href="#" @click.prevent="showExercisePicker" class="add-workout__add-exercise">Dodaj nowe ćwiczenie</a>
             </div>
 
         </div>

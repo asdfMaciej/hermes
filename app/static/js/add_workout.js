@@ -90,6 +90,9 @@ var t = new Vue({
 				moment() - this.current.workout.startMoment
 			).format('mm:ss');
 		}, 1000);
+
+		window.onpopstate = this.backButtonPressed;
+		window.onbeforeunload = this.backButtonPressed;
 	},
 
 	computed: {
@@ -129,6 +132,21 @@ var t = new Vue({
 	},
 
 	methods: {
+		backButtonPressed: function(event) {
+			if (this.showAddExercise)
+				this.showAddExercise = false;
+			/*console.log('pressed');
+			event.stopPropagation();*/
+			return "";
+		},
+
+
+
+		showExercisePicker: function() {
+			this.showAddExercise = true;
+			history.pushState({page: 'exercise-picker'}, "Wybierz ćwiczenie - Hermes", "#exercises");
+		},
+
 		blockSubmitButton: function(durationMs) {
 			this.blockSubmit = true;
 			setTimeout(() => {

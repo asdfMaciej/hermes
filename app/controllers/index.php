@@ -40,7 +40,7 @@ class Index extends \PageBuilder {
 		$name = $_POST["name"];
 		
 		if (!$this->verifyCredentials($login, $password, $name))
-			return $this->snackbar->set(400, "Nie spełniono wymagań dotyczących danych!");
+			return $this->snackbar->set(400, "Nie spełniono wymagań: hasło >= 8 znaków, login alfanumeryczny, dopuszczalne znaki specjalne: - _ .");
 
 		$user = new User();
 		$user->login = $login;
@@ -57,7 +57,7 @@ class Index extends \PageBuilder {
 
 	protected function verifyCredentials($login, $password, $name) {
 		$valid = true;
-		$valid = $valid && preg_match("~[^a-zA-Z0-9\-\_\.]~iU", $login) ? false : true;
+		$valid = $valid && preg_match("~[^a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9\-\_\.]~iU", $login) ? false : true;
 		$valid = $valid && strlen($login) >= 4;
 		$valid = $valid && strlen($password) >= 8;
 		$valid = $valid && strlen($name) >= 6;
