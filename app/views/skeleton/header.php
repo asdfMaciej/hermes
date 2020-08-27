@@ -8,7 +8,7 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="``PATH_PREFIX``/static/favicon/favicon-16x16.png">
 		<link rel="manifest" href="``PATH_PREFIX``/static/favicon/site.webmanifest">
 		<?php foreach ($stylesheets as $style): ?>
-		<link rel="stylesheet" type="text/css" href="``$style``">
+		<link rel="stylesheet" type="text/css" href="``$style``?ver=1.0">
 		<?php endforeach ?>
 			
 		<script>var PATH_PREFIX = "``PATH_PREFIX``"; <?php echo DEBUG ? "var DEBUG = true;" : "var DEBUG = false"; ?></script>
@@ -51,7 +51,7 @@
 				</form>
 			<?php else: ?>
                 <div class="page-header__filler"></div>
-				<form action="``PATH_PREFIX``/" method="post">
+				<form action="``PATH_PREFIX``/" method="post" class="login-form">
 					<input type="hidden" name="action" value="login">
 					<input type="text" name="login" placeholder="Login">
 					<input type="password" name="password" placeholder="Hasło">

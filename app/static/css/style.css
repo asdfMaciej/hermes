@@ -93,7 +93,6 @@
 	background: #333333;
 	color: white;
 	padding: 8px;
-	height: var(--footer-height);
 }
 .newsfeed {
 	display: flex;
@@ -436,10 +435,27 @@
 	font-size: 1.2em;
 	border-bottom: 1px solid #848484;
 }
+.login-form {
+	display: flex;
+}
 .landing-page {
 	display: flex;
 	flex-direction: row;
 }
+.landing-page__register,
+.landing-page__text {
+	background: white;
+	padding: 8px;
+	box-shadow: var(--white-box-shadow);
+}
+
+.landing-page__text {
+	min-height: 100vh;
+}
+.landing-page__register {
+	flex: 1;
+}
+
 .exercise-category {
 	margin-bottom: 16px;
 	padding: 8px;
@@ -563,6 +579,22 @@
 	margin: 0 12px 0 0;
 }
 @media (max-width: 768px) {
+	.landing-page {
+		flex-direction: column-reverse;
+	}
+	.landing-page__register {
+		margin: 16px 0;
+	}
+	.login-form {
+		width: calc(100% - 158px);
+	}
+	.login-form > input {
+		min-width: 0;
+		flex: 1 1;
+	}
+	.login-form > input[type="submit"] {
+		display: none;
+	}
 	.statistics-box {
 		position: relative;
 		margin: 8px;
