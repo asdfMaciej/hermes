@@ -1,6 +1,9 @@
 #!/bin/bash
 cd /root/hermes
+git add *
+git stash
 git pull
+
 cp -rf /root/hermes/app/controllers/* /var/www/hermes/controllers
 cp -rf /root/hermes/app/models/* /var/www/hermes/models
 cp -rf /root/hermes/app/static/* /var/www/hermes/static
