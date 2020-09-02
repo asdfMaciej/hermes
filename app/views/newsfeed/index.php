@@ -3,12 +3,15 @@
 		<a href="``PATH_PREFIX``/profile/``$account->user_id``" class='statistics-box__avatar'>
 			<img src="``PATH_PREFIX``/``$account->avatar``">
 				<div class="statistics-box__name">
-				Cześć, ``$account->first_name``!
-			</div>
-		</a>
+				    Cześć, ``$account->first_name``!
+			    </div>
+		    </a>
 
 		<a class='statistics-box__add' href="``PATH_PREFIX``/workout/add">Dodaj trening!</a>
-		
+
+        <?php if (strpos($account->avatar, 'default') !== false): ?>
+            <a class='statistics-box__add' href="``PATH_PREFIX``/settings">Zmień avatar</a>
+        <?php endif ?>
 		<div class="statistics-box__statistics">
 			<h4>Na siłowni byłeś:</h4>
 			<span>

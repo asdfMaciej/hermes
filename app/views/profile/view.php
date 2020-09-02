@@ -18,6 +18,8 @@
 					<a href="``PATH_PREFIX``/profile/``$user['user_id']``/follow" class="unfollowed">Zaobserwuj</a>
 				<?php endif ?>
 			</div>
-		<?php endif ?>
+		<?php else: ?>
+            <a href="``PATH_PREFIX``/settings">Zmień swój avatar</a>
+        <?php endif ?>
 	</div>
 </div>
