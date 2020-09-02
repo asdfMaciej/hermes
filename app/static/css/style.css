@@ -185,6 +185,7 @@
 	height: 100px;
 	overflow: hidden;
 	position: relative;
+	grid-area: avatar;
 }
 .feed-workout__avatar img {
 	width: 100px;
@@ -198,7 +199,9 @@
 	margin-bottom: 18px;
 	padding: 0px;
 	background: white;
-	display: flex;
+	display: grid;
+	grid-template-areas: "avatar title" "summary summary";
+	grid-template-columns: auto 1fr;
 	box-shadow: var(--white-box-shadow);
 }
 .feed-workout__date {
@@ -212,6 +215,7 @@
 .feed-workout__container {
 	width: 100%;
 	padding: 12px;
+	grid-area: title;
 }
 .feed-workout__reactions {
 	margin-top: 8px;
@@ -219,6 +223,15 @@
 }
 .feed-workout__reactions .reaction-button {
 	margin-right: 4px;
+}
+.feed-workout__summary {
+	padding: 12px;
+	border-top: 1px solid #c1c1c1;
+	margin-top: 8px;
+	grid-area: summary;
+}
+.feed-workout__summary > div {
+	margin-bottom: 6px;
 }
 .add-workout {
 	display: flex;

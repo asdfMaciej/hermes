@@ -26,6 +26,52 @@ class Workout extends \DBModel {
 		return $query;
 	}
 
+	protected static function addSummaryToNewsfeed($database, $rows) {
+        $workout_ids = [];
+        $query_parameters = [];
+        $workout_stats = [];
+        foreach ($rows as $row) {
+            $workout_ids[] = $row["workout_id"];
+            $workout_stats[$row["workout_id"]] = [];
+            $query_parameters[] = "?";
+        }
+        $query_parameters = '(' . implode(",", $query_parameters) . ')';
+
+        $stats_query = "
+	SELECT stats.*, et.exercise_type FROM (
+	SELECT e.type_id, e.workout_id,
+		COUNT(e.exercise_id) AS sets, 
+	MAX(reps) AS max_reps, MIN(reps) AS min_reps,
+	MIN(weight) AS min_weight, MAX(weight) AS max_weight,
+	floor(SUM(reps * weight)) AS volume,
+	MIN(duration) AS min_duration, MAX(duration) AS max_duration
+	
+	FROM exercises AS e
+	WHERE e.workout_id IN $query_parameters
+	GROUP BY e.type_id, e.workout_id
+	ORDER BY e.workout_id, MAX(e.exercise_id)
+) AS stats
+INNER JOIN exercise_types AS et
+ON et.type_id = stats.type_id
+		";
+
+        $stats_rows = static::sql($stats_query)
+            ->setParameters($workout_ids)
+            ->execute($database)
+            ->getAll();
+
+        foreach ($stats_rows as $row) {
+            $workout_stats[$row["workout_id"]][] = $row;
+        }
+
+        // newsfeed rows
+        foreach ($rows as &$row) {
+            $row["summary"] = $workout_stats[$row["workout_id"]] ?? [];
+        }
+
+        return $rows;
+    }
+
 	public static function getNewsfeedList($database, $user_id) {
 		// todo: complicated ON queries arent supported by orm
 		// todo: UNION isnt supported by orm
@@ -132,7 +178,7 @@ class Workout extends \DBModel {
 		->execute($database)
 		->getAll();
 
-		return $rows;
+		return static::addSummaryToNewsfeed($database, $rows);
 	}
 
 	public static function getNewsfeedForUser($database, $user_id, $viewing_user_id) {
@@ -190,7 +236,7 @@ class Workout extends \DBModel {
 				->execute($database)
 				->getAll();
 
-		return $rows;
+        return static::addSummaryToNewsfeed($database, $rows);
 	}
 
 	public static function getNewsfeedForGym($database, $gym_id, $viewing_user_id) {
@@ -248,7 +294,7 @@ class Workout extends \DBModel {
 				->execute($database)
 				->getAll();
 
-		return $rows;
+        return static::addSummaryToNewsfeed($database, $rows);
 	}
 
 	public static function getById($database, $id) {

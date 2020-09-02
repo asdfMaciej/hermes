@@ -34,6 +34,30 @@
 					<a :href="'``PATH_PREFIX``/workout/' + workout.workout_id">{{workout.comments}} {{(workout.comments == 0 || workout.comments >= 5) ? 'komentarzy' : (workout.comments == 1 ? 'komentarz' : 'komentarze')}}</a>
 				</div>
 			</div>
+            <div class="feed-workout__summary">
+                <div v-for="exercise in workout.summary">
+                    {{exercise.sets}} x <strong>{{exercise.exercise_type}}</strong>:
+                    serie
+                    <span v-if="exercise.max_reps">
+                            po {{exercise.max_reps != exercise.min_reps ?
+                            `${exercise.min_reps}-${exercise.max_reps}` : exercise.max_reps}}
+                            powtórzeń
+                        </span>
+                    <span v-if="exercise.max_weight && exercise.max_weight != '0'">
+                            z {{exercise.max_weight != exercise.min_weight ?
+                            `${exercise.min_weight}-${exercise.max_weight}` : exercise.max_weight}}
+                            kg
+                        </span>
+                    <span v-if="exercise.max_duration">
+                            - {{exercise.max_duration != exercise.min_duration ?
+                            `${exercise.min_duration}-${exercise.max_duration}` : exercise.max_duration}}
+                            s
+                        </span>
+                    <span v-if="exercise.volume && exercise.volume != '0'">
+                            (objętość {{exercise.volume}} kg)
+                        </span>
+                </div>
+            </div>
 		</div>
 		<div class="comment comment--newsfeed" v-if='workout.comment'>
 			<div class="comment__main">
