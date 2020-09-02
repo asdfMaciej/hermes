@@ -32,7 +32,7 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COALESCE(WorkoutCommentJoin.comments, 0),
+		COALESCE(WorkoutCommentJoin.comments, 0) as comments,
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
@@ -82,7 +82,7 @@ class Workout extends \DBModel {
 
 		SELECT
 		newsfeed.*,
-		COALESCE(WorkoutCommentJoin.comments, 0),
+		COALESCE(WorkoutCommentJoin.comments, 0) as comments,
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
@@ -139,7 +139,7 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COALESCE(WorkoutCommentJoin.comments, 0),
+		COALESCE(WorkoutCommentJoin.comments, 0) as comments,
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar
@@ -197,7 +197,7 @@ class Workout extends \DBModel {
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
-		COALESCE(WorkoutCommentJoin.comments, 0),
+		COALESCE(WorkoutCommentJoin.comments, 0) as comments,
 		WorkoutComment.comment,
 		WorkoutComment.created AS comment_created,
 		User.name as comment_user_name, User.user_id AS comment_user_id, User.avatar AS comment_avatar

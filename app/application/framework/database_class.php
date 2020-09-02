@@ -13,7 +13,7 @@ class DBClass {
 				$call = "mysql:host=" . $this->host . ";dbname=" . $this->database;
 				$this->connection = new PDO($call, $this->username, $this->password);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$this->connection->exec("set names utf8");
+				$this->connection->exec("set names utf8mb4");
 			} catch(PDOException $exception) {
 				$this->connection = null;
 				if (DEBUG) {

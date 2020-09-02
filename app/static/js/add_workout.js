@@ -65,7 +65,7 @@ var t = new Vue({
 				startMoment: null
 			}
 		},
-		timeElapsed: '00:00',
+		timeElapsed: '00:00:00',
 		api: null,
 		editTitle: false,
 		showAddExercise: false,
@@ -86,9 +86,8 @@ var t = new Vue({
 		});
 		this.current.workout.startMoment = moment();
 		setInterval(() => {
-			this.$data.timeElapsed = moment(
-				moment() - this.current.workout.startMoment
-			).format('mm:ss');
+			let start = this.current.workout.startMoment;
+			this.timeElapsed = moment.utc(moment().diff(start)).format("HH:mm:ss")
 		}, 1000);
 
 		window.onpopstate = this.backButtonPressed;
@@ -133,10 +132,10 @@ var t = new Vue({
 
 	methods: {
 		backButtonPressed: function(event) {
-			if (this.showAddExercise)
+			if (this.showAddExercise) {
 				this.showAddExercise = false;
-			/*console.log('pressed');
-			event.stopPropagation();*/
+			}
+
 			return "";
 		},
 
@@ -234,6 +233,7 @@ var t = new Vue({
 				if (response.code >= 400) {
 					this.snackbar(response.code, 'Nie udało się dodać treningu.');
 				} else {
+					window.onbeforeunload = null;
 					this.snackbar(response.code, 'Udało się dodać trening.');
 					this.redirect('workout/'+data.workout_id);
 				}

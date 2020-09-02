@@ -91,7 +91,7 @@
                 <input class="exercise_attribute__reps" type="number" v-model="exercise.reps" placeholder="Ilość" @focus="exercise.reps = ''">
             </div>
             <div class="exercise_attribute" v-if='exercise.show_weight == 1'>
-                <input class="exercise_attribute__weight" type="number" v-model="exercise.weight" placeholder="Waga" @focus="exercise.weight = ''">
+                <input class="exercise_attribute__weight" type="float" v-model="exercise.weight" placeholder="Waga" @focus="exercise.weight = ''">
             </div>
             <div class="exercise_attribute" v-if='exercise.show_duration == 1'>
                 <input class="exercise_attribute__duration" type="number" v-model="exercise.duration" placeholder="Czas" @focus="exercise.duration = ''">

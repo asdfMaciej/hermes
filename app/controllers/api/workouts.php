@@ -17,13 +17,19 @@ class Page extends \APIBuilder {
 			$workout_id = $this->database->lastInsertId();
 
 			foreach ($exercises as $exercise) {
+			    // comma separator doesn't work
+			    $exercise["weight"] = str_replace(",", ".", $exercise["weight"]);
+
+			    // for the moment, leave it as a client-side feature due to UI fail
+			    $exercise["failure"] = 0;
+
 			    if ($exercise["show_reps"] && intval($exercise["reps"]) <= 0)
 			        throw new Exception("Reps <= 0");
 
 			    if ($exercise["show_duration"] && intval($exercise["duration"]) <= 0)
 			        throw new Exception("Duration <= 0");
 
-			    if ($exercise["show_weight"] && intval($exercise["weight"]) < 0)
+			    if ($exercise["show_weight"] && floatval($exercise["weight"]) < 0)
 			        throw new Exception("Weight < 0");
 
 				$exercise["workout_id"] = $workout_id;
