@@ -1,7 +1,7 @@
 <div class="frontpage">
 	<div class='frontpage__statistics statistics-box'>
 		<a href="``PATH_PREFIX``/profile/``$account->user_id``" class='statistics-box__avatar'>
-			<img src="``PATH_PREFIX``/``$account->avatar``">
+			<img src="``PATH_PREFIX``/``$account->avatar``" class="avatar">
 				<div class="statistics-box__name">
 				    Cześć, ``$account->first_name``!
 			    </div>

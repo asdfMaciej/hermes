@@ -2,7 +2,7 @@
 	<div class="workout-details">
 		<div class="workout-details__photo">
 			<a href="``PATH_PREFIX``/profile/``$workout['user_id']``">
-				<img src="``PATH_PREFIX``/``$workout['avatar']``">
+				<img src="``PATH_PREFIX``/``$workout['avatar']``" class="avatar">
 			</a>
 		</div>
 

@@ -21,6 +21,12 @@ class ExerciseCategory extends \DBModel {
 			$category_exercises[$category_id][] = $exercise;
 		}
 
+		foreach ($category_exercises as &$exercises) {
+		    usort($exercises, function($a, $b) {
+		       return $a['exercise_type'] <=> $b['exercise_type'];
+            });
+        }
+
 		foreach($categories as &$item) {
 			$item['exercises'] = [];
 			if (array_key_exists($item['category_id'], $category_exercises)) {

@@ -33,7 +33,7 @@ Vue.component('exercise', {
 
 		addRep: function() {
 			this.$root.addExercise(this.exercise, this.index+1);
-			this.$nextTick(this.$root.scrollToExercisesBottom);
+			//this.$nextTick(this.$root.scrollToExercisesBottom);
 		}
 	},
 
@@ -59,7 +59,9 @@ var t = new Vue({
 			workout: {
 				workout: {
 					gym_id: null,
-					title: "Trening szefa"
+					title: "Trening szefa",
+					description: "",
+					duration: 0
 				},
 				exercises: [],
 				startMoment: null
@@ -68,7 +70,7 @@ var t = new Vue({
 		timeElapsed: '00:00:00',
 		api: null,
 		editTitle: false,
-		showAddExercise: false,
+		view: 'main',
 		blockSubmit: false,
 	},
 
@@ -87,6 +89,8 @@ var t = new Vue({
 		this.current.workout.startMoment = moment();
 		setInterval(() => {
 			let start = this.current.workout.startMoment;
+
+			// moment.js doesn't support duration, so this is kinda a hack
 			this.timeElapsed = moment.utc(moment().diff(start)).format("HH:mm:ss")
 		}, 1000);
 
@@ -132,18 +136,19 @@ var t = new Vue({
 
 	methods: {
 		backButtonPressed: function(event) {
-			if (this.showAddExercise) {
-				this.showAddExercise = false;
+			if (this.view == 'add-exercise') {
+				this.view = 'main';
 			}
-
+			if (this.view == 'presubmit') {
+				this.view = 'main';
+			}
 			return "";
 		},
 
-
-
 		showExercisePicker: function() {
-			this.showAddExercise = true;
+			this.view = 'add-exercise';
 			history.pushState({page: 'exercise-picker'}, "Wybierz ćwiczenie - Hermes", "#exercises");
+			this.$nextTick(() => {window.scrollTo({ top: 0, behavior: 'smooth' });});
 		},
 
 		blockSubmitButton: function(durationMs) {
@@ -187,6 +192,14 @@ var t = new Vue({
 				return;
 			}
 
+			if (this.view == 'main') {
+				this.view = 'presubmit';
+				history.pushState({page: 'presubmit'}, "Potwierdź trening - Hermes", "#presubmit");
+				this.$nextTick(() => {window.scrollTo({ top: 0, behavior: 'smooth' });});
+				return;
+			}
+
+			this.current.workout.workout.duration = Math.floor(moment().diff(this.current.workout.startMoment) / 1000);
 			this.addWorkout(this.current.workout);
 		},
 
@@ -213,7 +226,7 @@ var t = new Vue({
 		},
 
 		selectExerciseType: function(exerciseType) {
-			this.showAddExercise = false;
+			this.view = 'main';
 			this.addExercise(exerciseType);
 			this.$nextTick(this.scrollToExercisesBottom);
 		},

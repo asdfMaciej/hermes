@@ -1,7 +1,7 @@
 <div id="add-workout">
     <div id="snackbar" class="snackbar" ref="snackbar"></div>
-    <div class="add-workout">
-        <div class="add-workout__settings">
+    <div class="add-workout" v-cloak>
+        <div class="add-workout__settings" v-if="view == 'main'">
             <div class="add-workout__settings-title">
                 <h1 v-if="!editTitle" @click="openTitleEdition">
                     {{current.workout.workout.title}}&nbsp;<ion-icon name="create-outline"></ion-icon>
@@ -12,13 +12,13 @@
             </div>
         </div>
 
-        <div class="add-workout__list" v-if="showAddExercise">
+        <div class="add-workout__list" v-if="view == 'add-exercise'">
             <h2>Wybierz:</h2>
             <exercise-category :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories">
             </exercise-category>
         </div>
 
-        <div class="add-workout__preview" v-if="!showAddExercise" ref="exercises">
+        <div class="add-workout__preview" v-if="view == 'main'" ref="exercises">
             <h2>Dodane ćwiczenia:</h2>
             <exercise v-for="(exercise, i) in current.workout.exercises"
                 v-model='current.workout.exercises[i]'
@@ -36,7 +36,7 @@
 
         </div>
 
-        <div class="add-workout__settings" v-if="!showAddExercise">
+        <div class="add-workout__settings" v-if="view == 'main'">
             <div class="add-workout__settings-gym">
                 <h3>Wybierz miejsce ćwiczeń:</h3>
                 <ul>
@@ -49,7 +49,13 @@
             </div>
         </div>
 
-        <div class="add-workout__submit" v-if="!showAddExercise">
+        <div class="add-workout__presubmit" v-if="view == 'presubmit'">
+            <span>(niedopracowany widok XD)</span>
+            <h3>Dodaj opis (opcjonalnie):</h3>
+            <textarea placeholder="Lepszy opis = więcej polubień, ez math" v-model="current.workout.workout.description"></textarea>
+        </div>
+
+        <div class="add-workout__submit" v-if="view == 'main' || view == 'presubmit'">
             <button @click="submit" :disabled="blockSubmit">
                 Dodaj trening
             </button>

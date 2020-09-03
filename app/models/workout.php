@@ -11,6 +11,8 @@ class Workout extends \DBModel {
 	public $date;
 	public $added;
 	public $modified;
+    public $duration;
+    public $description;
 
 	protected static function queryNewsfeedList() {
 		$query = static::select([
@@ -86,7 +88,7 @@ ON et.type_id = stats.type_id
 
 		FROM (
 			SELECT 
-				Workout.workout_id, Workout.title, Workout.date, 
+				Workout.workout_id, Workout.title, Workout.date,  Workout.duration, Workout.description,
 				User.name as user_name, User.user_id, User.avatar, 
 				Gym.gym_id, Gym.name as gym_name,
 				COUNT(WorkoutReaction.user_id) as reactions,
@@ -136,7 +138,7 @@ ON et.type_id = stats.type_id
 
 		FROM (
 			SELECT 
-				Workout.workout_id, Workout.title, Workout.date, 
+				Workout.workout_id, Workout.title, Workout.date, Workout.duration, Workout.description, 
 				User.name as user_name, User.user_id, User.avatar, 
 				Gym.gym_id, Gym.name as gym_name,
 				COUNT(WorkoutReaction.user_id) as reactions,
@@ -193,7 +195,7 @@ ON et.type_id = stats.type_id
 
 		FROM (
 			SELECT 
-				Workout.workout_id, Workout.title, Workout.date, 
+				Workout.workout_id, Workout.title, Workout.date,  Workout.duration, Workout.description,
 				User.name as user_name, User.user_id, User.avatar, 
 				Gym.gym_id, Gym.name as gym_name,
 				COUNT(WorkoutReaction.user_id) as reactions,
@@ -251,7 +253,7 @@ ON et.type_id = stats.type_id
 
 		FROM (
 			SELECT 
-				Workout.workout_id, Workout.title, Workout.date, 
+				Workout.workout_id, Workout.title, Workout.date, Workout.duration, Workout.description,
 				User.name as user_name, User.user_id, User.avatar, 
 				Gym.gym_id, Gym.name as gym_name,
 				COUNT(WorkoutReaction.user_id) as reactions,

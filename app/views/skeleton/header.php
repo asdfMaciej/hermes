@@ -40,7 +40,7 @@
 					<ion-icon name="settings-sharp"></ion-icon>
 				</a>
 				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
-					<img src="``PATH_PREFIX``/``$account->avatar``">
+					<img src="``PATH_PREFIX``/``$account->avatar``" class="avatar">
 				</a><br>
 
 				<form action="``PATH_PREFIX``/" method="post" id="logout-form">

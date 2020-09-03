@@ -18,16 +18,19 @@ class Page extends \APIBuilder {
 
 			foreach ($exercises as $exercise) {
 			    // comma separator doesn't work
-			    $exercise["weight"] = str_replace(",", ".", $exercise["weight"]);
 
-                if ($exercise["weight"])
-			        $exercise["weight"] = trim($exercise["weight"]);
+                if ($exercise["weight"] ?? false) {
+                    $exercise["weight"] = str_replace(",", ".", $exercise["weight"]);
+                    $exercise["weight"] = trim($exercise["weight"]);
+                }
 
-			    if ($exercise["reps"])
+			    if ($exercise["reps"] ?? false) {
                     $exercise["reps"] = trim($exercise["reps"]);
+                }
 
-                if ($exercise["duration"])
+                if ($exercise["duration"] ?? false) {
                     $exercise["duration"] = trim($exercise["duration"]);
+                }
 
 			    // for the moment, leave it as a client-side feature due to UI fail
 			    $exercise["failure"] = 0;
@@ -45,18 +48,12 @@ class Page extends \APIBuilder {
 				Exercise::fromArray($exercise)->save($this->database);
 			}
 		} catch (\Exception $e) {
-            ini_set("log_errors", 1);
-            ini_set("error_log", "/tmp/php-error.log");
-            error_log("$e");
-            error_log(json_encode($exercise));
 			$this->database->rollBack();
 			return $this->generateAndSet([], 400);
 		}
 		$this->database->commit();
-		
 		return $this->generateAndSet(["workout_id" => $workout_id], 201);
 	}
 }
 
 new Page();
-?>
