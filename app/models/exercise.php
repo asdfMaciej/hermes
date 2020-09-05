@@ -11,5 +11,32 @@ class Exercise extends \DBModel {
 	public $weight;
 	public $duration;
 	public $failure;
+
+    public static function getPastExercises($database, $user_id,  $type_id) {
+        $rows = static::sql("
+		SELECT e.exercise_id, e.reps, e.weight, e.duration
+
+        FROM (
+            SELECT MAX(e.workout_id) AS workout_id
+            FROM workouts AS w
+            INNER JOIN exercises AS e
+            ON e.workout_id = w.workout_id 
+                AND e.type_id = :type_id
+            WHERE w.user_id = :user_id
+        ) AS freq
+        
+        INNER JOIN exercises AS e
+        ON e.workout_id = freq.workout_id
+        AND e.type_id = :type_id
+		")
+            ->setParameters([
+                ":type_id" => $type_id,
+                ":user_id" => $user_id
+            ])
+            ->execute($database)
+            ->getAll();
+
+        return $rows;
+    }
 }
 ?>

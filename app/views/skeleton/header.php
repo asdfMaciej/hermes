@@ -8,7 +8,7 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="``PATH_PREFIX``/static/favicon/favicon-16x16.png">
 		<link rel="manifest" href="``PATH_PREFIX``/static/favicon/site.webmanifest">
 		<?php foreach ($stylesheets as $style): ?>
-		<link rel="stylesheet" type="text/css" href="``$style``?ver=1.0">
+		<link rel="stylesheet" type="text/css" href="``$style``?ver=1.01234">
 		<?php endforeach ?>
 			
 		<script>var PATH_PREFIX = "``PATH_PREFIX``"; <?php echo DEBUG ? "var DEBUG = true;" : "var DEBUG = false"; ?></script>

@@ -19,7 +19,8 @@ Vue.component('exercise', {
 		hideTitle: Boolean,
 		showAddRep: Boolean,
 		order: Number,
-		index: Number
+		index: Number,
+		past: undefined
 	},
 	template: '#exercise-template',
 	methods: {
@@ -33,13 +34,31 @@ Vue.component('exercise', {
 
 		addRep: function() {
 			this.$root.addExercise(this.exercise, this.index+1);
-			//this.$nextTick(this.$root.scrollToExercisesBottom);
 		}
 	},
 
 	computed: {
 		exercise: function() {
 			return this.value;
+		},
+
+		pastSet: function() {
+			if (!this.past)
+				return "—";
+
+			let set = this.past[this.order - 1];
+			if (!set)
+				return "—";
+
+			let text = "";
+			if (set.reps != null)
+				text += set.reps;
+			if (set.weight != null)
+				text += ` × ${set.weight} kg`;
+			if (set.duration != null)
+				text += ` × ${set.duration} s`;
+
+			return text;
 		}
 	}
 });
@@ -50,7 +69,8 @@ var t = new Vue({
 		cache: {
 			exerciseCategories: [],
 			exerciseTypes: [],
-			gyms: []
+			gyms: [],
+			pastExercises: {}
 		},
 		selected: {
 			exerciseType: {}
@@ -229,6 +249,16 @@ var t = new Vue({
 			this.view = 'main';
 			this.addExercise(exerciseType);
 			this.$nextTick(this.scrollToExercisesBottom);
+
+			let typeId = exerciseType.type_id;
+			if (!(typeId in this.cache.pastExercises)) {
+				this.api.get(`exercises/past?type_id=${typeId}`, (response, data) => {
+					if (response.code >= 400)
+						return;
+
+					this.cache.pastExercises[typeId] = data.exercises;
+				});
+			}
 		},
 
 		scrollToExercisesBottom: function() {

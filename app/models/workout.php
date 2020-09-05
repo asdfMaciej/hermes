@@ -37,7 +37,12 @@ class Workout extends \DBModel {
             $workout_stats[$row["workout_id"]] = [];
             $query_parameters[] = "?";
         }
-        $query_parameters = '(' . implode(",", $query_parameters) . ')';
+        if ($query_parameters) {
+            $query_parameters = 'WHERE e.workout_id IN (' . implode(",", $query_parameters) . ')';
+        } else {
+            $query_parameters = "";
+        }
+
 
         $stats_query = "
 	SELECT stats.*, et.exercise_type FROM (
@@ -49,7 +54,7 @@ class Workout extends \DBModel {
 	MIN(duration) AS min_duration, MAX(duration) AS max_duration
 	
 	FROM exercises AS e
-	WHERE e.workout_id IN $query_parameters
+	$query_parameters
 	GROUP BY e.type_id, e.workout_id
 	ORDER BY e.workout_id, MAX(e.exercise_id)
 ) AS stats

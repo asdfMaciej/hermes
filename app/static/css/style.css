@@ -329,7 +329,15 @@
 	font-weight: bold;
 }
 .exercise_attribute {
-	padding: 8px;
+	padding: 6px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+.exercise_attribute--past-set {
+	flex: 0 0 78px;
+	justify-content: center;
+	padding: 0;
 }
 .exercise__checkmark {
 	display: flex;
@@ -345,8 +353,9 @@
 .exercise__no {
 	display: flex;
 	align-items: center;
-	width: 44px;
+	width: 32px;
 	padding-left: 8px;
+	margin-right: 8px;
 }
 .exercise__name {
 	color: #d32f2f;
@@ -370,25 +379,27 @@
 	display: flex;
 	margin-top: 12px;
 	margin-bottom: 6px;
+	font-size: 0.9em;
 }
 .exercise_headers > * {
 	padding: 8px;
 	color: #848484;
 }
-.exercise__headers .reps,
-.exercise__headers .weight,
-.exercise__headers .duration {
+.exercise__headers > span {
 	width: auto;
 	padding-left: 8px;
 }
 .exercise__headers .no {
-	width: 42px;
+	padding-left: 0;
 }
-.exercise_attribute input {
+input.exercise_attribute  {
 	padding: 8px;
+	margin: 6px;
 	border: 0;
 	border-bottom: 2px solid #b7b4b4;
-	width: 80px;
+	width: auto;
+	max-width: 80px;
+	min-width: 0;
 	background: none;
 }
 .exercise_attribute input:invalid {
@@ -711,3 +722,12 @@
 	}
 }
 
+@media (max-width: 340px) {
+	.exercise__headers {
+		font-size: 0.85em;
+	}
+	.exercise_attribute--past-set {
+		flex: 0 0 64px;
+		font-size: 0.9em;
+	}
+}
