@@ -13,7 +13,7 @@ function auto_version($file)
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <?php if (!DEBUG): ?>
+        <?php if (DB_HOST != 'localhost'): ?>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-177328075-1"></script>
         <script>
