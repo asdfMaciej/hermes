@@ -17,10 +17,17 @@ class Page extends \PageBuilder {
 		if (!$user)
 			return $this->response->addTemplate("codes/404.php");
 
+		$gym_frequency = User::getGymFrequency($this->database, $id);
+
+		$gym_timeseries = [];
+		foreach ($gym_frequency as $row) {
+		    $gym_timeseries[$row["date"]] = $row["count"];
+        }
         $this->metadata->setTitle($user["name"]);
 		$this->response->addTemplate("profile/view.php", [
 			"user" => $user,
-			"account" => $this->account
+			"account" => $this->account,
+            "gym_timeseries" => $gym_timeseries
 		]);
 
 		$workouts = Workout::getNewsfeedForUser($this->database, $id, $this->account->user_id);

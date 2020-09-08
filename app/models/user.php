@@ -11,7 +11,21 @@ class User extends \DBModel {
 	public $register_date;
 	public $avatar;
 
-	public function register($db) {
+    public static function getGymFrequency($database, $user_id) {
+        $rows = static::sql("
+            SELECT date(DATE) AS date, COUNT(workout_id) AS count
+            FROM workouts
+            WHERE user_id = :user_id
+            GROUP BY date(DATE)
+            ")
+            ->setParameter(":user_id", $user_id)
+            ->execute($database)
+            ->getAll();
+
+        return $rows;
+    }
+
+    public function register($db) {
 		try {
 			$this->password = password_hash($this->password, PASSWORD_DEFAULT);
 			return self::save($db);

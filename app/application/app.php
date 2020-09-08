@@ -20,6 +20,9 @@ class PageBuilder extends \WebBuilder {
 			$this->metadata->addScript("https://vuejs.org/js/vue.min.js", false);
 			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
 		}
+
+        $this->metadata->addScript("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js", false);
+		$this->metadata->addScript("cal-heatmap/cal-heatmap.min.js");
 		
 		$this->metadata->addScript("moment.min.js");
 		$this->metadata->addScript("momentpl.js");
@@ -31,6 +34,7 @@ class PageBuilder extends \WebBuilder {
 
 		$this->metadata->addStylesheet("elements.css");
 		$this->metadata->addStylesheet("style.css");
+        $this->metadata->addStylesheet("cal-heatmap/cal-heatmap.css");
 	}
 
 	public function run() {

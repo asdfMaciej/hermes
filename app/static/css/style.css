@@ -94,6 +94,15 @@
 	color: white;
 	padding: 8px;
 }
+.cal-heatmap-container {
+	width: 100%;
+}
+.profile-heatmap {
+	background: white;
+	padding: 12px;
+	margin-bottom: 12px;
+	box-shadow: var(--white-box-shadow);
+}
 .newsfeed {
 	display: flex;
 	flex-direction: column;
