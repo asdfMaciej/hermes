@@ -25,7 +25,7 @@ $router->route('workout\/\d+\/unreact\/?', 'workouts/unreact.php');
 $router->route('gym\/\d+\/?', 'gyms/view.php');
 
 // exercises
-$router->route('exercises\/?', 'exercises/view_all.php');
+$router->route('exercise\/\d+\/??', 'exercise/view.php');
 
 // api
 $router->route('api\/login\/?', 'api/login.php');
