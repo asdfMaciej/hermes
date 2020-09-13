@@ -48,6 +48,7 @@ GROUP BY
 ) AS s
 
 GROUP BY s.user_id, s.type_id
+order by max_weight desc
 ")
             ->setParameter(":type_id", $type_id)
             ->execute($database)

@@ -41,7 +41,7 @@
 
             <div class="feed-workout__summary">
                 <div v-for="exercise in workout.summary">
-                    <strong>• {{exercise.exercise_type}}</strong>
+                    <a :href="'``PATH_PREFIX``/exercise/' + exercise.type_id"><strong>• {{exercise.exercise_type}}</strong></a>
                     <span class="desktop-only">-</span>
                     <br class="mobile-only">
                     {{exercise.sets}} {{exercise.sets == 1 ? 'seria' : (exercise.sets < 5 ? 'serie' : 'serii')}}
