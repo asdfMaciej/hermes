@@ -56,5 +56,27 @@ order by max_weight desc
 
 	    return $rows;
     }
+
+    public static function getUserExerciseHistory($database, $type_id, $user_id) {
+    	$rows = static::sql("
+	    SELECT 	
+	e.type_id, max(e.weight) AS max_weight, SUM(e.weight * e.reps) AS volume, 
+	w.user_id, w.workout_id, MAX(w.date) AS date
+FROM exercises AS e
+INNER JOIN workouts AS w 
+	ON w.workout_id = e.workout_id
+WHERE 
+	e.type_id = :type_id AND w.user_id = :user_id
+GROUP BY 
+	w.user_id, e.type_id, w.workout_id
+ORDER BY DATE asc
+")
+            ->setParameter(":type_id", $type_id)
+            ->setParameter(":user_id", $user_id)
+            ->execute($database)
+            ->getAll();
+
+	    return $rows;
+    }
 }
 ?>

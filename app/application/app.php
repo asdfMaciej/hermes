@@ -16,17 +16,21 @@ class PageBuilder extends \WebBuilder {
 		if (DEBUG) {
 			$this->metadata->addScript("vue.js");
 			$this->metadata->addScript("axios.min.js");
+			$this->metadata->addScript("d3/d3.min.js");
 		} else {
 			$this->metadata->addScript("https://vuejs.org/js/vue.min.js", false);
 			$this->metadata->addScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", false);
+			$this->metadata->addScript("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js", false);
 		}
 
-        $this->metadata->addScript("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js", false);
-		$this->metadata->addScript("cal-heatmap/cal-heatmap.min.js");
+		
 		
 		$this->metadata->addScript("moment.min.js");
 		$this->metadata->addScript("momentpl.js");
 		$this->metadata->addScript("api.js");
+
+		$this->metadata->addScript("chart/Chart.min.js");
+		$this->metadata->addScript("cal-heatmap/cal-heatmap.min.js");
 
 		// add at end of file
 		$this->metadata->addScript("main.js", true, true);
