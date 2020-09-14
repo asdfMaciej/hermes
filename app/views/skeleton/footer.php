@@ -11,7 +11,7 @@
 		</div>
 
 		<?php foreach ($scripts_on_end as $script): ?>
-			<script src="``$script``"></script>
+			<script src="``auto_version($script)``"></script>
 		<?php endforeach ?>
 	</body>
 </html>
