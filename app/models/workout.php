@@ -306,7 +306,7 @@ ON et.type_id = stats.type_id
 
 	public static function getById($database, $id) {
 		$row = static::select([
-					static::class => ["workout_id", "title", "date"],
+					static::class => ["*"],
 					User::class => ["name as user_name", "user_id", "avatar"],
 					Gym::class => ["gym_id", "name as gym_name"]
 				])

@@ -14,7 +14,10 @@
 
         <div class="add-workout__list" v-if="view == 'add-exercise'">
             <h2>Wybierz:</h2>
-            <exercise-category :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories">
+            <a href="#" @click.prevent="exerciseLanguage = 'pl'" v-if="exerciseLanguage == 'en'">🇵🇱 Pokaż nazwy po polsku</a>
+            <a href="#" @click.prevent="exerciseLanguage = 'en'" v-if="exerciseLanguage == 'pl'">🇬🇧 Pokaż nazwy po angielsku</a>
+            <br>
+            <exercise-category :exercise-language="exerciseLanguage" :category='exerciseCategory' v-for="exerciseCategory in cache.exerciseCategories">
             </exercise-category>
         </div>
 
@@ -71,12 +74,12 @@
         <ul v-if='show'>
             <li v-for='exerciseType in category.exercises'>
                 <a href='#' @click.prevent='$root.selectExerciseType(exerciseType)'>
-                    {{exerciseType.exercise_type}}
+                    {{exerciseLanguage == "pl" ? exerciseType.exercise_type : exerciseType.exercise_type_en}}
                 </a>
             </li>
         </ul>
 
-		<exercise-category :category='exerciseCategory' v-for="exerciseCategory in category.categories" v-if='show'>
+		<exercise-category :exercise-language="exerciseLanguage" :category='exerciseCategory' v-for="exerciseCategory in category.categories" v-if='show'>
 		</exercise-category>
 	</div>
 </script>

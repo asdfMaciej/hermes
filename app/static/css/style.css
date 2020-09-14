@@ -522,7 +522,9 @@ input.exercise_attribute  {
 .workout-details__photo {
 	grid-area: photo;
 }
-.workout-details__date {}
+.workout-details__date {
+	font-size: 0.85em;
+}
 .workout-details__username {}
 .workout-details__row {
 	flex: 1;
@@ -532,6 +534,11 @@ input.exercise_attribute  {
 	width: 100px;
 	display: block;
 	margin: auto;
+}
+.workout-details__description {
+	white-space: pre-line;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 .workout-gym__picture img {
 	max-width: 480px;

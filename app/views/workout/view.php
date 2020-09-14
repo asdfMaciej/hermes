@@ -7,15 +7,20 @@
 		</div>
 
 		<div class="workout-details__row">
-			<h2 class="workout-details__title">
-				``$workout["title"]``
-			</h2>
+			
 			<a class="workout-details__username" href="``PATH_PREFIX``/profile/``$workout['user_id']``">
 				``$workout["user_name"]``
 			</a>
 			<div class="workout-details__date">
-				``$workout["date"]``
+				<span class='date'>``$workout["date"]``</span>
+				<?php if ($workout['duration']): ?>
+					- <span class='duration'>``$workout["duration"]``</span>
+				<?php endif ?>
 			</div>
+			<h2 class="workout-details__title">
+				``$workout["title"]``
+			</h2>
+			<div class="workout-details__description">``$workout["description"]``</div>
 			<div class="workout-details__reactions">
 				<reaction-button :workout='{workout_id: ``$workout["workout_id"]``, reactions: ``$reactions["count"] ?? 0``, reacted: ``$reactions["reacted"] ?? 0``}'></reaction-button>				
 			</div>

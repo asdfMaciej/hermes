@@ -4,7 +4,8 @@ function copy(o) {
 
 Vue.component('exercise-category', {
 	props: {
-		category: undefined
+		category: undefined,
+		exerciseLanguage: undefined
 	},
 	template: '#exercise-category-template',
 	data: function() {return {
@@ -92,6 +93,7 @@ var t = new Vue({
 		editTitle: false,
 		view: 'main',
 		blockSubmit: false,
+		exerciseLanguage: "pl"
 	},
 
 	mounted: function() {
