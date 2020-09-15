@@ -5,8 +5,8 @@ Vue.component('newsfeed-item', {
 	data: function() {return {
 		showMenu: false,
 		toggledMenu: false,
-		deleted: false
-
+		deleted: false,
+		userId: USER_ID
 	}},
 	template: '#newsfeed-item-template',
 	methods: {
@@ -20,6 +20,7 @@ Vue.component('newsfeed-item', {
 
 		easteregg: function() {
 			alert("Idź na trening >:(");
+			this.showMenu = false;
 		},
 
 		onDelete: function() {

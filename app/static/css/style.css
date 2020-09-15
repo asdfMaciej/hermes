@@ -548,6 +548,7 @@ input.exercise_attribute  {
 	padding: 16px;
 	background: white;
 	box-shadow: var(--white-box-shadow);
+	position: relative;
 }
 .workout-details__title {
 	grid-area: title;
@@ -603,6 +604,7 @@ input.exercise_attribute  {
 	grid-template-areas: "details details" "exercises gym" "comments comments";
 	grid-template-columns: 1fr auto;
 	grid-gap: 16px 16px;
+	position: relative;
 }
 .workout-comments {
 	grid-area: comments;

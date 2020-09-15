@@ -32,7 +32,13 @@ function auto_version($file)
 		<link rel="stylesheet" type="text/css" href="``auto_version($style)``">
 		<?php endforeach ?>
 			
-		<script>var PATH_PREFIX = "``PATH_PREFIX``"; <?php echo DEBUG ? "var DEBUG = true;" : "var DEBUG = false"; ?></script>
+		<script>
+			const PATH_PREFIX = "``PATH_PREFIX``"; 
+			<?php echo DEBUG ? "const DEBUG = true;" : "const DEBUG = false;"; 
+			if ($account->user_id) {
+				echo "const USER_ID = ".$account->user_id.";";
+			} ?>
+		</script>
 
 		<?php foreach ($scripts as $script): ?>
 			<script src="``auto_version($script)``"></script>

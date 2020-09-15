@@ -8,7 +8,7 @@
 	<div class="newsfeed-item" v-if="!deleted">
 		<div class="feed-workout__menu" v-if="showMenu">
 			<button class="hermes" @click.prevent="easteregg">Idź ćwiczyć</button>
-			<button class="hermes" @click.prevent="onDelete">Usuń trening</button>
+			<button class="hermes" @click.prevent="onDelete" v-if="userId == workout.user_id">Usuń trening</button>
 		</div>
 		<div class="feed-workout" :class="{activemenu: showMenu}" @click="clickWorkout">
 			<div class="feed-workout__avatar">

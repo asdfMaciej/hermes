@@ -1,5 +1,14 @@
+<script>const WORKOUT_ID = <?php echo $workout['workout_id']; ?>;</script>
 <div class="workout" id="view-workout">
+	<div class="feed-workout__menu" v-if="showMenu">
+		<button class="hermes" @click.prevent="onDelete" v-if="userId == ``$workout['user_id']``">Usuń trening</button>
+	</div>
+
 	<div class="workout-details">
+		<a href="#" class="feed-workout__menu-button" @click.prevent="showMenu = !showMenu">
+			<ion-icon name="ellipsis-vertical"></ion-icon>
+		</a>
+
 		<div class="workout-details__photo">
 			<a href="``PATH_PREFIX``/profile/``$workout['user_id']``">
 				<img src="``PATH_PREFIX``/``$workout['avatar']``" class="avatar">
