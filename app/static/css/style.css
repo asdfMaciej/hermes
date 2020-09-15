@@ -234,6 +234,37 @@
 	width: 100%;
 	padding: 12px;
 	grid-area: title;
+	position: relative;
+}
+a.feed-workout__menu-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding-right: 16px;
+	padding-top: 16px;
+	font-size: 1.4em;
+	display: block;
+	color: #989898;
+}
+.feed-workout__menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin-top: 42px;
+	min-width: 150px;
+	display: flex;
+	flex-direction: column;
+	filter: drop-shadow(0px 2px 8px #0000002b);
+	z-index: 10;
+}
+.newsfeed-item {
+	position: relative;
+}
+.feed-workout.activemenu {
+	filter: blur(1px);
+}
+.feed-workout__menu > button.hermes {
+	margin: 2px 0;
 }
 .feed-workout__reactions {
 	margin-top: 8px;
@@ -261,13 +292,15 @@
 .add-workout__settings,
 .add-workout__list,
 .add-workout__presubmit,
-.add-workout__submit button {
+.add-workout__submit button,
+button.hermes {
 	padding: 24px;
 	margin: 8px 0;
 	background: white;
 	box-shadow: var(--white-box-shadow);
 }
-.add-workout__submit button {
+.add-workout__submit button,
+button.hermes {
 	border: none;
 	border-bottom: 2px solid #d32f2f;
 	font-weight: 700;

@@ -38,6 +38,13 @@ class API {
 		)
 	}
 
+	delete(path, onResponse) {
+		this._request(
+			axios.delete(this.getPath(path)),
+			onResponse
+		)
+	}
+
 	_request(request, onResponse) {
 		request.then((response) => {
 			let r = new APIResponse(response);

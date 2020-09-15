@@ -25,11 +25,12 @@ $router->route('workout\/\d+\/unreact\/?', 'workouts/unreact.php');
 $router->route('gym\/\d+\/?', 'gyms/view.php');
 
 // exercises
-$router->route('exercise\/\d+\/??', 'exercise/view.php');
+$router->route('exercise\/\d+\/?', 'exercise/view.php');
 
 // api
 $router->route('api\/login\/?', 'api/login.php');
 $router->route('api\/workouts\/?', 'api/workouts.php');
+$router->route('api\/workouts\/\d+\/?', 'api/workouts.php');
 $router->route('api\/exercise_categories\/?', 'api/exercise_categories.php');
 $router->route('api\/exercise_types\/?', 'api/exercise_types.php');
 $router->route('api\/exercises\/past\/?', 'api/exercises_past.php');

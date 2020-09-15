@@ -478,6 +478,19 @@ class DBModel extends Model {
 		return $row;
 	}
 
+	public static function delete($db, $condition=[]) {
+		if (!$condition)
+			throw new \Exception("No condition set for delete!");
+
+		$table = static::$table_name;
+		$where = static::whereQuery($table, $condition);
+		$query = $where['query'];
+		static::sql("DELETE FROM $table WHERE $query")
+					->setParameters($where['parameters'])
+					->execute($db);
+		return true;
+	}
+
 	public static function getSingleItem($db, $match=[]) {
 		$row = static::getItemsQuery($match)
 					->execute($db)

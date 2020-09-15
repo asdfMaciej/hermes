@@ -54,6 +54,19 @@ class Page extends \APIBuilder {
 		$this->database->commit();
 		return $this->generateAndSet(["workout_id" => $workout_id], 201);
 	}
+
+	public function delete() {
+		$id = $this->data->path->workouts;
+		$workout = Workout::getSingleItem($this->database, ["workout_id" => $id]);
+		if (!$id)
+			return $this->generateAndSet([], 400);
+
+		if ($this->account->user_id !== $workout["user_id"])
+			return $this->generateAndSet([], 401);
+
+		Workout::delete($this->database, ["workout_id" => $id]);
+		return $this->generateAndSet([], 200);
+	}
 }
 
 new Page();

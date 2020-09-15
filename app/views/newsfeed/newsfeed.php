@@ -5,14 +5,21 @@
 </div>
 
 <script type="text/x-template" id="newsfeed-item-template">
-	<div class="newsfeed-item">
-		<div class="feed-workout">
+	<div class="newsfeed-item" v-if="!deleted">
+		<div class="feed-workout__menu" v-if="showMenu">
+			<button class="hermes" @click.prevent="easteregg">Idź ćwiczyć</button>
+			<button class="hermes" @click.prevent="onDelete">Usuń trening</button>
+		</div>
+		<div class="feed-workout" :class="{activemenu: showMenu}" @click="clickWorkout">
 			<div class="feed-workout__avatar">
                 <a :href="'``PATH_PREFIX``/profile/' + workout.user_id">
 				    <img :src="'``PATH_PREFIX``/' + workout.avatar" class="avatar">
                 </a>
 			</div>
 			<div class="feed-workout__container">
+				<a href="#" class="feed-workout__menu-button" @click.prevent="showMenu = !showMenu; toggledMenu = true">
+					<ion-icon name="ellipsis-vertical"></ion-icon>
+				</a>
 				<div class="feed-workout__author">
 					<a :href="'``PATH_PREFIX``/profile/' + workout.user_id">
 						{{workout.user_name}}
