@@ -66,7 +66,7 @@ function auto_version($file)
 				<a class='page-header__settings white' href="``PATH_PREFIX``/settings">
 					<ion-icon name="settings-sharp"></ion-icon>
 				</a>
-				<a href="``PATH_PREFIX``/profile/``$account->user_id``">
+				<a href="``PATH_PREFIX``/profile/``$account->user_id``" class="page-header__profile">
 					<img src="``PATH_PREFIX``/``$account->avatar``" class="avatar">
 				</a><br>
 

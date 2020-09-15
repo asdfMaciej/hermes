@@ -700,7 +700,7 @@ input.exercise_attribute  {
 		padding: 0px;
 	}
 	.page-header__logo img {
-		height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding));
+		height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding) - 8px);
 	}
 	.page-header__filler {
 		display: none;
@@ -708,11 +708,12 @@ input.exercise_attribute  {
 	}
 	.page-header__add {
 		flex: 1 0 auto;
-		text-align: center;
+		padding-left: 12px;
 	}
 	.page-header__settings {
 		flex: 1 1;
 		justify-content: flex-end;
+		padding: 4px;
 	}
 	.page-header.show-search > * {
 		display: none;
@@ -751,6 +752,12 @@ input.exercise_attribute  {
 	.add-workout__settings-gym {
 		margin: 8px 0px;
 	}
+	.page-header__profile,
+	.page-header__search-button,
+	#logout-form a {
+		padding-left: 4px;
+		padding-right: 4px;
+	}
 }
 @media (max-width: 400px) {
 	.workout-details {
@@ -767,6 +774,9 @@ input.exercise_attribute  {
 		display: none;
 	}
 	.page-header__add {
+		padding: 4px;
+	}
+	.page-header__add {
 		font-size: 1.5em;
 		display: flex;
 		align-items: center;
@@ -780,5 +790,8 @@ input.exercise_attribute  {
 	.exercise_attribute--past-set {
 		flex: 0 0 64px;
 		font-size: 0.9em;
+	}
+	.page-header__logo img {
+		height: calc(calc(var(--header-height) - var(--header-padding)) - var(--header-padding) - 12px);
 	}
 }
