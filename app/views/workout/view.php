@@ -106,7 +106,7 @@
 		<div class="comment">
 			<div class="comment__main">
                 <a href="``PATH_PREFIX``/profile/``$comment['user_id']``">
-                    <img class="comment__avatar" src="``PATH_PREFIX``/``$comment['avatar']``">
+                    <img class="comment__avatar avatar" src="``PATH_PREFIX``/``$comment['avatar']``">
                 </a>
 				<a href="``PATH_PREFIX``/profile/``$comment['user_id']``" class="comment__name">
 					``$comment['user_name']``

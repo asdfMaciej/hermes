@@ -571,7 +571,7 @@ input.exercise_attribute  {
 }
 .workout-details__description {
 	white-space: pre-line;
-	margin-top: 12px;
+	margin-top: 4px;
 	margin-bottom: 12px;
 }
 .workout-gym__picture img {
@@ -634,6 +634,7 @@ input.exercise_attribute  {
 }
 .comment__main {
 	padding: 8px;
+	width: 100%;
 }
 .comment__created {}
 .reaction-button {

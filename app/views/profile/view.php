@@ -1,5 +1,5 @@
 <div class="profile-details">
-	<div class="profile-details__avatar">
+	<div class="profile-details__avatar avatar">
 		<img src="``PATH_PREFIX``/``$user['avatar']``">
 	</div>
 	<div class="profile-details__container">
