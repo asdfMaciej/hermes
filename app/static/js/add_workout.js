@@ -88,6 +88,7 @@ var t = new Vue({
 				startMoment: null
 			}
 		},
+		editedWorkoutId: null,
 		timeElapsed: '00:00:00',
 		api: null,
 		editTitle: false,
@@ -104,20 +105,20 @@ var t = new Vue({
 		this.api.get('exercise_types', (response, data) => {
 			this.cache.exerciseTypes = data.exercise_types;
 		});
-
 		this.api.get('gyms', (response, data) => {
 			this.cache.gyms = data.gyms;
 		});
-		this.current.workout.startMoment = moment();
-		setInterval(() => {
-			let start = this.current.workout.startMoment;
-
-			// moment.js doesn't support duration, so this is kinda a hack
-			this.timeElapsed = moment.utc(moment().diff(start)).format("HH:mm:ss")
-		}, 1000);
 
 		window.onpopstate = this.backButtonPressed;
 		window.onbeforeunload = this.backButtonPressed;
+
+		if (window.location.pathname.indexOf("edit") === -1) {
+			// creating a new workout
+			this.initAddWorkout();
+		} else {
+			// editing an existing workout
+			this.initEditWorkout();
+		}
 	},
 
 	computed: {
@@ -157,6 +158,30 @@ var t = new Vue({
 	},
 
 	methods: {
+		initEditWorkout: function() {
+			// get the id from path
+			const pathElements = window.location.pathname.split("workout/");
+			this.editedWorkoutId = pathElements[1].split("/")[0];
+
+			this.api.get(`workouts/${this.editedWorkoutId}`, (response, data) => {
+				this.$set(this.current.workout, 'workout', data.workout);
+				this.$set(this.current.workout, 'exercises', data.exercises);
+				this.timeElapsed = moment.utc(data.workout.duration*1000).format('HH:mm:ss');
+
+				// fetch past exercises?
+				// this.getPastExercises(typeId); if add in future
+			});
+		},
+
+		initAddWorkout: function() {
+			this.current.workout.startMoment = moment();
+			setInterval(() => {
+				let start = this.current.workout.startMoment;
+				// moment.js doesn't support duration, so this is kinda a hack
+				this.timeElapsed = moment.utc(moment().diff(start)).format("HH:mm:ss")
+			}, 1000);
+		},
+
 		backButtonPressed: function(event) {
 			if (this.view == 'add-exercise') {
 				this.view = 'main';
@@ -221,7 +246,6 @@ var t = new Vue({
 				return;
 			}
 
-			this.current.workout.workout.duration = Math.floor(moment().diff(this.current.workout.startMoment) / 1000);
 			this.addWorkout(this.current.workout);
 		},
 
@@ -254,13 +278,17 @@ var t = new Vue({
 
 			let typeId = exerciseType.type_id;
 			if (!(typeId in this.cache.pastExercises)) {
-				this.api.get(`exercises/past?type_id=${typeId}`, (response, data) => {
-					if (response.code >= 400)
-						return;
-
-					this.cache.pastExercises[typeId] = data.exercises;
-				});
+				this.getPastExercises(typeId);
 			}
+		},
+
+		getPastExercises: function(typeId) {
+			this.api.get(`exercises/past?type_id=${typeId}`, (response, data) => {
+				if (response.code >= 400)
+					return;
+
+				this.cache.pastExercises[typeId] = data.exercises;
+			});
 		},
 
 		scrollToExercisesBottom: function() {
@@ -274,6 +302,10 @@ var t = new Vue({
 		},
 
 		addWorkout: function(workout) {
+			if (this.editedWorkoutId == null) {
+				this.current.workout.workout.duration = Math.floor(moment().diff(this.current.workout.startMoment) / 1000);
+			}
+
 			this.api.post('workouts', workout, (response, data) => {
 				if (response.code >= 400) {
 					this.snackbar(response.code, 'Nie udało się dodać treningu.');

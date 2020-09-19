@@ -54,14 +54,13 @@
         </div>
 
         <div class="add-workout__presubmit" v-if="view == 'presubmit'">
-            <span>(niedopracowany widok XD)</span>
-            <h3>Dodaj opis (opcjonalnie):</h3>
+            <h3>{{editedWorkoutId == null ? 'Dodaj opis' : 'Edytuj opis'}}:</h3>
             <textarea placeholder="Lepszy opis = więcej polubień, ez math" v-model="current.workout.workout.description"></textarea>
         </div>
 
         <div class="add-workout__submit" v-if="view == 'main' || view == 'presubmit'">
             <button @click="submit" :disabled="blockSubmit">
-                Dodaj trening
+                {{editedWorkoutId == null ? 'Dodaj trening' : 'Edytuj trening'}}
             </button>
         </div>
     </div>
@@ -115,7 +114,7 @@
                 <ion-icon name="checkmark-circle" v-if="!exercise.failure"></ion-icon>
             </div>
             <a href="#" @click.prevent="remove" class="exercise-remove">
-                <ion-icon name="close-outline" @click="remove"></ion-icon>
+                <ion-icon name="close-outline"></ion-icon>
             </a>
 
         </div>

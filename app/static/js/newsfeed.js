@@ -35,6 +35,10 @@ Vue.component('newsfeed-item', {
 			});
 		},
 
+		onEdit: function() {
+			window.location.href = `${PATH_PREFIX}/workout/${this.workout.workout_id}/edit`;
+		},
+
 		clickWorkout: function(event) {
 			if (this.showMenu && !this.toggledMenu) {
 				this.showMenu = false;

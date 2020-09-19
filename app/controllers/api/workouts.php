@@ -7,16 +7,32 @@ use mysql_xdevapi\Exception;
 class Page extends \APIBuilder {
 	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
-		$workout["user_id"] = $this->account->user_id;
 
+		$editing = $workout["workout_id"];
+		// if editing a workout, we need to verify the user
+		if ($editing) {
+		    $existing_workout = Workout::getSingleItem($this->database, ["workout_id" => $workout["workout_id"]]);
+		    if ($existing_workout['user_id'] !== $this->account->user_id) {
+                return $this->generateAndSet(["error" => "You're not the user!"], 400);
+            }
+        }
+
+        $workout["user_id"] = $this->account->user_id;
 		$exercises = $this->data->json["exercises"] ?? [];
-		
+
+		// if something fails, we need to revert everything
 		$this->database->beginTransaction();
 		try {
 			Workout::fromArray($workout)->save($this->database);
-			$workout_id = $this->database->lastInsertId();
+			$workout_id = $workout["workout_id"] ? $workout["workout_id"] : $this->database->lastInsertId();
+
+			// we need to delete the past exercises if editing
+			if ($editing) {
+			    Exercise::delete($this->database, ["workout_id" => $workout_id]);
+            }
 
 			foreach ($exercises as $exercise) {
+			    $exercise["exercise_id"] = 0;
 			    // comma separator doesn't work
 
                 if ($exercise["weight"] ?? false) {
@@ -67,6 +83,17 @@ class Page extends \APIBuilder {
 		Workout::delete($this->database, ["workout_id" => $id]);
 		return $this->generateAndSet([], 200);
 	}
+
+	public function get() {
+        $id = $this->data->path->workouts;
+        $workout = Workout::getSingleItem($this->database, ["workout_id" => $id]);
+        if (!$workout)
+            return $this->generateAndSet([], 400);
+
+        $exercises = Exercise::getWithTypes($this->database, $id);
+
+        return $this->generateAndSet(compact("workout", "exercises"), 200);
+    }
 }
 
 new Page();

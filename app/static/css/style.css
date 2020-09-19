@@ -264,7 +264,7 @@ a.feed-workout__menu-button {
 	filter: blur(1px);
 }
 .feed-workout__menu > button.hermes {
-	margin: 2px 0;
+	margin: 0;
 }
 .feed-workout__reactions {
 	margin-top: 8px;

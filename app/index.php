@@ -18,6 +18,7 @@ $router->route('search\/?', 'profiles/search.php');
 
 // workouts
 $router->route('workout\/add\/?', 'workouts/add.php');
+$router->route('workout\/\d+\/edit\/?', 'workouts/add.php');
 $router->route('workout\/\d+\/?', 'workouts/view.php');
 $router->route('workout\/\d+\/react\/?', 'workouts/react.php');
 $router->route('workout\/\d+\/unreact\/?', 'workouts/unreact.php');

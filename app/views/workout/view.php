@@ -1,4 +1,4 @@
-<script>const WORKOUT_ID = <?php echo $workout['workout_id']; ?>;</script>
+<script>const WORKOUT_ID = ``$workout['workout_id']``;</script>
 <div class="workout" id="view-workout">
 	<div class="feed-workout__menu" v-if="showMenu">
 		<button class="hermes" @click.prevent="onDelete" v-if="userId == ``$workout['user_id']``">Usuń trening</button>

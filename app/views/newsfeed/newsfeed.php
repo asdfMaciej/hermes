@@ -8,12 +8,13 @@
 	<div class="newsfeed-item" v-if="!deleted">
 		<div class="feed-workout__menu" v-if="showMenu">
 			<button class="hermes" @click.prevent="easteregg">Idź ćwiczyć</button>
+            <button class="hermes" @click.prevent="onEdit" v-if="userId == workout.user_id">Edytuj trening</button>
 			<button class="hermes" @click.prevent="onDelete" v-if="userId == workout.user_id">Usuń trening</button>
 		</div>
 		<div class="feed-workout" :class="{activemenu: showMenu}" @click="clickWorkout">
 			<div class="feed-workout__avatar">
                 <a :href="'``PATH_PREFIX``/profile/' + workout.user_id">
-				    <img :src="'``PATH_PREFIX``/' + workout.avatar" class="avatar">
+				    <img loading="lazy" :src="'``PATH_PREFIX``/' + workout.avatar" class="avatar">
                 </a>
 			</div>
 			<div class="feed-workout__container">
@@ -76,7 +77,7 @@
 		<div class="comment comment--newsfeed" v-if='workout.comment'>
 			<div class="comment__main">
                 <a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id">
-                    <img class="comment__avatar avatar" :src="'``PATH_PREFIX``/' + workout.comment_avatar">
+                    <img loading="lazy" class="comment__avatar avatar" :src="'``PATH_PREFIX``/' + workout.comment_avatar">
                 </a>
 				<a :href="'``PATH_PREFIX``/profile/' + workout.comment_user_id" class="comment__name">
 					{{workout.comment_user_name}}

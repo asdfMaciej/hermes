@@ -38,5 +38,20 @@ class Exercise extends \DBModel {
 
         return $rows;
     }
+
+    public static function getWithTypes($database, $workout_id) {
+        $rows = static::select([
+            static::class => "*",
+            ExerciseType::class => ["*"]
+        ])
+            ->from(static::class)
+            ->innerJoin(ExerciseType::class, "type_id")
+            ->where("Exercise.workout_id = :workout_id")
+            ->setParameter(":workout_id", $workout_id)
+            ->execute($database)
+            ->getAll();
+
+        return $rows;
+    }
 }
 ?>
