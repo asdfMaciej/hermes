@@ -8,7 +8,7 @@ class Page extends \APIBuilder {
 	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
 
-		$editing = $workout["workout_id"];
+		$editing = $workout["workout_id"] ?? null;
 		// if editing a workout, we need to verify the user
 		if ($editing) {
 		    $existing_workout = Workout::getSingleItem($this->database, ["workout_id" => $workout["workout_id"]]);
@@ -24,7 +24,7 @@ class Page extends \APIBuilder {
 		$this->database->beginTransaction();
 		try {
 			Workout::fromArray($workout)->save($this->database);
-			$workout_id = $workout["workout_id"] ? $workout["workout_id"] : $this->database->lastInsertId();
+			$workout_id = $editing ? $editing : $this->database->lastInsertId();
 
 			// we need to delete the past exercises if editing
 			if ($editing) {

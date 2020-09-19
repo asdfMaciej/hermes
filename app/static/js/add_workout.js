@@ -307,6 +307,9 @@ var t = new Vue({
 			}
 
 			this.api.post('workouts', workout, (response, data) => {
+				// leaving log in, chrome devtools dont allow me to check past requests response [wtf]
+				console.log(response);
+
 				if (response.code >= 400) {
 					this.snackbar(response.code, 'Nie udało się dodać treningu.');
 				} else {
