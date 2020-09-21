@@ -175,10 +175,6 @@ var t = new Vue({
 	},
 
 	methods: {
-		selectRoutine: function() {
-			this.view = 'main';
-		},
-
 		initEditWorkout: function() {
 			// get the id from path
 			const pathElements = window.location.pathname.split("workout/");
