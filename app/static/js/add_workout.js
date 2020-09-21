@@ -222,7 +222,7 @@ var t = new Vue({
 
 			this.view = 'main';
 			this.api.get(`routines/${routine.routine_id}`, (response, data) => {
-				let exercises = [];
+				this.$set(this.current.workout, 'exercises', []);
 				for (let exercise of data.exercises) {
 					for (let i=0; i<exercise.sets; i++) {
 						exercise.failure = true;
@@ -230,10 +230,6 @@ var t = new Vue({
 					}
 					this.getPastExercises(exercise.type_id);
 				}
-				this.$set(this.current.workout, 'exercises', exercises);
-
-				// fetch past exercises?
-				// this.getPastExercises(typeId); if add in future
 			});
 		},
 
