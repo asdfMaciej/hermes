@@ -7,6 +7,9 @@
     <div style="max-width: 500px">
         <canvas id="exercise-max-volume"></canvas>
     </div>
+    <div style="max-width: 500px">
+        <canvas id="exercise-estimated-1rm"></canvas>
+    </div>
     <?php foreach ($weight_records as $record): ?>
     <div style="display: flex; margin-bottom: 8px">
         <div class="feed-workout__avatar">
@@ -51,14 +54,17 @@ var chartOptions = {
 };
 
 var dataset = <?php echo json_encode($user_history, JSON_UNESCAPED_UNICODE); ?>;
-var weights = [], volume =[], labels = [];
+var weights = [], volume = [], maxes = [], labels = [];
 for (let item of dataset) {
     weights.push({t: item.date, y: item.max_weight});
     volume.push({t: item.date, y: item.volume});
+    maxes.push({t: item.date, y: item.estimated_1rm});
     labels.push(item.date);
 }
 var maxWeight = document.getElementById("exercise-max-weight").getContext("2d");
+var estimated1RM = document.getElementById("exercise-estimated-1rm").getContext("2d");
 var maxVolume = document.getElementById("exercise-max-volume").getContext("2d");
+
 
 var weightChart = new Chart(maxWeight, {
     type: 'line',
@@ -67,6 +73,21 @@ var weightChart = new Chart(maxWeight, {
         datasets: [{
             label: 'Maksymalne obciążenie na treningu [kg]',
             data: weights,
+            backgroundColor: '#ffffff00',
+            borderColor: borderColor,
+            borderWidth: 3
+        }]
+    },
+    options: chartOptions
+});
+
+var estimated1rmChart = new Chart(estimated1RM, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Szacowany max na 1 powtórzenie [kg]',
+            data: maxes,
             backgroundColor: '#ffffff00',
             borderColor: borderColor,
             borderWidth: 3
@@ -89,4 +110,6 @@ var volumeChart = new Chart(maxVolume, {
     },
     options: chartOptions
 });
+
+
 </script>
