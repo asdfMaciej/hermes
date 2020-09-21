@@ -106,9 +106,9 @@
             <div class="exercise__no">
                 {{order}}.
             </div>
-            <div class="exercise_attribute exercise_attribute--past-set">
+            <a href="#" @click.prevent="usePastSet()" class="exercise_attribute exercise_attribute--past-set">
                 {{pastSet}}
-            </div>
+            </a>
             <input v-if='exercise.show_reps == 1' class="exercise_attribute exercise_attribute__reps"
                    type="number" v-model="exercise.reps" placeholder="Ilość" @focus="exercise.reps = ''">
 

@@ -35,6 +35,19 @@ Vue.component('exercise', {
 
 		addRep: function() {
 			this.$root.addExercise(this.exercise, this.index+1);
+		},
+
+		usePastSet: function() {
+			let set = this.past[this.order - 1];
+			if (!set)
+				return;
+
+			if (set.reps != null)
+				this.$set(this.exercise, 'reps', set.reps);
+			if (set.weight != null)
+				this.$set(this.exercise, 'weight', set.weight);
+			if (set.duration != null)
+				this.$set(this.exercise, 'duration', set.duration);
 		}
 	},
 
