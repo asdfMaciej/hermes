@@ -71,6 +71,7 @@ var t = new Vue({
 			exerciseCategories: [],
 			exerciseTypes: [],
 			gyms: [],
+			routines: [],
 			pastExercises: {}
 		},
 		selected: {
@@ -107,6 +108,9 @@ var t = new Vue({
 		});
 		this.api.get('gyms', (response, data) => {
 			this.cache.gyms = data.gyms;
+		});
+		this.api.get('routines', (response, data) => {
+			this.cache.routines = data.routines;
 		});
 
 		window.onpopstate = this.backButtonPressed;
@@ -158,6 +162,10 @@ var t = new Vue({
 	},
 
 	methods: {
+		selectRoutine: function() {
+			this.view = 'main';
+		},
+
 		initEditWorkout: function() {
 			// get the id from path
 			const pathElements = window.location.pathname.split("workout/");
@@ -189,7 +197,37 @@ var t = new Vue({
 			if (this.view == 'presubmit') {
 				this.view = 'main';
 			}
+			if (this.view == 'routines') {
+				this.view = 'main';
+			}
 			return "";
+		},
+
+		selectRoutine: function(routine) {
+			if (!confirm(`Czy chcesz wybrać plan '${routine.name}'? Usunie to twój obecny trening.`))
+				return;
+
+			this.view = 'main';
+			this.api.get(`routines/${routine.routine_id}`, (response, data) => {
+				let exercises = [];
+				for (let exercise of data.exercises) {
+					for (let i=0; i<exercise.sets; i++) {
+						exercise.failure = true;
+						exercises.push(exercise);
+					}
+					this.getPastExercises(exercise.type_id);
+				}
+				this.$set(this.current.workout, 'exercises', exercises);
+
+				// fetch past exercises?
+				// this.getPastExercises(typeId); if add in future
+			});
+		},
+
+		showRoutinePicker: function() {
+			this.view = 'routines';
+			history.pushState({page: 'routines'}, "Wybierz plan treningowy - Hermes", "#routines");
+			this.$nextTick(() => {window.scrollTo({ top: 0, behavior: 'smooth' });});
 		},
 
 		showExercisePicker: function() {
@@ -277,12 +315,14 @@ var t = new Vue({
 			this.$nextTick(this.scrollToExercisesBottom);
 
 			let typeId = exerciseType.type_id;
-			if (!(typeId in this.cache.pastExercises)) {
-				this.getPastExercises(typeId);
-			}
+			this.getPastExercises(typeId);
 		},
 
 		getPastExercises: function(typeId) {
+			if (typeId in this.cache.pastExercises) {
+				return;
+			}
+
 			this.api.get(`exercises/past?type_id=${typeId}`, (response, data) => {
 				if (response.code >= 400)
 					return;

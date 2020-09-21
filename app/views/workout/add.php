@@ -10,8 +10,17 @@
                        placeholder='Podaj nazwę treningu' @keyup.enter="editTitle = false" ref="edittitle">
                 <h4>{{timeElapsed}}</h4>
             </div>
+            <a href="#" @click.prevent="showRoutinePicker()">Wybierz plan treningowy</a>
         </div>
 
+        <div class="add-workout__list" v-if="view == 'routines'">
+            <a href="#" @click.prevent="view = 'main'">Wróć do widoku głównego</a>
+            <h2>Wybierz plan:</h2>
+            <div @click.prevent='selectRoutine(routine)' class="routine-mini" v-for="routine in cache.routines">
+                <img class='avatar' :src="'``PATH_PREFIX``/' + routine.avatar">
+                <span>{{routine.name}}</span>
+            </div>
+        </div>
         <div class="add-workout__list" v-if="view == 'add-exercise'">
             <h2>Wybierz:</h2>
             <a href="#" @click.prevent="exerciseLanguage = 'pl'" v-if="exerciseLanguage == 'en'">🇵🇱 Pokaż nazwy po polsku</a>

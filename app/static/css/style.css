@@ -327,9 +327,22 @@ button.hermes {
 	display: flex;
 	flex-direction: column;
 }
-
+.routine-mini {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+.routine-mini span {
+	padding: 8px;
+}
+.routine-mini img {
+	width: 40px;
+}
 .add-workout__settings-gym {
 	margin-top: 12px;
+}
+.add-workout__settings-title {
+	margin-bottom: 6px;
 }
 .add-workout__settings-title ion-icon {
 	font-size: 0.9em;
