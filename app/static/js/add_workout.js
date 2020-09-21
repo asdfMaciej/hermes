@@ -226,7 +226,7 @@ var t = new Vue({
 				for (let exercise of data.exercises) {
 					for (let i=0; i<exercise.sets; i++) {
 						exercise.failure = true;
-						exercises.push(exercise);
+						this.addExercise(exercise);
 					}
 					this.getPastExercises(exercise.type_id);
 				}
