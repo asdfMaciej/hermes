@@ -2,9 +2,51 @@
 namespace Web\Pages;
 use \Model\Workout;
 use \Model\Exercise;
+use \Model\Routine;
+use \Model\RoutineExerciseType;
 use mysql_xdevapi\Exception;
 
 class Page extends \APIBuilder {
+	protected function addRoutine() {
+		$routine = $this->data->json["routine"];
+		$exercises = $this->data->json["exercises"];
+		$name = $routine["name"];
+		if (!$name)
+			throw new \Exception("Routine doesnt have a name!");
+
+		$routine["user_id"] = $this->account->user_id;
+		Routine::fromArray($routine)->save($this->database);
+
+		$routine_id = $this->database->lastInsertId();
+
+		// now, we need to count reps
+		$exercise_types = [];
+
+		/* the code below counts sets for each exercise
+		it can occur that exercises are for ex. AABBAAA so it cant be 
+		A->5, B->2, it has to be A->2, B->2, A->3 */
+		foreach ($exercises as $exercise) {
+			$type_id = $exercise['type_id'];
+			if (count($exercise_types)) {
+				$last = &$exercise_types[count($exercise_types)-1];
+				if ($last['type_id'] == $type_id) {
+					$last['sets'] += 1;
+					continue;
+				}
+			}
+			$exercise['sets'] = 1;
+			$exercise['routine_id'] = $routine_id;
+			$exercise_types[] = $exercise;
+		}
+
+		// add it to the db
+		foreach ($exercise_types as $exercise_type) {
+			RoutineExerciseType::fromArray($exercise_type)->save($this->database);
+		}
+
+		return $routine_id; // we're set
+	}
+
 	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
 
@@ -60,9 +102,25 @@ class Page extends \APIBuilder {
 			    if ($exercise["show_weight"] && floatval($exercise["weight"]) < 0)
 			        throw new Exception("Weight < 0");
 
+			    // todo: first query the db for every exercise type
+			    // and check it that way if we should store reps/weight/duration
+			    if (!$exercise["show_weight"])
+			    	unset($exercise["weight"]);
+
+			    if (!$exercise["show_duration"])
+			    	unset($exercise["duration"]);
+
+			    if (!$exercise["show_reps"])
+			    	unset($exercise["reps"]);
+
 				$exercise["workout_id"] = $workout_id;
 				Exercise::fromArray($exercise)->save($this->database);
 			}
+
+			if ($this->data->json["routine"]["add"]) {
+				$this->addRoutine();
+			}
+
 		} catch (\Exception $e) {
 			$this->database->rollBack();
 			return $this->generateAndSet([], 400);

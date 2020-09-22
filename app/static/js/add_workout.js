@@ -67,10 +67,19 @@ Vue.component('exercise', {
 			let text = "";
 			if (set.reps != null)
 				text += set.reps;
-			if (set.weight != null)
-				text += ` × ${set.weight} kg`;
-			if (set.duration != null)
-				text += ` × ${set.duration} s`;
+
+			if (set.weight != null) {
+				if (text)
+					text += ' × ';
+
+				text += `${set.weight} kg`;
+			}
+			if (set.duration != null) {
+				if (text)
+					text += ' × ';
+
+				text += `${set.duration} s`;
+			}
 
 			return text;
 		}
@@ -99,7 +108,11 @@ var t = new Vue({
 					duration: 0
 				},
 				exercises: [],
-				startMoment: null
+				startMoment: null,
+				routine: {
+					add: false,
+					name: ''
+				}
 			}
 		},
 		editedWorkoutId: null,
@@ -277,7 +290,7 @@ var t = new Vue({
 			}
 
 			if (missingFields) {
-				this.blockSubmitButton(3000);
+				this.blockSubmitButton(2000);
 				this.snackbar(400, "Uzupełnij wszystkie pola!");
 				return;
 			}
@@ -287,6 +300,14 @@ var t = new Vue({
 				history.pushState({page: 'presubmit'}, "Potwierdź trening - Hermes", "#presubmit");
 				this.$nextTick(() => {window.scrollTo({ top: 0, behavior: 'smooth' });});
 				return;
+			}
+
+			if (this.view == 'presubmit') {
+				if (this.current.workout.routine.add && !this.current.workout.routine.name) {
+					this.blockSubmitButton(2000);
+					this.snackbar(400, "Musisz dodać nazwę planu!");
+					return;
+				}
 			}
 
 			this.addWorkout(this.current.workout);
@@ -352,7 +373,7 @@ var t = new Vue({
 			}
 
 			this.api.post('workouts', workout, (response, data) => {
-				// leaving log in, chrome devtools dont allow me to check past requests response [wtf]
+				// leaving logging in, chrome devtools dont allow me to check past requests response [wtf]
 				console.log(response);
 
 				if (response.code >= 400) {

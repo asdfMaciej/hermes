@@ -321,6 +321,17 @@ button.hermes {
 .add-workout__presubmit textarea {
 	width: 100%;
 	height: 120px;
+	margin-bottom: 6px;
+}
+.add-workout__presubmit label {
+	display: block;
+	margin: 6px 0 12px;
+}
+.add-workout__presubmit input[type='text'] {
+	width: 100%;
+}
+.add-workout__presubmit {
+	padding: 12px;
 }
 .add-workout__settings {
 	grid-area: settings;

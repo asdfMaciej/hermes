@@ -65,6 +65,9 @@
         <div class="add-workout__presubmit" v-if="view == 'presubmit'">
             <h3>{{editedWorkoutId == null ? 'Dodaj opis' : 'Edytuj opis'}}:</h3>
             <textarea placeholder="Lepszy opis = więcej polubień, ez math" v-model="current.workout.workout.description"></textarea>
+            <label><input type="checkbox" v-model='current.workout.routine.add'>
+            Stwórz nowy plan treningowy</label>
+            <input type="text" v-model='current.workout.routine.name' v-if='current.workout.routine.add' placeholder="Podaj nazwę planu">
         </div>
 
         <div class="add-workout__submit" v-if="view == 'main' || view == 'presubmit'">
