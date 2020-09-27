@@ -68,7 +68,7 @@ class User extends \DBModel {
 					static::class => [
 						"user_id", "login", "name", "register_date", "avatar"
 					],
-					"EXISTS(SELECT 0 FROM followers WHERE user_id = user_id AND follower_id = :viewer_id) AS following"
+					"EXISTS(SELECT 0 FROM followers as f WHERE f.user_id = User.user_id AND follower_id = :viewer_id) AS following"
 				])
 				->from(static::class)
 				->where("User.name LIKE :query")
