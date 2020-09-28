@@ -47,14 +47,16 @@ class User extends \DBModel {
 	}
 
 	public static function getProfileById($database, $id, $viewer_id) {
-		$row = static::select([
-					static::class => [
-						"user_id", "login", "name", "register_date", "avatar"
-					],
-					"EXISTS(SELECT 0 FROM followers WHERE user_id = :id AND follower_id = :viewer_id) AS following"
-				])
-				->from(static::class)
-				->where("User.user_id = :id")
+		$row = static::sql("
+SELECT 
+	User.user_id, User.login, User.name, User.register_date, User.avatar, 
+	EXISTS(SELECT 0 FROM followers WHERE user_id = User.user_id AND follower_id = :viewer_id) AS following,
+	(SELECT COUNT(follower_id) AS n FROM followers WHERE user_id = User.user_id) AS followers_count,
+	(SELECT COUNT(user_id) AS n FROM followers WHERE follower_id = User.user_id) AS following_count,
+	(SELECT COUNT(workout_id) AS n FROM workouts WHERE user_id = User.user_id) AS workout_count
+FROM `users` AS User
+WHERE User.user_id = :id
+			")
 				->setParameter(":id", $id)
 				->setParameter(":viewer_id", $viewer_id)
 				->execute($database)
