@@ -65,8 +65,8 @@ WHERE User.user_id = :id
 		return $row;
 	}
 
-	public static function searchProfiles($database, $query, $viewer_id) {
-		$row = static::sql("
+	protected static function getProfilesQuery() {
+        return "
 SELECT 
 	User.user_id, User.login, User.name, User.register_date, User.avatar, 
 	COALESCE(follow.following, 0) AS following, 
@@ -88,9 +88,10 @@ LEFT JOIN (
 	WHERE follower_id = :viewer_id 
 ) AS follow
 ON follow.user_id = User.user_id
-
-WHERE User.name LIKE :query
-			")
+        ";
+    }
+	public static function searchProfiles($database, $query, $viewer_id) {
+		$row = static::sql(static::getProfilesQuery() . " WHERE User.name LIKE :query")
 				->setParameter(":query", $query)
 				->setParameter(":viewer_id", $viewer_id)
 				->execute($database)
@@ -98,6 +99,36 @@ WHERE User.name LIKE :query
 
 		return $row;
 	}
+
+    public static function getFollowedProfiles($database, $user_id, $viewer_id) {
+        $row = static::sql(static::getProfilesQuery() . "
+WHERE User.user_id IN (
+	SELECT user_id from followers AS Follower
+	Where Follower.follower_id = :user_id
+)
+         ")
+            ->setParameter(":user_id", $user_id)
+            ->setParameter(":viewer_id", $viewer_id)
+            ->execute($database)
+            ->getAll();
+
+        return $row;
+    }
+
+    public static function getProfileFollowers($database, $user_id, $viewer_id) {
+        $row = static::sql(static::getProfilesQuery() . "
+WHERE User.user_id IN (
+	SELECT follower_id from followers AS Follower
+	Where Follower.user_id = :user_id
+)
+         ")
+            ->setParameter(":user_id", $user_id)
+            ->setParameter(":viewer_id", $viewer_id)
+            ->execute($database)
+            ->getAll();
+
+        return $row;
+    }
 
 	public static function getStatistics($database, $id) {
 		$row = static::select([

@@ -45,6 +45,7 @@ $router->route('api\/reactions\/?', 'api/reactions.php');
 
 $router->route('api\/profiles\/\d+\/?', 'api/profiles.php');
 $router->route('api\/profiles\/?', 'api/profiles.php');
-
+$router->route('api\/profiles\/\d+\/following\/?', 'api/profiles.php');
+$router->route('api\/profiles\/\d+\/followers\/?', 'api/profiles.php');
 $router->execute();
 ?>

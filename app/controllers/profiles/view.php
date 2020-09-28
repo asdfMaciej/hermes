@@ -8,6 +8,7 @@ use \Model\Gym;
 class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->addScript("reaction-button.js", true, true);
+        $this->metadata->addScript("profile-list.js", true, true);
 		$this->metadata->addScript("newsfeed.js", true, true);
 		$this->metadata->addScript("profile.js", true, true);
 	}
@@ -25,15 +26,12 @@ class Page extends \PageBuilder {
 		    $gym_timeseries[$row["date"]] = $row["count"];
         }
         $this->metadata->setTitle($user["name"]);
+        $workouts = Workout::getNewsfeedForUser($this->database, $id, $this->account->user_id);
 		$this->response->addTemplate("profile/view.php", [
 			"user" => $user,
 			"account" => $this->account,
-            "gym_timeseries" => $gym_timeseries
-		]);
-
-		$workouts = Workout::getNewsfeedForUser($this->database, $id, $this->account->user_id);
-		$this->response->addTemplate("newsfeed/newsfeed.php", [
-			"workouts" => $workouts
+            "gym_timeseries" => $gym_timeseries,
+            "workouts" => $workouts
 		]);
 	}
 }

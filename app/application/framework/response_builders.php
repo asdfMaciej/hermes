@@ -269,7 +269,7 @@ class DataFromArray implements ArrayAccess {
 }
 
 class DataFromPath {
-	private $path_levels;
+	public $path_levels;
 
 	public function __construct() {
 		$uri = explode('?', $_SERVER['REQUEST_URI'], 2); // /maindir/app?a=123&b=23
@@ -285,6 +285,8 @@ class DataFromPath {
 
 	public function __get($key) {
 		// /app/a/b/c/d  /key/value/  e/f/g
+        if ($key == 'path_levels')
+            return $this->path_levels;
 
 		$value = "";
 		$found_key = False;

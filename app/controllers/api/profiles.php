@@ -23,6 +23,23 @@ class Page extends \APIBuilder {
 		
 		return $this->generateAndSet([], 200);
 	}
+
+	public function get() {
+        $id = $this->data->path->profiles;
+        if (!$id)
+            return;
+        $path = $this->data->path->path_levels;
+        if ($path[1] != 'profiles') {
+            throw new \Exception('Path has changed!');
+        }
+        $action = $path[3] ?? ''; // following / followers
+        if ($action == 'following') {
+            return $this->generateAndSet(User::getFollowedProfiles($this->database, $id, $this->account->user_id), 200);
+        } elseif ($action == 'followers') {
+            return $this->generateAndSet(User::getProfileFollowers($this->database, $id, $this->account->user_id), 200);
+        }
+        return $this->generateAndSet(User::getProfileById($this->database, $id, $this->account->user_id), 200);
+    }
 }
 
 new Page();
