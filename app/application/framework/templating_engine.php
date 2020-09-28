@@ -87,7 +87,7 @@ class Template implements TemplateInterface {
 		eval($content);
 	}
 
-	protected function nest($filename, $data) { // input there should be correct
+	protected function nest($filename, $data=[]) { // input there should be correct
 		$temp = new Template();
 		$temp->setTemplateFile($filename);
 		$temp->generate($data);

@@ -123,6 +123,9 @@
 	margin-top: 8px;
 	text-align: center;
 }
+.profile-details__settings {
+	text-align: center;
+}
 
 .profile-list-item__avatar {
 	width: 50px;

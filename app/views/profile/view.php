@@ -13,7 +13,7 @@
                 <a v-else @click.prevent='follow()' href="#" class="unfollowed">Zaobserwuj</a>
             </div>
         <?php else: ?>
-            <a href="``PATH_PREFIX``/settings">Zmień swój avatar</a>
+            <a class="profile-details__settings" href="``PATH_PREFIX``/settings">Zmień swój avatar</a>
         <?php endif ?>
 
         <div class="profile-details__following">

@@ -3,7 +3,10 @@ namespace Web\Pages;
 use \Model\User;
 
 class Page extends \PageBuilder {
-	protected function init() {}
+	protected function init() {
+		$this->metadata->addScript("profile-list.js", true, true);
+		$this->metadata->addScript("search-users.js", true, true);
+	}
 
 	protected function content() {
 	    $searched_string = $_GET["q"] ?? "";
