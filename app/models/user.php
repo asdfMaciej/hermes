@@ -64,14 +64,31 @@ class User extends \DBModel {
 	}
 
 	public static function searchProfiles($database, $query, $viewer_id) {
-		$row = static::select([
-					static::class => [
-						"user_id", "login", "name", "register_date", "avatar"
-					],
-					"EXISTS(SELECT 0 FROM followers as f WHERE f.user_id = User.user_id AND follower_id = :viewer_id) AS following"
-				])
-				->from(static::class)
-				->where("User.name LIKE :query")
+		$row = static::sql("
+SELECT 
+	User.user_id, User.login, User.name, User.register_date, User.avatar, 
+	COALESCE(follow.following, 0) AS following, 
+	coalesce(stats.frequency, 0) AS frequency, stats.last_workout
+FROM `users` AS USER
+
+LEFT JOIN (
+	SELECT 
+		w.user_id, COUNT(w.workout_id) as frequency, MAX(w.added) AS last_workout 
+	FROM `workouts` AS w
+	GROUP BY w.user_id
+) AS stats
+ON stats.user_id = User.user_id
+
+LEFT JOIN (
+	SELECT 
+		1 AS following, user_id
+	FROM followers as f 
+	WHERE follower_id = :viewer_id 
+) AS follow
+ON follow.user_id = User.user_id
+
+WHERE User.name LIKE :query
+			")
 				->setParameter(":query", $query)
 				->setParameter(":viewer_id", $viewer_id)
 				->execute($database)

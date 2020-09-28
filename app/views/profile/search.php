@@ -9,7 +9,18 @@
                     <?php if ($user['following']): ?>
                         <div style="margin-top: -4px; margin-bottom: 4px">• Obserwujesz go</div>
                     <?php endif ?>
-                    <div style="font-size: 0.9em">Dołączył <span class="date">``$user['register_date']``</span></div>
+                    <div style="font-size: 0.9em">
+                    	Dołączył <span class="date">``$user['register_date']``</span>
+                    </div>
+                    <div style="font-size: 0.9em">
+                    	<?php if ($user['frequency']): ?>
+                    		Dodał ``$user['frequency']``
+                    		``$user['frequency'] == 1 ? 'trening' : ($user['frequency'] < 5 ? 'treningi' : 'treningów')``,
+							ostatni <span class="date">``$user['last_workout']``</span>.
+                    	<?php else: ?>
+                    		Nie dodał żadnych treningów.
+                    	<?php endif ?>
+                    </div>
 
                 </div>
 			</div>
