@@ -69,7 +69,7 @@ SELECT
 	User.user_id, User.login, User.name, User.register_date, User.avatar, 
 	COALESCE(follow.following, 0) AS following, 
 	coalesce(stats.frequency, 0) AS frequency, stats.last_workout
-FROM `users` AS USER
+FROM `users` AS User
 
 LEFT JOIN (
 	SELECT 
