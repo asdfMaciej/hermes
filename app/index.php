@@ -10,8 +10,6 @@ $router->route('', 'index.php');
 
 // profile
 $router->route('profile\/\d+\/?', 'profiles/view.php');
-$router->route('profile\/\d+\/follow\/?', 'profiles/follow.php');
-$router->route('profile\/\d+\/unfollow\/?', 'profiles/unfollow.php');
 $router->route('upload\/avatar\/?', 'upload/avatar.php');
 $router->route('settings\/?', 'profiles/settings.php');
 $router->route('search\/?', 'profiles/search.php');
@@ -45,6 +43,8 @@ $router->route('api\/exercises\/past\/?', 'api/exercises_past.php');
 $router->route('api\/gyms\/?', 'api/gyms.php');
 $router->route('api\/reactions\/?', 'api/reactions.php');
 
+$router->route('api\/profiles\/\d+\/?', 'api/profiles.php');
+$router->route('api\/profiles\/?', 'api/profiles.php');
 
 $router->execute();
 ?>

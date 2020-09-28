@@ -9,6 +9,7 @@ class Page extends \PageBuilder {
 	protected function init() {
 		$this->metadata->addScript("reaction-button.js", true, true);
 		$this->metadata->addScript("newsfeed.js", true, true);
+		$this->metadata->addScript("profile.js", true, true);
 	}
 
 	protected function content() {
