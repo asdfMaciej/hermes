@@ -113,7 +113,7 @@ var t = new Vue({
 					add: false,
 					name: ''
 				},
-				images: []
+				images: {}
 			}
 		},
 		editedWorkoutId: null,
@@ -371,14 +371,17 @@ var t = new Vue({
 		uploadImage: function(event) {
 			// fires on image upload @change event
 			let uploader = event.path[0];
+			this.$set(this.current.workout, 'images', {});
 			if (!(uploader.files && uploader.files[0])) {
 				return console.log('uploader - exiting early');
 			}
 
+			let filename = uploader.files[0].name;
+
 			var reader = new FileReader();
 			reader.addEventListener("load", (e) => {
 				let base64 = e.target.result;
-				this.$set(this.current.workout, 'images', [base64]);
+				this.$set(this.current.workout.images, filename, base64);
 				this.snackbar(200, 'Załadowano obrazek.');
 			});
 

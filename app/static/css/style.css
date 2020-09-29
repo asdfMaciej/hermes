@@ -364,6 +364,14 @@ button.hermes {
 	display: flex;
 	flex-direction: column;
 }
+.add-workout__photos {
+	display: flex;
+	flex-wrap: wrap;
+}
+.add-workout__photos img {
+	width: 100%;
+	max-width: 400px;
+}
 .routine-mini {
 	display: flex;
 	align-items: center;

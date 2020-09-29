@@ -7,6 +7,7 @@ class Photo extends \DBModel {
 	public $photo_id;
 	public $album_id;
 	public $path;
+	public $filename;
 	public $date;
 	public $width;
 	public $height;

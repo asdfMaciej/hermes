@@ -67,6 +67,9 @@
             <textarea placeholder="Lepszy opis = więcej polubień, ez math" v-model="current.workout.workout.description"></textarea>
             <h3>Dodaj zdjęcie:</h3>
             <input type="file" accept="image/*" @change="uploadImage($event)" id="workout-images-upload">
+            <div class="add-workout__photos">
+                <img v-for="(base64, filename) in current.workout.images" :src="base64">
+            </div>
             <label><input type="checkbox" v-model='current.workout.routine.add'>
             Stwórz nowy plan treningowy</label>
             <input type="text" v-model='current.workout.routine.name' v-if='current.workout.routine.add' placeholder="Podaj nazwę planu">

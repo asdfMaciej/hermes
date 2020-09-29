@@ -60,12 +60,19 @@ class Page extends \APIBuilder {
 			return;
 		}
 
+		foreach ($images as $filename => $image) {
+			$this->addPhoto($filename, $image, $album_id);
+		}
+		
+	}
+
+	protected function addPhoto($filename, $image, $album_id) {
 		// create a temporary file and get its path
 		$file = tmpfile();
 		$path = stream_get_meta_data($file)['uri'];
 
 		// split the (...)base64, prefix and extract mime type
-		list($type, $data) = explode(';', $images[0]);
+		list($type, $data) = explode(';', $image);
 		list(, $data) = explode(',', $data);
 		list(, $type)= explode(':', $type);
 
@@ -78,7 +85,7 @@ class Page extends \APIBuilder {
 
 		// todo: change name to according filename and store filename in db
 		$file_array = [
-			"name" => "todo.jpeg",
+			"name" => $filename,
 			"type" => $type,
 			"tmp_name" => $path,
 			"error" => 0,
@@ -120,6 +127,7 @@ class Page extends \APIBuilder {
         // save it to the database and quit
 		return Photo::fromArray([
 			"album_id" => $album_id,
+			"filename" => $filename,
 			"path" => "uploads\\img\\" . $image->getName() . ".jpg",
 			"width" => $w,
 			"height" => $h
