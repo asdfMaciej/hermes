@@ -221,6 +221,7 @@ class Page extends \APIBuilder {
 			}
 
 		} catch (\Exception $e) {
+			error_log($e);
 			$this->database->rollBack();
 			return $this->generateAndSet([], 400);
 		}
