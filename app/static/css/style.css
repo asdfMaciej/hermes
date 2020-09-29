@@ -257,6 +257,11 @@
 	grid-area: title;
 	position: relative;
 }
+.feed-workout__container img {
+	width: 100%;
+	max-width: 400px;
+	margin-top: 12px;
+}
 a.feed-workout__menu-button {
 	position: absolute;
 	right: 0;

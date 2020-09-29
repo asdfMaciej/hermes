@@ -40,6 +40,7 @@
 					</div>
 				</a>
                 <div class="feed-workout__description" v-if="workout.description">{{workout.description}}</div>
+                <img v-if="workout.photos.length > 0" :src="'``PATH_PREFIX``/' + workout.photos[0].path" alt="żono moja..">
 				<div class="feed-workout__reactions">
 					<reaction-button :workout='workout'></reaction-button>
 

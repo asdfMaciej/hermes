@@ -5,5 +5,6 @@ class Album extends \DBModel {
 	protected static $primary_key = "album_id";
 
 	public $album_id;
+	public $title;
 }
 ?>

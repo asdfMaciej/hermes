@@ -6,6 +6,7 @@ class Workout extends \DBModel {
 
 	public $workout_id;
 	public $user_id;
+	public $album_id;
 	public $gym_id;
 	public $title;
 	public $date;
@@ -28,21 +29,28 @@ class Workout extends \DBModel {
 		return $query;
 	}
 
-	protected static function addSummaryToNewsfeed($database, $rows) {
-        $workout_ids = [];
+	protected static function getWorkoutWhereQuery($rows, $table_alias) {
+		$workout_ids = [];
         $query_parameters = [];
-        $workout_stats = [];
+        $ids_assoc_array = [];
         foreach ($rows as $row) {
             $workout_ids[] = $row["workout_id"];
-            $workout_stats[$row["workout_id"]] = [];
+            $ids_assoc_array[$row["workout_id"]] = [];
             $query_parameters[] = "?";
         }
         if ($query_parameters) {
-            $query_parameters = 'WHERE e.workout_id IN (' . implode(",", $query_parameters) . ')';
+            $query_parameters = "WHERE $table_alias.workout_id IN (" . implode(",", $query_parameters) . ')';
         } else {
             $query_parameters = "";
         }
+        return compact("query_parameters", "workout_ids", "ids_assoc_array");
+	}
 
+	protected static function addSummaryToNewsfeed($database, $rows) {
+        $q = static::getWorkoutWhereQuery($rows, 'e');
+        $query_parameters = $q["query_parameters"];
+        $workout_ids = $q["workout_ids"];
+		$workout_stats = $q["ids_assoc_array"];
 
         $stats_query = "
 	SELECT stats.*, et.exercise_type FROM (
@@ -74,6 +82,38 @@ ON et.type_id = stats.type_id
         // newsfeed rows
         foreach ($rows as &$row) {
             $row["summary"] = $workout_stats[$row["workout_id"]] ?? [];
+        }
+
+        return $rows;
+    }
+
+    public static function addPhotosToNewsfeed($database, $rows) {
+    	$q = static::getWorkoutWhereQuery($rows, 'w');
+        $query_parameters = $q["query_parameters"];
+        $workout_ids = $q["workout_ids"];
+		$workout_photos = $q["ids_assoc_array"];
+
+		$photos_query = "
+SELECT w.workout_id, p.*
+	FROM workouts AS w 
+INNER JOIN albums AS a
+	ON a.album_id = w.album_id
+INNER JOIN photos AS p
+	ON p.album_id = a.album_id
+$query_parameters
+		";
+
+		$photos = static::sql($photos_query)
+			->setParameters($workout_ids)
+			->execute($database)
+			->getAll();
+
+		foreach ($photos as $photo) {
+			$workout_photos[$photo['workout_id']][] = $photo;
+		}
+
+		foreach ($rows as &$row) {
+            $row["photos"] = $workout_photos[$row["workout_id"]] ?? [];
         }
 
         return $rows;
@@ -185,7 +225,9 @@ ON et.type_id = stats.type_id
 		->execute($database)
 		->getAll();
 
-		return static::addSummaryToNewsfeed($database, $rows);
+		$rows = static::addSummaryToNewsfeed($database, $rows);
+		$rows = static::addPhotosToNewsfeed($database, $rows);
+		return $rows;
 	}
 
 	public static function getNewsfeedForUser($database, $user_id, $viewing_user_id) {
@@ -243,7 +285,9 @@ ON et.type_id = stats.type_id
 				->execute($database)
 				->getAll();
 
-        return static::addSummaryToNewsfeed($database, $rows);
+        $rows = static::addSummaryToNewsfeed($database, $rows);
+		$rows = static::addPhotosToNewsfeed($database, $rows);
+		return $rows;
 	}
 
 	public static function getNewsfeedForGym($database, $gym_id, $viewing_user_id) {
@@ -301,7 +345,9 @@ ON et.type_id = stats.type_id
 				->execute($database)
 				->getAll();
 
-        return static::addSummaryToNewsfeed($database, $rows);
+        $rows = static::addSummaryToNewsfeed($database, $rows);
+		$rows = static::addPhotosToNewsfeed($database, $rows);
+		return $rows;
 	}
 
 	public static function getById($database, $id) {

@@ -112,7 +112,8 @@ var t = new Vue({
 				routine: {
 					add: false,
 					name: ''
-				}
+				},
+				images: []
 			}
 		},
 		editedWorkoutId: null,
@@ -367,14 +368,34 @@ var t = new Vue({
 			});
 		},
 
+		uploadImage: function(event) {
+			// fires on image upload @change event
+			let uploader = event.path[0];
+			if (!(uploader.files && uploader.files[0])) {
+				return console.log('uploader - exiting early');
+			}
+
+			var reader = new FileReader();
+			reader.addEventListener("load", (e) => {
+				let base64 = e.target.result;
+				this.$set(this.current.workout, 'images', [base64]);
+				this.snackbar(200, 'Załadowano obrazek.');
+			});
+
+			reader.readAsDataURL(uploader.files[0]);
+		},
+
 		addWorkout: function(workout) {
 			if (this.editedWorkoutId == null) {
 				this.current.workout.workout.duration = Math.floor(moment().diff(this.current.workout.startMoment) / 1000);
 			}
 
+			this.blockSubmit = true;
+			this.snackbar(200, "Zapisywanie treningu...");
 			this.api.post('workouts', workout, (response, data) => {
 				// leaving logging in, chrome devtools dont allow me to check past requests response [wtf]
 				console.log(response);
+				this.blockSubmit = false;
 
 				if (response.code >= 400) {
 					this.snackbar(response.code, 'Nie udało się dodać treningu.');
@@ -397,6 +418,7 @@ var t = new Vue({
 		},
 
 		redirect: function(page) {
+			//return console.log('preventing redirect');
 			window.location.href = PATH_PREFIX + '/' + page;
 		}
 	}

@@ -3,8 +3,13 @@ namespace Web\Pages;
 use \Model\Workout;
 use \Model\Exercise;
 use \Model\Routine;
+use \Model\Album;
+use \Model\Photo;
 use \Model\RoutineExerciseType;
-use mysql_xdevapi\Exception;
+
+include_once ROOT_PATH . "/application/lib/bulletproof/bulletproof.php";
+include_once ROOT_PATH . "/application/lib/bulletproof/utils/func.image-resize.php";
+include_once ROOT_PATH . "/application/lib/bulletproof/utils/func.image-crop.php";
 
 class Page extends \APIBuilder {
 	protected function addRoutine() {
@@ -47,6 +52,80 @@ class Page extends \APIBuilder {
 		return $routine_id; // we're set
 	}
 
+	protected function addPhotos($album_id) {
+		// adds photos passed by json as base64
+		$images = $this->data->json['images'] ?? [];
+		
+		if (!$images) {
+			return;
+		}
+
+		// create a temporary file and get its path
+		$file = tmpfile();
+		$path = stream_get_meta_data($file)['uri'];
+
+		// split the (...)base64, prefix and extract mime type
+		list($type, $data) = explode(';', $images[0]);
+		list(, $data) = explode(',', $data);
+		list(, $type)= explode(':', $type);
+
+		// decode the image from base64
+		$data = base64_decode($data);
+
+		// save the image into the tmp file and get its size
+		file_put_contents($path, $data);
+		$size = filesize($path);
+
+		// todo: change name to according filename and store filename in db
+		$file_array = [
+			"name" => "todo.jpeg",
+			"type" => $type,
+			"tmp_name" => $path,
+			"error" => 0,
+			"size" => $size
+		];
+
+		// create Bulletproof image - max limit 20 MB, jpeg/jpg/png, uploads to uploads/img
+		// todo: change max image limits
+		$image = new \Bulletproof\Image($file_array);
+		$image->setSize(1, 1000 * 1000 * 20); // min / max mb
+
+		$image->setMime(['jpeg', 'jpg', 'png']);
+		$image->setLocation(ROOT_PATH . "/uploads/img");
+
+		if ($success = $image->upload()) {} else {
+			throw new \Exception($image->getError());
+		}
+
+		// convert the image to 600x600 jpg
+	    $path_before = $image->getFullPath();
+	    $path = $image->getLocation().'/'.$image->getName().'.jpg';
+	    $width = $image->getWidth();
+	    $height = $image->getHeight();
+
+	    // todo: create 3 size versions
+		\Bulletproof\Utils\resize(
+            $path_before,
+			"jpg",
+			$width,
+            $height,
+            600, 600,
+			true
+		);
+
+		// move the file to .jpg path and get its size 
+		rename($path_before, $path);
+        list($w, $h) = getimagesize($path);
+
+        // save it to the database and quit
+		return Photo::fromArray([
+			"album_id" => $album_id,
+			"path" => "uploads\\img\\" . $image->getName() . ".jpg",
+			"width" => $w,
+			"height" => $h
+		])->save($this->database);
+	}
+
 	public function post() {
 		$workout = $this->data->json["workout"] ?? [];
 
@@ -65,14 +144,25 @@ class Page extends \APIBuilder {
 		// if something fails, we need to revert everything
 		$this->database->beginTransaction();
 		try {
+			// create an album for each new workout
+			if (!$editing) {
+				Album::fromArray(["title" => "#W(" . $workout['user_id'] . ') ' .  $workout["title"]])->save($this->database);
+				$album_id = $this->database->lastInsertId();
+				$workout['album_id'] = $album_id;
+			} else {
+				$album_id = $workout['album_id'];
+			}
+
 			Workout::fromArray($workout)->save($this->database);
 			$workout_id = $editing ? $editing : $this->database->lastInsertId();
 
 			// we need to delete the past exercises if editing
 			if ($editing) {
+				Photo::delete($this->database, ["album_id" => $album_id]);
 			    Exercise::delete($this->database, ["workout_id" => $workout_id]);
             }
 
+            $this->addPhotos($album_id);
 			foreach ($exercises as $exercise) {
 			    $exercise["exercise_id"] = 0;
 			    // comma separator doesn't work
@@ -94,13 +184,13 @@ class Page extends \APIBuilder {
 			    $exercise["failure"] = 0;
 
 			    if ($exercise["show_reps"] && intval($exercise["reps"]) <= 0)
-			        throw new Exception("Reps <= 0");
+			        throw new \Exception("Reps <= 0");
 
 			    if ($exercise["show_duration"] && intval($exercise["duration"]) <= 0)
-			        throw new Exception("Duration <= 0");
+			        throw new \Exception("Duration <= 0");
 
 			    if ($exercise["show_weight"] && floatval($exercise["weight"]) < 0)
-			        throw new Exception("Weight < 0");
+			        throw new \Exception("Weight < 0");
 
 			    // todo: first query the db for every exercise type
 			    // and check it that way if we should store reps/weight/duration
@@ -117,6 +207,7 @@ class Page extends \APIBuilder {
 				Exercise::fromArray($exercise)->save($this->database);
 			}
 
+			// add a new routine if asked by user
 			if ($this->data->json["routine"]["add"]) {
 				$this->addRoutine();
 			}
@@ -125,6 +216,7 @@ class Page extends \APIBuilder {
 			$this->database->rollBack();
 			return $this->generateAndSet([], 400);
 		}
+
 		$this->database->commit();
 		return $this->generateAndSet(["workout_id" => $workout_id], 201);
 	}

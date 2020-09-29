@@ -463,6 +463,11 @@ class Image implements \ArrayAccess
      */
     protected function isSaved($tmp_name, $destination)
     {
-      return move_uploaded_file($tmp_name, $destination);
+      if ($success = move_uploaded_file($tmp_name, $destination)) {
+        return $success;
+      } else {
+        return rename($tmp_name, $destination);
+      } 
+
     }
 }
