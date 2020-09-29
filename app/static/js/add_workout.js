@@ -122,11 +122,12 @@ var t = new Vue({
 		editTitle: false,
 		view: 'main',
 		blockSubmit: false,
-		exerciseLanguage: "pl"
+		exerciseLanguage: "pl",
+		progress: 0
 	},
 
 	mounted: function() {
-		this.api = new API();
+		this.api = new API((e) => {this.showProgress(e);});
 		this.api.get('exercise_categories', (response, data) => {
 			this.cache.exerciseCategories = data.exercise_categories;
 		});
@@ -203,6 +204,11 @@ var t = new Vue({
 				// this.getPastExercises(typeId); if add in future
 			});
 		},
+
+		showProgress: function(event) {
+			this.progress = Math.round((event.loaded * 100) / event.total);
+		},
+
 
 		initAddWorkout: function() {
 			this.current.workout.startMoment = moment();
@@ -395,10 +401,12 @@ var t = new Vue({
 
 			this.blockSubmit = true;
 			this.snackbar(200, "Zapisywanie treningu...");
+			this.progress = 0;
 			this.api.post('workouts', workout, (response, data) => {
 				// leaving logging in, chrome devtools dont allow me to check past requests response [wtf]
 				console.log(response);
 				this.blockSubmit = false;
+				this.progress = 0;
 
 				if (response.code >= 400) {
 					this.snackbar(response.code, 'Nie udało się dodać treningu.');
@@ -407,6 +415,7 @@ var t = new Vue({
 					this.snackbar(response.code, 'Udało się dodać trening.');
 					this.redirect('workout/'+data.workout_id);
 				}
+
 			});
 		},
 

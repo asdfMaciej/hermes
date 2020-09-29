@@ -20,27 +20,33 @@ class APIResponse {
 }
 
 class API {
+	constructor(showProgress) {
+		this.config = {}
+		if (showProgress) {
+			this.config['onUploadProgress'] = showProgress;
+		}
+	}
 	getPath(method) {
 		return PATH_PREFIX + '/api/' + method;
 	}
 
 	post(path, data, onResponse) {
 		this._request(
-			axios.post(this.getPath(path), data),
+			axios.post(this.getPath(path), data, this.config),
 			onResponse
 		)
 	}
 
 	get(path, onResponse) {
 		this._request(
-			axios.get(this.getPath(path)),
+			axios.get(this.getPath(path), this.config),
 			onResponse
 		)
 	}
 
 	delete(path, onResponse) {
 		this._request(
-			axios.delete(this.getPath(path)),
+			axios.delete(this.getPath(path), this.config),
 			onResponse
 		)
 	}

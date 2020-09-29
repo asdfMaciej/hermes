@@ -78,6 +78,7 @@
         <div class="add-workout__submit" v-if="view == 'main' || view == 'presubmit'">
             <button @click="submit" :disabled="blockSubmit">
                 {{editedWorkoutId == null ? 'Dodaj trening' : 'Edytuj trening'}}
+                {{view == 'presubmit' && progress > 0 ? ` (${progress} %)` : ''}}
             </button>
         </div>
     </div>
