@@ -59,6 +59,24 @@ function resize($image, $mimeType, $imgWidth, $imgHeight, $newWidth, $newHeight,
     $imgString = file_get_contents($image);
 
     $imageFromString = imagecreatefromstring($imgString);
+
+    $exif = @exif_read_data($image); // supress warnings
+    if(!empty($exif['Orientation'])) {
+        switch($exif['Orientation']) {
+            case 8:
+                $imageFromString = imagerotate($imageFromString,90,0);
+            break;
+            
+            case 3:
+                $imageFromString = imagerotate($imageFromString,180,0);
+            break;
+            
+            case 6:
+                $imageFromString = imagerotate($imageFromString,-90,0);
+            break;
+        }
+    }
+
     $tmp = imagecreatetruecolor($newWidth, $newHeight);
     imagealphablending($tmp, false);
     imagesavealpha($tmp, true);

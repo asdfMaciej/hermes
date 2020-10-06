@@ -430,7 +430,7 @@ var t = new Vue({
 		},
 
 		redirect: function(page) {
-			//return console.log('preventing redirect');
+			return console.log('preventing redirect');
 			window.location.href = PATH_PREFIX + '/' + page;
 		}
 	}
