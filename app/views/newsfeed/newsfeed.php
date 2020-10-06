@@ -1,7 +1,16 @@
+<script>var NEWSFEED_PREFIX = '``$newsfeed_prefix ?? ""``'</script>
 <div class="newsfeed" id="newsfeed">
-	<?php foreach ($workouts as $workout): ?>
-		<newsfeed-item :workout='<?php echo str_replace("'", "&#39;", json_encode($workout, JSON_UNESCAPED_UNICODE)); ?>'></newsfeed-item>
-	<?php endforeach ?>
+	<div v-if="!loading && workouts.length == 0">
+		Nie masz żadnych treningów.<br>
+		Zaobserwuj kogoś (użyj wyszukiwarki) lub dodaj własne treningi.
+	</div>
+	<newsfeed-item v-for='workout in workouts' :workout='workout'></newsfeed-item>
+	<div v-if='loading'>
+		Ładowanie...
+	</div>
+	<div v-if='loadedAll'>
+		Załadowałeś wszystkie treningi. Nie ma więcej D:
+	</div>
 </div>
 
 <script type="text/x-template" id="newsfeed-item-template">

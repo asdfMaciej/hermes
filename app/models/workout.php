@@ -119,7 +119,14 @@ $query_parameters
         return $rows;
     }
 
-	public static function getNewsfeedList($database, $user_id) {
+	public static function getNewsfeedList($database, $user_id, $parameters=[]) {
+		$before_id = $parameters['before_id'] ?? '';
+		$before_query = $before_id ? 'AND Workout.workout_id < :before_id' : '';
+
+		$query_params = [":user_id" => $user_id];
+		if ($before_id)
+			$query_params[':before_id'] = $before_id;
+
 		// todo: complicated ON queries arent supported by orm
 		// todo: UNION isnt supported by orm
 		$rows = static::sql("
@@ -149,6 +156,7 @@ $query_parameters
 			LEFT JOIN workout_reactions AS WorkoutReaction
 				ON WorkoutReaction.workout_id = Workout.workout_id
 			WHERE Follower.follower_id = :user_id
+			$before_query
 			
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
@@ -197,7 +205,8 @@ $query_parameters
 			LEFT JOIN workout_reactions AS WorkoutReaction
 				ON WorkoutReaction.workout_id = Workout.workout_id
 			WHERE Workout.user_id = :user_id
-			
+			$before_query
+
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
 		) AS newsfeed
@@ -220,8 +229,9 @@ $query_parameters
 			ON User.user_id = WorkoutComment.user_id
 
 		ORDER BY workout_id DESC
+		LIMIT 10
 		")
-		->setParameter(":user_id", $user_id)
+		->setParameters($query_params)
 		->execute($database)
 		->getAll();
 
@@ -230,7 +240,14 @@ $query_parameters
 		return $rows;
 	}
 
-	public static function getNewsfeedForUser($database, $user_id, $viewing_user_id) {
+	public static function getNewsfeedForUser($database, $user_id, $viewing_user_id, $parameters=[]) {
+		$before_id = $parameters['before_id'] ?? '';
+		$before_query = $before_id ? 'AND Workout.workout_id < :before_id' : '';
+
+		$query_params = [":user_id" => $user_id, ":viewing_user_id" => $viewing_user_id];
+		if ($before_id)
+			$query_params[':before_id'] = $before_id;
+
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
@@ -256,6 +273,7 @@ $query_parameters
 			LEFT JOIN workout_reactions AS WorkoutReaction
 				ON WorkoutReaction.workout_id = Workout.workout_id
 			WHERE Workout.user_id = :user_id
+			$before_query
 			
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
@@ -279,9 +297,9 @@ $query_parameters
 			ON User.user_id = WorkoutComment.user_id
 
 		ORDER BY workout_id DESC
+		LIMIT 10
 				")
-				->setParameter(":user_id", $user_id)
-				->setParameter(":viewing_user_id", $viewing_user_id)
+				->setParameters($query_params)
 				->execute($database)
 				->getAll();
 
@@ -290,7 +308,14 @@ $query_parameters
 		return $rows;
 	}
 
-	public static function getNewsfeedForGym($database, $gym_id, $viewing_user_id) {
+	public static function getNewsfeedForGym($database, $gym_id, $viewing_user_id, $parameters=[]) {
+		$before_id = $parameters['before_id'] ?? '';
+		$before_query = $before_id ? 'AND Workout.workout_id < :before_id' : '';
+
+		$query_params = [":gym_id" => $gym_id, ":viewing_user_id" => $viewing_user_id];
+		if ($before_id)
+			$query_params[':before_id'] = $before_id;
+
 		$rows = static::sql("
 		SELECT
 		newsfeed.*,
@@ -316,6 +341,7 @@ $query_parameters
 			LEFT JOIN workout_reactions AS WorkoutReaction
 				ON WorkoutReaction.workout_id = Workout.workout_id
 			WHERE Gym.gym_id = :gym_id
+			$before_query
 			
 			GROUP BY Workout.workout_id
 			ORDER BY Workout.workout_id DESC
@@ -339,9 +365,9 @@ $query_parameters
 			ON User.user_id = WorkoutComment.user_id
 
 		ORDER BY workout_id DESC
+		LIMIT 10
 				")
-				->setParameter(":gym_id", $gym_id)
-				->setParameter(":viewing_user_id", $viewing_user_id)
+				->setParameters($query_params)
 				->execute($database)
 				->getAll();
 

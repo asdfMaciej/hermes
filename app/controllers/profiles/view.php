@@ -26,12 +26,10 @@ class Page extends \PageBuilder {
 		    $gym_timeseries[$row["date"]] = $row["count"];
         }
         $this->metadata->setTitle($user["name"]);
-        $workouts = Workout::getNewsfeedForUser($this->database, $id, $this->account->user_id);
 		$this->response->addTemplate("profile/view.php", [
 			"user" => $user,
 			"account" => $this->account,
-            "gym_timeseries" => $gym_timeseries,
-            "workouts" => $workouts
+            "gym_timeseries" => $gym_timeseries
 		]);
 	}
 }
