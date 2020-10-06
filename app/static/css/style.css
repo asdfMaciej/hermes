@@ -296,6 +296,12 @@ a.feed-workout__menu-button {
 	margin-top: 8px;
 	font-size: 0.9em;
 }
+.feed-workout__reactions img {
+	width: 30px;
+	margin-bottom: -8px;
+	margin-right: 4px;
+	margin-top: 0;
+}
 .feed-workout__reactions .reaction-button {
 	margin-right: 4px;
 }
