@@ -20,11 +20,9 @@ class Index extends \PageBuilder {
 	protected function content() {
 		if ($this->account->isLoggedIn()) {
             $this->metadata->setTitle("Aktualności");
-			$workouts = Workout::getNewsfeedList($this->database, $this->account->user_id);
 			$statistics = User::getStatistics($this->database, $this->account->user_id);
 
 			$this->response->addTemplate("newsfeed/index.php", [
-				"workouts" => $workouts, 
 				"account" => $this->account,
 				"statistics" => $statistics
 			]);

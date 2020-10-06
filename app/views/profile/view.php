@@ -46,5 +46,5 @@
     </div>
     <h3 v-if="view == 'following' || view == 'followers'">Treningi:</h3>
 </div>
-<?php $this->nest("newsfeed/newsfeed.php", ["workouts" => $workouts]); ?>
+<?php $this->nest("newsfeed/newsfeed.php", ["newsfeed_prefix" => 'profiles/'.$user['user_id'].'/']); ?>
 <?php $this->nest("vue/profile-list.php"); ?>

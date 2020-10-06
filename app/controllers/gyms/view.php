@@ -31,9 +31,8 @@ class Page extends \PageBuilder {
 			"frequenters" => $frequenters
 		]);
 
-		$workouts = Workout::getNewsfeedForGym($this->database, $id, $this->account->user_id);
 		$this->response->addTemplate("newsfeed/newsfeed.php", [
-			"workouts" => $workouts
+			"newsfeed_prefix" => 'gyms/'.$id.'/'
 		]);
 	}
 }

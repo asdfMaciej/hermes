@@ -7,7 +7,7 @@ use mysql_xdevapi\Exception;
 class Page extends \APIBuilder {
 	public function get() {
         $id = $this->data->path->routines;
-
+        
         if ($id) { // get specified by id
         	$exercises = Routine::getExerciseTypes($this->database, $id);
         	$routine = Routine::getSingleItem($this->database, ["routine_id" => $id]);

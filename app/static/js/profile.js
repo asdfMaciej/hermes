@@ -51,7 +51,7 @@ var t = new Vue({
                 this.view = 'main';
                 this.$nextTick(() => {initCalendar();});
             }
-            return "";
+            //return "";
         },
 
         follow: function() {
