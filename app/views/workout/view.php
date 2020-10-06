@@ -56,9 +56,9 @@
 				$display_title = $n == 0 ? true : $exercises[$n - 1]["type_id"] != $exercise["type_id"];
 				if ($display_title):
 				?>
-					<h4 class="exercises-list__name">
+					<a href="``PATH_PREFIX``/exercise/``$exercise['type_id']``"><h4 class="exercises-list__name">
 						• ``$exercise["exercise_type"]``
-					</h4>
+					</h4></a>
 				<?php endif ?>
 
 				<div class="exercises-list__item ``$exercise['failure'] ? 'failed' : ''``">

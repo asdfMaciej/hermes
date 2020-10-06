@@ -121,10 +121,11 @@ var t = new Vue({
 					return;
 
 				this.loading = false;
-				this.workouts = this.workouts.concat(data.workouts);
-
-				if (data.workouts.length == 0) {
+				
+				if (data.workouts.length == 0 || data.workouts == null) {
 					this.loadedAll = true;
+				} else {
+					this.workouts = this.workouts.concat(data.workouts);
 				}
 			});
 		}

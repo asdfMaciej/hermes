@@ -138,10 +138,15 @@ limit 3)
 
 		$q = implode(" union all ", $q);
 
-		$photos = static::sql($q)
-			->setParameters($workout_ids)
-			->execute($database)
-			->getAll();
+		if ($q) {
+			$photos = static::sql($q)
+				->setParameters($workout_ids)
+				->execute($database)
+				->getAll();
+		} else {
+			$photos = [];
+		}
+		
 
 		foreach ($photos as $photo) {
 			$workout_photos[$photo['workout_id']][] = $photo;
