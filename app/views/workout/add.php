@@ -22,6 +22,7 @@
             </div>
         </div>
         <div class="add-workout__list" v-if="view == 'add-exercise'">
+            <a href="#" @click.prevent="view = 'main'">Wróć do widoku głównego</a>
             <h2>Wybierz:</h2>
             <a href="#" @click.prevent="exerciseLanguage = 'pl'" v-if="exerciseLanguage == 'en'">🇵🇱 Pokaż nazwy po polsku</a>
             <a href="#" @click.prevent="exerciseLanguage = 'en'" v-if="exerciseLanguage == 'pl'">🇬🇧 Pokaż nazwy po angielsku</a>
@@ -49,7 +50,27 @@
 
         </div>
 
-        <div class="add-workout__settings" v-if="view == 'main'">
+        <div class="add-workout__presubmit" v-if="view == 'presubmit'">
+            <div class="add-workout__settings-title">
+                <h1 v-if="!editTitle" @click="openTitleEdition">
+                    {{current.workout.workout.title}}&nbsp;<ion-icon name="create-outline"></ion-icon>
+                </h1>
+                <input type="text" v-if='editTitle' v-model='current.workout.workout.title'
+                       placeholder='Podaj nazwę treningu' @keyup.enter="editTitle = false" ref="edittitle">
+                <h4>{{timeElapsed}}</h4>
+            </div>
+            <textarea placeholder="Dodaj opis do swojego treningu." v-model="current.workout.workout.description"></textarea>
+            <h4>Dodaj zdjęcie:</h4>
+            <input type="file" accept="image/*" @change="uploadImage($event)" id="workout-images-upload">
+            <div class="add-workout__photos">
+                <img v-for="(base64, filename) in current.workout.images" :src="base64">
+            </div>
+            <label><input type="checkbox" v-model='current.workout.routine.add'>
+            Stwórz nowy plan treningowy</label>
+            <input type="text" v-model='current.workout.routine.name' v-if='current.workout.routine.add' placeholder="Podaj nazwę planu">
+        </div>
+
+        <div class="add-workout__settings" v-if="view == 'presubmit'">
             <div class="add-workout__settings-gym">
                 <h3>Wybierz miejsce ćwiczeń:</h3>
                 <ul>
@@ -62,22 +83,9 @@
             </div>
         </div>
 
-        <div class="add-workout__presubmit" v-if="view == 'presubmit'">
-            <h3>{{editedWorkoutId == null ? 'Dodaj opis' : 'Edytuj opis'}}:</h3>
-            <textarea placeholder="Lepszy opis = więcej polubień, ez math" v-model="current.workout.workout.description"></textarea>
-            <h3>Dodaj zdjęcie:</h3>
-            <input type="file" accept="image/*" @change="uploadImage($event)" id="workout-images-upload">
-            <div class="add-workout__photos">
-                <img v-for="(base64, filename) in current.workout.images" :src="base64">
-            </div>
-            <label><input type="checkbox" v-model='current.workout.routine.add'>
-            Stwórz nowy plan treningowy</label>
-            <input type="text" v-model='current.workout.routine.name' v-if='current.workout.routine.add' placeholder="Podaj nazwę planu">
-        </div>
-
         <div class="add-workout__submit" v-if="view == 'main' || view == 'presubmit'">
             <button @click="submit" :disabled="blockSubmit">
-                {{editedWorkoutId == null ? 'Dodaj trening' : 'Edytuj trening'}}
+                {{editedWorkoutId == null ? (view == 'presubmit' ? 'Dodaj trening' : 'Zakończ trening') : 'Edytuj trening'}}
                 {{view == 'presubmit' && progress > 0 ? ` (${progress} %)` : ''}}
             </button>
         </div>
@@ -118,6 +126,20 @@
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
 		<div class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</div>
+        <a class="exercise__toggle-graphs" v-if="!hideTitle && exercise.type_id in $root.cache.exerciseHistory" @click.prevent="toggleGraphs">
+            {{showGraphs ? 'Ukryj wykresy' : 'Pokaż wykresy'}}
+        </a>
+        <div class="exercise__graphs" v-if="showGraphs">
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-weight-'+index"></canvas>
+            </div>
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-volume-'+index"></canvas>
+            </div>
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-rm-'+index"></canvas>
+            </div>
+        </div>
         <div class="exercise__headers" v-if="!hideTitle">
             <span class="no">Seria</span>
             <span class="past">Poprzednio</span>

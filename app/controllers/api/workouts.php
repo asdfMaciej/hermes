@@ -250,8 +250,8 @@ class Page extends \APIBuilder {
             return $this->generateAndSet([], 400);
 
         $exercises = Exercise::getWithTypes($this->database, $id);
-
-        return $this->generateAndSet(compact("workout", "exercises"), 200);
+        $photos = Photo::getForWorkout($this->database, $id);
+        return $this->generateAndSet(compact("workout", "exercises", "photos"), 200);
     }
 }
 

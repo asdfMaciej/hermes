@@ -346,6 +346,7 @@ limit 3)
 
         $rows = static::addSummaryToNewsfeed($database, $rows);
 		$rows = static::addPhotosToNewsfeed($database, $rows);
+		$rows = static::addReactionsToNewsfeed($database, $rows);
 		return $rows;
 	}
 
@@ -414,6 +415,7 @@ limit 3)
 
         $rows = static::addSummaryToNewsfeed($database, $rows);
 		$rows = static::addPhotosToNewsfeed($database, $rows);
+		$rows = static::addReactionsToNewsfeed($database, $rows);
 		return $rows;
 	}
 
