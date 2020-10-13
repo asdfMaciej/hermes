@@ -252,6 +252,11 @@ var t = new Vue({
       		timerInterval: null,
       		timeLimit: 0
 		},
+		calculator: {
+			reps: '',
+			weight: '',
+			result: ''
+		},
 		editedWorkoutId: null,
 		timeElapsed: '00:00:00',
 		api: null,
@@ -362,6 +367,32 @@ var t = new Vue({
 			
 		},
 
+		calculateRM: function() {
+			let reps = parseInt(this.calculator.reps);
+			let weight = parseFloat(this.calculator.weight);
+			if (!reps || !weight) {
+				this.calculator.result = "Podaj poprawne dane.";
+				return;
+			}
+
+			this.calculator.result = '';
+			let rm = weight * (36 / (37-reps));
+			for (let p=100; p>=50; p-=10) {
+				console.log(p);
+				this.calculator.result += `
+${p}% RM: ${Math.round(rm/100*p * 100) / 100} kg`
+			}
+
+			this.calculator.result += `
+----
+`;
+			for (let rep=1; rep<=16; rep++) {
+				let repMax = rm / 36 * (37 - rep);
+				this.calculator.result += `
+${rep} reps max: ${Math.round(repMax * 100) / 100} kg`;
+			}
+		},
+
 		showProgress: function(event) {
 			this.progress = Math.round((event.loaded * 100) / event.total);
 		},
@@ -377,7 +408,7 @@ var t = new Vue({
 		},
 
 		backButtonPressed: function(event) {
-			if (this.viewGroup == 'timer') {
+			if (this.viewGroup != 'workout') {
 				this.viewGroup = 'workout';
 				return;
 			}

@@ -94,6 +94,18 @@
         <base-timer :time="timer.time"></base-timer>
         <label><input type="number" v-model="timer.time"> sekund</label>
     </div>
+    <div class="add-workout-calculator" v-cloak v-if="viewGroup == 'calculator'">
+        <label>
+            Obciążenie [kg]:
+            <input type="float" v-model="calculator.weight">
+        </label>
+        <label>
+            Powtórzenia:
+            <input type="number" v-model="calculator.reps">
+        </label>
+        <button @click="calculateRM">Oblicz</button>
+        <pre>{{calculator.result}}</pre>
+    </div>
     <div class="add-workout-switch">
         <a href="#" @click.prevent="switchViewGroup('workout')" :class="{selected: viewGroup == 'workout'}">
             <ion-icon name="barbell"></ion-icon>
@@ -102,6 +114,10 @@
         <a href="#" @click.prevent="switchViewGroup('timer')" :class="{selected: viewGroup == 'timer'}">
             <ion-icon name="timer"></ion-icon>
             Stoper
+        </a>
+        <a href="#" @click.prevent="switchViewGroup('calculator')" :class="{selected: viewGroup == 'calculator'}">
+            <ion-icon name="calculator"></ion-icon>
+            Kalkulator
         </a>
     </div>
 </div>
