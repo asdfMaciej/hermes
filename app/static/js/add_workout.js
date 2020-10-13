@@ -270,11 +270,14 @@ var t = new Vue({
 		validateWorkoutErrors: function() {
 			let w = this.current.workout;
 			let errors = [];
-			if (w.workout.gym_id == null || !w.workout.title)
-				errors.push("Nie ustawiono siłowni lub nazwy treningu!");
+			if (w.workout.gym_id == null && this.view == 'presubmit')
+				errors.push("Nie ustawiono siłowni!");
 
 			if (w.exercises.length == 0)
 				errors.push("Nie dodano żadnych ćwiczeń!");
+
+			if (!w.workout.title)
+				errors.push("Nie wybrano tytułu!");
 
 			return errors;
 		},
@@ -312,10 +315,27 @@ var t = new Vue({
 				this.$set(this.current.workout, 'workout', data.workout);
 				this.$set(this.current.workout, 'exercises', data.exercises);
 				this.timeElapsed = moment.utc(data.workout.duration*1000).format('HH:mm:ss');
-
+				this.loadPhotos(data.photos);
 				// fetch past exercises?
 				// this.getPastExercises(typeId); if add in future
 			});
+		},
+
+		loadPhotos: function(photos) {
+			for (let photo of photos) {
+				let url = window.location.origin+'/'+PATH_PREFIX+"/"+photo.path;
+				axios.get(url, {
+					responseType: 'blob'
+				})
+				.then(response => {
+					var reader = new window.FileReader();
+			        reader.readAsDataURL(response.data); 
+			        reader.onload = () => {
+			        	this.current.workout.images[photo.filename] = reader.result;
+			        }	
+				});
+			}
+			
 		},
 
 		showProgress: function(event) {

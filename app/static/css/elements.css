@@ -5,6 +5,8 @@
 }
 :root {
     --white-box-shadow: 1px 1px 6px #00000014;
+    --header-shadow: 0px 1px 1px #00000040;
+    --navbar-shadow: 0px -1px 3px #00000030;
     --font-family: Inter, Arial, sans-serif;
 }
 body {
