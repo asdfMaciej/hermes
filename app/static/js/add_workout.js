@@ -408,7 +408,7 @@ ${rep} reps max: ${Math.round(repMax * 100) / 100} kg`;
 		},
 
 		backButtonPressed: function(event) {
-			if (this.viewGroup == 'timer') {
+			if (this.viewGroup != 'workout') {
 				this.viewGroup = 'workout';
 				return;
 			}
