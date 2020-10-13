@@ -1,6 +1,6 @@
 <div id="add-workout">
     <div id="snackbar" class="snackbar" ref="snackbar"></div>
-    <div class="add-workout" v-cloak>
+    <div class="add-workout" v-cloak v-if="viewGroup == 'workout'">
         <div class="add-workout__settings" v-if="view == 'main'">
             <div class="add-workout__settings-title">
                 <h1 v-if="!editTitle" @click="openTitleEdition">
@@ -82,6 +82,20 @@
             </button>
         </div>
     </div>
+    <div class="add-workout-timer" v-cloak v-if="viewGroup == 'timer'">
+        <base-timer :time="timer.time"></base-timer>
+        <label><input type="number" v-model="timer.time"> sekund</label>
+    </div>
+    <div class="add-workout-switch">
+        <a href="#" @click.prevent="switchViewGroup('workout')" :class="{selected: viewGroup == 'workout'}">
+            <ion-icon name="barbell"></ion-icon>
+            Trening
+        </a>
+        <a href="#" @click.prevent="switchViewGroup('timer')" :class="{selected: viewGroup == 'timer'}">
+            <ion-icon name="timer"></ion-icon>
+            Stoper
+        </a>
+    </div>
 </div>
 
 <script type="text/x-template" id="exercise-category-template">
@@ -141,4 +155,29 @@
             Dodaj serię
         </a>
 	</div>
+</script>
+
+<script type="text/x-template" id="base-timer-template">
+    <div class="base-timer">
+  <div class="base-timer__timer">
+    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g class="base-timer__circle">
+        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <path
+          :stroke-dasharray="circleDasharray"
+          class="base-timer__path-remaining"
+          :class="remainingPathColor"
+          d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+          "
+        ></path>
+      </g>
+    </svg>
+    <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+  </div>
+  <button @click="restart">Start</button>
+</div>
 </script>
