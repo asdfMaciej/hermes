@@ -70,6 +70,8 @@ var t = new Vue({
         },
 
         workouts: function () {
+            if (this.view == 'main')
+                return;
             this.view = 'main';
             this.$nextTick(() => {initCalendar();});
             this._addHistoryEntry('main');
@@ -88,10 +90,10 @@ var t = new Vue({
                 }
                 if (action == 'follow') {
                     this.$set(this.user, 'following', 1);
-                    this.$set(this.user, 'followers_count', this.user.followers_count + 1);
+                    this.$set(this.user, 'followers_count', parseInt(this.user.followers_count) + 1);
                 } else {
                     this.$set(this.user, 'following', 0);
-                    this.$set(this.user, 'followers_count', this.user.followers_count - 1);
+                    this.$set(this.user, 'followers_count', parseInt(this.user.followers_count) - 1);
                 }
             });
         },

@@ -37,6 +37,7 @@ function auto_version($file)
 			<?php echo DEBUG ? "const DEBUG = true;" : "const DEBUG = false;"; 
 			if ($account->user_id) {
 				echo "const USER_ID = ".$account->user_id.";";
+				echo "const USER_AVATAR = '".addslashes($account->avatar)."';";
 			} ?>
 		</script>
 

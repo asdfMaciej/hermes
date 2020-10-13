@@ -13,6 +13,112 @@ Vue.component('exercise-category', {
 	}}
 });
 
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 20;
+const ALERT_THRESHOLD = 10;
+
+const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+};
+
+const TIME_LIMIT = 20;
+
+/* component taken from:
+https://medium.com/js-dojo/how-to-create-an-animated-countdown-timer-with-vue-89738903823f */
+Vue.component('base-timer', {
+	template: '#base-timer-template',
+	props: {
+		time: undefined
+	},
+
+  data: function() {
+    return {
+      
+    };
+  },
+
+  computed: {
+    circleDasharray() {
+      return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`;
+    },
+
+    formattedTimeLeft() {
+      const timeLeft = this.timeLeft;
+      const minutes = Math.floor(timeLeft / 60);
+      let seconds = timeLeft % 60;
+
+      if (seconds < 10) {
+        seconds = `0${seconds}`;
+      }
+
+      return `${minutes}:${seconds}`;
+    },
+
+    timeLeft() {
+      return this.$root.timer.timeLimit - this.$root.timer.timePassed;
+    },
+
+    timeFraction() {
+      const rawTimeFraction = this.timeLeft / this.$root.timer.timeLimit;
+      return rawTimeFraction - (1 / this.$root.timer.timeLimit) * (1 - rawTimeFraction);
+    },
+
+    remainingPathColor() {
+      const { alert, warning, info } = COLOR_CODES;
+
+      if (this.timeLeft <= alert.threshold) {
+        return alert.color;
+      } else if (this.timeLeft <= warning.threshold) {
+        return warning.color;
+      } else {
+        return info.color;
+      }
+    }
+  },
+
+  watch: {
+    timeLeft(newValue) {
+      if (newValue === 0) {
+        this.onTimesUp();
+      }
+    }
+  },
+
+  mounted: function() {
+  	if (this.timeLeft <= 0) {
+  		this.$root.timer.timePassed = this.$root.timer.timeLimit;
+  		this.onTimesUp();
+  	}
+  },
+
+  methods: {
+    onTimesUp() {
+      clearInterval(this.$root.timer.timerInterval);
+    },
+
+    startTimer(timeLimit) {
+    	this.$root.timer.timeLimit = timeLimit; 
+      this.$root.timer.timerInterval = setInterval(() => (this.$root.timer.timePassed += 1), 1000);
+    },
+
+    restart() {
+    	clearInterval(this.$root.timer.timerInterval);
+    	this.$root.timer.timePassed = 0;
+    	this.startTimer(this.$root.timer.time || TIME_LIMIT);
+    }
+  }
+});
+
 Vue.component('exercise', {
 	props: {
 		value: undefined,
@@ -116,11 +222,18 @@ var t = new Vue({
 				images: {}
 			}
 		},
+		timer: {
+			time: 30,
+			timePassed: 0,
+      		timerInterval: null,
+      		timeLimit: 0
+		},
 		editedWorkoutId: null,
 		timeElapsed: '00:00:00',
 		api: null,
 		editTitle: false,
 		view: 'main',
+		viewGroup: 'workout',
 		blockSubmit: false,
 		exerciseLanguage: "pl",
 		progress: 0
@@ -220,6 +333,11 @@ var t = new Vue({
 		},
 
 		backButtonPressed: function(event) {
+			if (this.viewGroup == 'timer') {
+				this.viewGroup = 'workout';
+				return;
+			}
+
 			if (this.view == 'add-exercise') {
 				this.view = 'main';
 			}
@@ -247,6 +365,14 @@ var t = new Vue({
 					this.getPastExercises(exercise.type_id);
 				}
 			});
+		},
+
+		switchViewGroup: function(group) {
+			this.viewGroup = group;
+			history.pushState({page: group}, "Dodawanie treningu - Hermes", "#"+group);
+			if (group == 'workout') {
+				this.$nextTick(() => {this.scrollToExercisesBottom();});
+			}
 		},
 
 		showRoutinePicker: function() {

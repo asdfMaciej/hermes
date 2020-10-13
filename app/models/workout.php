@@ -119,6 +119,46 @@ $query_parameters
         return $rows;
     }
 
+    public static function addReactionsToNewsfeed($database, $rows) {
+    	$q = static::getWorkoutWhereQuery($rows, 'Workout');
+        $query_parameters = $q["query_parameters"];
+        $workout_ids = $q["workout_ids"];
+		$workout_photos = $q["ids_assoc_array"];
+
+		$q = [];
+		foreach ($workout_ids as $id) {
+			$q[] = "(SELECT WorkoutReaction.workout_id, User.user_id, User.avatar
+	FROM workout_reactions AS WorkoutReaction
+INNER JOIN users as User 
+	ON User.user_id = WorkoutReaction.user_id
+where WorkoutReaction.workout_id = ?
+limit 3)
+";
+		}
+
+		$q = implode(" union all ", $q);
+
+		if ($q) {
+			$photos = static::sql($q)
+				->setParameters($workout_ids)
+				->execute($database)
+				->getAll();
+		} else {
+			$photos = [];
+		}
+		
+
+		foreach ($photos as $photo) {
+			$workout_photos[$photo['workout_id']][] = $photo;
+		}
+
+		foreach ($rows as &$row) {
+            $row["reactions_users"] = $workout_photos[$row["workout_id"]] ?? [];
+        }
+
+        return $rows;
+    }
+
 	public static function getNewsfeedList($database, $user_id, $parameters=[]) {
 		$before_id = $parameters['before_id'] ?? '';
 		$before_query = $before_id ? 'AND Workout.workout_id < :before_id' : '';
@@ -237,6 +277,7 @@ $query_parameters
 
 		$rows = static::addSummaryToNewsfeed($database, $rows);
 		$rows = static::addPhotosToNewsfeed($database, $rows);
+		$rows = static::addReactionsToNewsfeed($database, $rows);
 		return $rows;
 	}
 

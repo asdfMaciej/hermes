@@ -4,7 +4,8 @@
 		Nie masz żadnych treningów.<br>
 		Zaobserwuj kogoś (użyj wyszukiwarki) lub dodaj własne treningi.
 	</div>
-	<newsfeed-item v-for='workout in workouts' :workout='workout'></newsfeed-item>
+	<newsfeed-item v-for='workout in workouts' :workout='workout'
+		@reacted="reacted(workout)" @unreacted="unreacted(workout)"></newsfeed-item>
 	<div v-if='loading'>
 		Ładowanie...
 	</div>
@@ -51,8 +52,11 @@
                 <div class="feed-workout__description" v-if="workout.description">{{workout.description}}</div>
                 <img v-if="workout.photos.length > 0" :src="'``PATH_PREFIX``/' + workout.photos[0].path" alt="żono moja..">
 				<div class="feed-workout__reactions">
-					<reaction-button :workout='workout'></reaction-button>
-
+					
+					<reaction-button :workout='workout' @reacted='reacted' @unreacted='unreacted'></reaction-button>
+					<a :href="'``PATH_PREFIX``/profile/' + user.user_id" v-for="user in workout.reactions_users">
+						<img loading="lazy" :src="'``PATH_PREFIX``/' + user.avatar" class="avatar">
+					</a>
 					<a :href="'``PATH_PREFIX``/workout/' + workout.workout_id">{{workout.comments}} {{(workout.comments == 0 || workout.comments >= 5) ? 'komentarzy' : (workout.comments == 1 ? 'komentarz' : 'komentarze')}}</a>
 				</div>
 			</div>

@@ -46,6 +46,14 @@ Vue.component('newsfeed-item', {
             	event.preventDefault();
 			}
 			this.toggledMenu = false;
+		},
+
+		reacted: function() {
+			this.$emit('reacted');
+		},
+		
+		unreacted: function() {
+			this.$emit('unreacted');
 		}
 	}
 });
@@ -73,6 +81,31 @@ var t = new Vue({
 
 		},
 
+		unreacted: function(workout){
+			for (let n in this.workouts) {
+				if (this.workouts[n].workout_id == workout.workout_id) {
+					this.workouts[n].reacted = 0;
+					this.workouts[n].reactions = parseInt(this.workouts[n].reactions) - 1;
+					let reactions_users = this.workouts[n].reactions_users.filter((v) => {v.user_id != USER_ID});
+					this.$set(this.workouts[n], 'reactions_users', reactions_users);
+					break;
+				} 
+			}
+		},
+
+		reacted: function(workout) {
+			for (let n in this.workouts) {
+				if (this.workouts[n].workout_id == workout.workout_id) {
+					this.workouts[n].reacted = 1;
+					this.workouts[n].reactions = parseInt(this.workouts[n].reactions) + 1;
+					let reactions_users = this.workouts[n].reactions_users.concat({
+						avatar: USER_AVATAR, user_id: USER_ID, workout_id: workout.workout_id});
+					this.$set(this.workouts[n], 'reactions_users', reactions_users);
+					break;
+				} 
+			}
+		},
+
 		loadNextItems: function() {
 			if (this.workouts.length == 0)
 				return;
@@ -88,10 +121,11 @@ var t = new Vue({
 					return;
 
 				this.loading = false;
-				this.workouts = this.workouts.concat(data.workouts);
-
-				if (data.workouts.length == 0) {
+				
+				if (data.workouts.length == 0 || data.workouts == null) {
 					this.loadedAll = true;
+				} else {
+					this.workouts = this.workouts.concat(data.workouts);
 				}
 			});
 		}
