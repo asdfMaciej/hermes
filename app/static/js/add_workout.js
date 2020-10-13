@@ -129,6 +129,13 @@ Vue.component('exercise', {
 		index: Number,
 		past: undefined
 	},
+
+	data: function() {
+		return {
+			showGraphs: false
+		}
+	},
+
 	template: '#exercise-template',
 	methods: {
 		toggleFailure: function() {
@@ -137,6 +144,22 @@ Vue.component('exercise', {
 
 		remove: function() {
 			this.$emit('delete');
+		},
+
+		toggleGraphs: function() {
+			if (this.showGraphs) {
+				this.showGraphs = false;
+				return; 
+			}
+
+			this.showGraphs = true;
+			this.$nextTick(() => {
+				initCharts(this.$root.cache.exerciseHistory[this.exercise.type_id], {
+			        weight: `#canvas-weight-${this.index}`,
+			        rm: `#canvas-rm-${this.index}`,
+			        volume: `#canvas-volume-${this.index}`
+			    });
+			})
 		},
 
 		addRep: function() {
@@ -198,6 +221,7 @@ var t = new Vue({
 		cache: {
 			exerciseCategories: [],
 			exerciseTypes: [],
+			exerciseHistory: {},
 			gyms: [],
 			routines: [],
 			pastExercises: {}
@@ -507,6 +531,7 @@ var t = new Vue({
 					return;
 
 				this.cache.pastExercises[typeId] = data.exercises;
+				this.cache.exerciseHistory[typeId] = data.history;
 			});
 		},
 

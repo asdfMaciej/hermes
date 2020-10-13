@@ -126,6 +126,20 @@
 <script type="text/x-template" id="exercise-template">
 	<div class="exercise" :class="{'group-end': !isFirst && !hideTitle}">
 		<div class="exercise__name" v-if="!hideTitle">{{exercise.exercise_type}}</div>
+        <a class="exercise__toggle-graphs" v-if="!hideTitle && exercise.type_id in $root.cache.exerciseHistory" @click.prevent="toggleGraphs">
+            {{showGraphs ? 'Ukryj wykresy' : 'Pokaż wykresy'}}
+        </a>
+        <div class="exercise__graphs" v-if="showGraphs">
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-weight-'+index"></canvas>
+            </div>
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-volume-'+index"></canvas>
+            </div>
+            <div style="max-width: 500px">
+                <canvas :id="'canvas-rm-'+index"></canvas>
+            </div>
+        </div>
         <div class="exercise__headers" v-if="!hideTitle">
             <span class="no">Seria</span>
             <span class="past">Poprzednio</span>

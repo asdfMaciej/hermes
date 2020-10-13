@@ -60,6 +60,7 @@ class API {
 			onResponse(r, r.data);
 		})
 		.catch((error) => {
+			console.log(error);
 			let r = new APIResponse(error.response);
 			if (DEBUG)
 				r.preview();
