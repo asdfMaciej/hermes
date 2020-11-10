@@ -7,9 +7,10 @@ class Page extends \APIBuilder {
     public function get() {
         $user_id = $this->account->user_id;
         $type_id = $this->data->get["type_id"] ?? "";
+        $exercise = ExerciseType::getSingleItem($this->database, ["type_id" => $type_id]);
         $exercises = Exercise::getPastExercises($this->database, $user_id, $type_id);
         $history = ExerciseType::getUserExerciseHistory($this->database, $type_id, $user_id);
-        return $this->generateAndSet(compact("exercises", "history"), 200);
+        return $this->generateAndSet(compact("exercise", "exercises", "history"), 200);
     }
 }
 

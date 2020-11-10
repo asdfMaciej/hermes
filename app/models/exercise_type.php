@@ -61,6 +61,7 @@ order by max_weight desc
     	$rows = static::sql("
 	    SELECT 	
 	e.type_id, max(e.weight) AS max_weight, SUM(e.weight * e.reps) AS volume, 
+	sum(e.reps) as reps, count(e.exercise_id) as sets,
 	w.user_id, w.workout_id, MAX(w.date) AS date,
 	ROUND(MAX(e.weight * (36 / (37 - LEAST(36, e.reps)))), 1) as estimated_1rm
 FROM exercises AS e
