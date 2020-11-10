@@ -50,11 +50,7 @@ function initCharts(exerciseHistory, selectors) {
     if (isBodyweightExercise) {
         chartOptions.scales.xAxes[0].distribution = 'series';
         chartOptions.scales.xAxes[0].offset = true;
-        chartOptions.scales.yAxes = [{
-            ticks: {
-                beginAtZero: true
-            }
-        }];
+
        var repsChart = new Chart(maxWeight, {
             type: 'bar',
             data: {
@@ -132,5 +128,4 @@ function initCharts(exerciseHistory, selectors) {
             options: chartOptions
         });
     }
-    
 }

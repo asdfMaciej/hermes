@@ -106,7 +106,7 @@
         <button @click="calculateRM">Oblicz</button>
         <pre>{{calculator.result}}</pre>
     </div>
-    <div class="add-workout-switch">
+    <div class="add-workout-switch" v-if="view != 'presubmit'">
         <a href="#" @click.prevent="switchViewGroup('workout')" :class="{selected: viewGroup == 'workout'}">
             <ion-icon name="barbell"></ion-icon>
             Trening

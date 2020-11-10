@@ -257,6 +257,7 @@ var t = new Vue({
 			weight: '',
 			result: ''
 		},
+		timerPaused: false,
 		editedWorkoutId: null,
 		timeElapsed: '00:00:00',
 		api: null,
@@ -401,7 +402,11 @@ ${rep} reps max: ${Math.round(repMax * 100) / 100} kg`;
 		initAddWorkout: function() {
 			this.current.workout.startMoment = moment();
 			setInterval(() => {
+				if (this.timerPaused) {
+					this.current.workout.startMoment.add(1, 's');
+				}
 				let start = this.current.workout.startMoment;
+
 				// moment.js doesn't support duration, so this is kinda a hack
 				this.timeElapsed = moment.utc(moment().diff(start)).format("HH:mm:ss")
 			}, 1000);
@@ -418,6 +423,7 @@ ${rep} reps max: ${Math.round(repMax * 100) / 100} kg`;
 			}
 			if (this.view == 'presubmit') {
 				this.view = 'main';
+				this.timerPaused = false;
 			}
 			if (this.view == 'routines') {
 				this.view = 'main';
@@ -505,6 +511,7 @@ ${rep} reps max: ${Math.round(repMax * 100) / 100} kg`;
 
 			if (this.view == 'main') {
 				this.view = 'presubmit';
+				this.timerPaused = true;
 				history.pushState({page: 'presubmit'}, "Potwierdź trening - Hermes", "#presubmit");
 				this.$nextTick(() => {window.scrollTo({ top: 0, behavior: 'smooth' });});
 				return;
